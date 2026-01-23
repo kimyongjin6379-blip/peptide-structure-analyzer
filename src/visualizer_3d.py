@@ -3,10 +3,21 @@
 3D structure visualization using py3Dmol
 """
 
-import py3Dmol
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
-from IPython.display import display, HTML
+
+# Optional import for py3Dmol
+try:
+    import py3Dmol
+    PY3DMOL_AVAILABLE = True
+except ImportError:
+    PY3DMOL_AVAILABLE = False
+
+# Optional import for IPython
+try:
+    from IPython.display import display, HTML
+except ImportError:
+    pass
 
 try:
     from .utils import AMINO_ACIDS
@@ -27,6 +38,9 @@ class Py3DmolViewer:
             width: 뷰어 너비
             height: 뷰어 높이
         """
+        if not PY3DMOL_AVAILABLE:
+            raise ImportError("py3Dmol is not installed. Install it with: pip install py3Dmol")
+
         self.width = width
         self.height = height
         self.viewer = None
