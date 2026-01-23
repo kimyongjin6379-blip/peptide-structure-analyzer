@@ -1,0 +1,31 @@
+# 핵심 패키지 (필수)
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+openpyxl>=3.1.0
+scikit-learn>=1.3.0
+requests>=2.31.0
+
+# 시각화 (필수)
+plotly>=5.17.0
+streamlit>=1.28.0
+
+# 생물정보학 (필수)
+biopython>=1.81
+
+# 테스트
+pytest>=7.4.0
+
+# 3D 시각화 (필수)
+py3Dmol>=2.0.0
+
+# 선택적 패키지 (고급 기능)
+# modlamp>=4.3.0
+# peptides>=2.6.0
+# rdkit>=2023.9.1
+# kaleido>=0.2.1
+# jupyter>=1.0.0
+# notebook>=7.0.0
+# ipywidgets>=8.0.0
+# tqdm>=4.66.0
+# python-dotenv>=1.0.0
