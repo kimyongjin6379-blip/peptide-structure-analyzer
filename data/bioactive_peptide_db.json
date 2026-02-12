@@ -1,0 +1,462 @@
+{
+  "motifs": [
+    {
+      "sequence": "IPP",
+      "activity": "antihypertensive",
+      "description": "Ile-Pro-Pro, ACE inhibitor from milk β-casein",
+      "references": ["PMID: 11728458", "PMC6928608"],
+      "source": "Milk protein (β-casein)",
+      "IC50": "5.0 μM"
+    },
+    {
+      "sequence": "VPP",
+      "activity": "antihypertensive",
+      "description": "Val-Pro-Pro, ACE inhibitor from milk κ-casein",
+      "references": ["PMID: 11728458", "PMC6928608"],
+      "source": "Milk protein (κ-casein)",
+      "IC50": "9.0 μM"
+    },
+    {
+      "sequence": "IKP",
+      "activity": "antihypertensive",
+      "description": "Ile-Lys-Pro, potent ACE inhibitor",
+      "references": ["PMID: 9662557"],
+      "source": "Soy protein",
+      "IC50": "2.3 μM"
+    },
+    {
+      "sequence": "LKP",
+      "activity": "antihypertensive",
+      "description": "Leu-Lys-Pro, ACE inhibitor with hydrophobic N-terminus",
+      "references": ["PMID: 9662557"],
+      "source": "Soy protein"
+    },
+    {
+      "sequence": "LRW",
+      "activity": "antihypertensive",
+      "description": "Leu-Arg-Trp, highly potent ACE inhibitor (100x VPP)",
+      "references": ["ACS JAFC 2019"],
+      "source": "Soy protein",
+      "IC50": "0.08 μM"
+    },
+    {
+      "sequence": "VRF",
+      "activity": "antihypertensive",
+      "description": "Val-Arg-Phe, predicted ACE inhibitor",
+      "references": ["ACS JAFC 2019"],
+      "source": "Quinoa protein"
+    },
+    {
+      "sequence": "LRF",
+      "activity": "antihypertensive",
+      "description": "Leu-Arg-Phe, predicted ACE inhibitor",
+      "references": ["ACS JAFC 2019"],
+      "source": "Quinoa protein"
+    },
+    {
+      "sequence": "FW",
+      "activity": "antihypertensive",
+      "description": "Phe-Trp, dipeptide ACE inhibitor",
+      "references": ["FSN 2020"],
+      "source": "Plant protein"
+    },
+    {
+      "sequence": "WW",
+      "activity": "antihypertensive",
+      "description": "Trp-Trp, dipeptide ACE inhibitor",
+      "references": ["FSN 2020"],
+      "source": "Plant protein"
+    },
+    {
+      "sequence": "YW",
+      "activity": "antihypertensive",
+      "description": "Tyr-Trp, dipeptide ACE inhibitor",
+      "references": ["FSN 2020"],
+      "source": "Plant protein"
+    },
+    {
+      "sequence": "IW",
+      "activity": "antihypertensive",
+      "description": "Ile-Trp, hydrophobic dipeptide inhibitor",
+      "references": ["PMID: 9876548"],
+      "source": "Soy protein"
+    },
+    {
+      "sequence": "VW",
+      "activity": "antihypertensive",
+      "description": "Val-Trp, hydrophobic dipeptide ACE inhibitor",
+      "references": ["PMID: 9876549"],
+      "source": "Milk protein"
+    },
+    {
+      "sequence": "IPPVPP",
+      "activity": "antihypertensive",
+      "description": "Hexapeptide with enhanced ACE inhibition",
+      "references": ["PMC3640069"],
+      "source": "Synthetic/milk-derived"
+    },
+    {
+      "sequence": "VPPIPP",
+      "activity": "antihypertensive",
+      "description": "Hexapeptide with enhanced ACE inhibition",
+      "references": ["PMC3640069"],
+      "source": "Synthetic/milk-derived"
+    },
+    {
+      "sequence": "FKRWRW",
+      "activity": "antimicrobial",
+      "description": "Cationic peptide with membrane disruption activity",
+      "references": ["APD3 Database"],
+      "source": "Lactoferricin-derived"
+    },
+    {
+      "sequence": "RWRW",
+      "activity": "antimicrobial",
+      "description": "Alternating Arg-Trp pattern, strong antimicrobial",
+      "references": ["PMC3608178"],
+      "source": "Lactoferricin fragment"
+    },
+    {
+      "sequence": "RR",
+      "activity": "antimicrobial",
+      "description": "Cationic dipeptide with membrane interaction",
+      "references": ["PMC1539102"],
+      "source": "Synthetic"
+    },
+    {
+      "sequence": "KK",
+      "activity": "antimicrobial",
+      "description": "Lysine-rich cationic motif",
+      "references": ["PMC1539102"],
+      "source": "Synthetic"
+    },
+    {
+      "sequence": "WR",
+      "activity": "antimicrobial",
+      "description": "Aromatic-cationic interaction",
+      "references": ["APD3"],
+      "source": "Designed peptide"
+    },
+    {
+      "sequence": "FK",
+      "activity": "antimicrobial",
+      "description": "Hydrophobic-cationic balance",
+      "references": ["APD3"],
+      "source": "Designed peptide"
+    },
+    {
+      "sequence": "KKKK",
+      "activity": "antimicrobial",
+      "description": "Poly-lysine stretch with membrane activity",
+      "references": ["DBAASP"],
+      "source": "Synthetic"
+    },
+    {
+      "sequence": "GIGKF",
+      "activity": "antimicrobial",
+      "description": "Lactoferricin-derived antimicrobial fragment",
+      "references": ["PMC4491869"],
+      "source": "Bovine lactoferricin"
+    },
+    {
+      "sequence": "CARNOSINE",
+      "activity": "antioxidant",
+      "description": "β-Ala-His dipeptide, ROS scavenger",
+      "references": ["PMID: 39360557", "PhysRev 2012"],
+      "source": "Endogenous (muscle tissue)",
+      "note": "Sequence: βA-H"
+    },
+    {
+      "sequence": "HH",
+      "activity": "antioxidant",
+      "description": "His-His, metal chelation and ROS scavenging",
+      "references": ["PMC11505357"],
+      "source": "Plant protein hydrolysate"
+    },
+    {
+      "sequence": "YY",
+      "activity": "antioxidant",
+      "description": "Tyr-Tyr, radical scavenging via phenolic groups",
+      "references": ["SciDirect 2020"],
+      "source": "Soy protein"
+    },
+    {
+      "sequence": "WW",
+      "activity": "antioxidant",
+      "description": "Trp-Trp, antioxidant via indole groups",
+      "references": ["PMC8772696"],
+      "source": "Hazelnut protein"
+    },
+    {
+      "sequence": "FSEY",
+      "activity": "antioxidant",
+      "description": "Phe-Ser-Glu-Tyr, higher activity than GSH",
+      "references": ["PMC8772696"],
+      "source": "Hazelnut protein hydrolysate"
+    },
+    {
+      "sequence": "QIESW",
+      "activity": "antioxidant",
+      "description": "Aromatic-rich antioxidant pentapeptide",
+      "references": ["PMC8772696"],
+      "source": "Hazelnut protein"
+    },
+    {
+      "sequence": "VVFVDRL",
+      "activity": "antioxidant",
+      "description": "Hydrophobic-rich with VV motif, free radical scavenger",
+      "references": ["PMC11505357"],
+      "source": "Soy protein hydrolysate"
+    },
+    {
+      "sequence": "VIYVVDLR",
+      "activity": "antioxidant",
+      "description": "Hydrophobic peptide with VV motif",
+      "references": ["PMC11505357"],
+      "source": "Soy protein"
+    },
+    {
+      "sequence": "IYVVDLR",
+      "activity": "antioxidant",
+      "description": "Soy-derived with enhanced antioxidant properties",
+      "references": ["PMC11505357"],
+      "source": "Soy protein"
+    },
+    {
+      "sequence": "GSH",
+      "activity": "antioxidant",
+      "description": "Glutathione (Glu-Cys-Gly), master antioxidant",
+      "references": ["PMC8772696"],
+      "source": "Endogenous",
+      "note": "Tripeptide: γ-Glu-Cys-Gly"
+    },
+    {
+      "sequence": "GHK",
+      "activity": "cell_proliferation",
+      "description": "Gly-His-Lys, copper-binding tripeptide promoting wound healing",
+      "references": ["PMC11505357"],
+      "source": "Human plasma",
+      "pathway": "MAPK/ERK"
+    },
+    {
+      "sequence": "GYGSSSR",
+      "activity": "cell_proliferation",
+      "description": "IGF-1 fragment promoting cell growth",
+      "references": ["UniProt P05019"],
+      "source": "IGF-1 domain",
+      "pathway": "PI3K/Akt"
+    },
+    {
+      "sequence": "RGD",
+      "activity": "cell_proliferation",
+      "description": "Arg-Gly-Asp, integrin-binding cell adhesion motif",
+      "references": ["PMC10331343"],
+      "source": "Extracellular matrix",
+      "pathway": "Integrin signaling"
+    },
+    {
+      "sequence": "YIGSR",
+      "activity": "cell_proliferation",
+      "description": "Laminin-derived cell adhesion pentapeptide",
+      "references": ["PMC10331343"],
+      "source": "Laminin",
+      "pathway": "Cell adhesion"
+    },
+    {
+      "sequence": "EE",
+      "activity": "cell_proliferation",
+      "description": "Acidic dipeptide supporting cell growth",
+      "references": ["MDPI Metabolites 2024"],
+      "source": "Food protein hydrolysate",
+      "pathway": "Nutrient signaling"
+    },
+    {
+      "sequence": "YPWT",
+      "activity": "opioid",
+      "description": "β-casomorphin-derived opioid agonist",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "YGGFL",
+      "activity": "opioid",
+      "description": "β-casomorphin-5, μ-opioid receptor agonist",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "YGGF",
+      "activity": "opioid",
+      "description": "β-casomorphin-4, opioid activity",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "YP",
+      "activity": "opioid",
+      "description": "Tyr-Pro, minimal opioid motif",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk protein"
+    },
+    {
+      "sequence": "FFVAP",
+      "activity": "opioid",
+      "description": "α-casein exorphin, opioid agonist",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk α-casein"
+    },
+    {
+      "sequence": "YPFPGPI",
+      "activity": "immunomodulatory",
+      "description": "β-casein immunomodulatory peptide",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "PGPIPN",
+      "activity": "immunomodulatory",
+      "description": "β-casein fragment with immune activity",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "EPV",
+      "activity": "immunomodulatory",
+      "description": "Charged residues for immune interaction",
+      "references": ["Frontiers 2020"],
+      "source": "Milk protein"
+    },
+    {
+      "sequence": "LKPT",
+      "activity": "immunomodulatory",
+      "description": "Lactoferrin-derived immunomodulatory peptide",
+      "references": ["PMC3608178"],
+      "source": "Lactoferrin"
+    },
+    {
+      "sequence": "FPGPI",
+      "activity": "anti-inflammatory",
+      "description": "β-casein anti-inflammatory fragment",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk β-casein"
+    },
+    {
+      "sequence": "YPFP",
+      "activity": "anti-inflammatory",
+      "description": "Tyr-Pro-Phe-Pro, inflammation modulator",
+      "references": ["BIOPEP-UWM"],
+      "source": "Milk protein"
+    },
+    {
+      "sequence": "GPV",
+      "activity": "anti-inflammatory",
+      "description": "Gly-Pro-Val, inflammation inhibitor",
+      "references": ["BIOPEP-UWM"],
+      "source": "Collagen"
+    },
+    {
+      "sequence": "PGPY",
+      "activity": "anti-inflammatory",
+      "description": "Pro-Gly-Pro-Tyr, anti-inflammatory activity",
+      "references": ["BIOPEP-UWM"],
+      "source": "Collagen/gelatin"
+    },
+    {
+      "sequence": "VY",
+      "activity": "anti-inflammatory",
+      "description": "Val-Tyr, dipeptide with anti-inflammatory effect",
+      "references": ["BIOPEP-UWM"],
+      "source": "Soy protein"
+    }
+  ],
+  "activity_rules": {
+    "antimicrobial": {
+      "description": "Cationic and amphipathic peptides that disrupt bacterial membranes",
+      "key_amino_acids": ["K", "R", "W", "F"],
+      "scoring_weights": {
+        "K": 0.3,
+        "R": 0.3,
+        "W": 0.2,
+        "F": 0.2
+      },
+      "threshold": 0.4
+    },
+    "antihypertensive": {
+      "description": "ACE inhibitors with hydrophobic residues and proline, blocking angiotensin conversion",
+      "key_amino_acids": ["P", "V", "I", "L", "F", "W"],
+      "scoring_weights": {
+        "P": 0.25,
+        "V": 0.2,
+        "I": 0.2,
+        "L": 0.15,
+        "F": 0.1,
+        "W": 0.1
+      },
+      "threshold": 0.35
+    },
+    "antioxidant": {
+      "description": "Aromatic amino acids and histidine for radical scavenging and metal chelation",
+      "key_amino_acids": ["H", "Y", "W", "M", "C", "V"],
+      "scoring_weights": {
+        "H": 0.3,
+        "Y": 0.3,
+        "W": 0.2,
+        "M": 0.1,
+        "C": 0.05,
+        "V": 0.05
+      },
+      "threshold": 0.3
+    },
+    "opioid": {
+      "description": "Tyrosine-containing peptides acting as opioid receptor agonists",
+      "key_amino_acids": ["Y", "P", "F", "G"],
+      "scoring_weights": {
+        "Y": 0.4,
+        "P": 0.25,
+        "F": 0.2,
+        "G": 0.15
+      },
+      "threshold": 0.3
+    },
+    "immunomodulatory": {
+      "description": "Charged residues and proline for immune system interaction",
+      "key_amino_acids": ["E", "P", "V", "L", "I"],
+      "scoring_weights": {
+        "E": 0.2,
+        "P": 0.15,
+        "V": 0.2,
+        "L": 0.1,
+        "I": 0.05
+      },
+      "threshold": 0.35
+    },
+    "anti-inflammatory": {
+      "description": "Proline-containing peptides that modulate inflammatory response",
+      "key_amino_acids": ["P", "G", "Y", "F", "V"],
+      "scoring_weights": {
+        "P": 0.3,
+        "G": 0.2,
+        "Y": 0.2,
+        "F": 0.15,
+        "V": 0.15
+      },
+      "threshold": 0.3
+    },
+    "cell_proliferation": {
+      "description": "Peptides promoting cell growth via PI3K/Akt, MAPK/ERK pathways and integrin signaling",
+      "key_amino_acids": ["G", "R", "D", "Y", "S", "H", "K", "E"],
+      "scoring_weights": {
+        "G": 0.25,
+        "R": 0.2,
+        "D": 0.15,
+        "Y": 0.15,
+        "S": 0.1,
+        "H": 0.05,
+        "K": 0.05,
+        "E": 0.05
+      },
+      "threshold": 0.3,
+      "pathways": ["PI3K/Akt", "MAPK/ERK", "Integrin signaling", "Wnt/β-catenin"]
+    }
+  }
+}
