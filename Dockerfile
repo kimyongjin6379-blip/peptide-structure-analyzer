@@ -19,7 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 작업 디렉토리
 WORKDIR /app
 
-# ---- 1단계: PyTorch CPU 먼저 설치 (캐시 효율) ----
+# ---- 0단계: numpy 1.x 먼저 고정 (PyTorch 2.2 호환) ----
+RUN pip install --no-cache-dir "numpy>=1.24.0,<2.0.0"
+
+# ---- 1단계: PyTorch CPU 설치 ----
 RUN pip install --no-cache-dir \
     torch==2.2.0+cpu \
     --index-url https://download.pytorch.org/whl/cpu
@@ -50,7 +53,6 @@ RUN mkdir -p /app/.streamlit
 COPY .streamlit/config.toml /app/.streamlit/config.toml
 
 # ---- 시작 스크립트 ----
-# Railway가 PORT 환경변수를 설정함 (기본값 8501)
 RUN echo '#!/bin/bash\nstreamlit run streamlit_app/app.py --server.port=${PORT:-8501} --server.address=0.0.0.0 --server.headless=true --browser.gatherUsageStats=false' > /app/start.sh \
     && chmod +x /app/start.sh
 
