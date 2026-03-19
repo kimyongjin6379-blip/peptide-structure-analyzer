@@ -55,10 +55,22 @@ TRANSFORMERS_OK = check_transformers_available()
 
 # ---- 캐싱 ----
 @st.cache_resource
-def get_plm_embedder(model_name="esm2_t6_8M"):
+def get_plm_embedder(model_name="esm2_t6_8M", finetuned_name=None):
     from plm_embedder import PLMEmbedder
     embedder = PLMEmbedder(model_name=model_name)
     embedder.load_model()
+
+    # Fine-tuned 모델 가중치 로드
+    if finetuned_name:
+        try:
+            from plm_finetuner import PLMFineTuner
+            finetuner = PLMFineTuner(model_name=model_name)
+            if finetuner.load_finetuned(name=finetuned_name):
+                embedder.model = finetuner.model
+                embedder.model.eval()
+        except Exception:
+            pass  # Fine-tuned 모델 없으면 범용 모델 사용
+
     return embedder
 
 
@@ -91,6 +103,26 @@ def main():
             index=0,
             help="큰 모델일수록 정확하지만 느림"
         )
+
+        # Fine-tuned 모델 선택
+        st.markdown("### 🎯 Fine-tuned 모델")
+        finetuned_name = None
+        try:
+            from plm_finetuner import PLMFineTuner
+            ft_check = PLMFineTuner(model_name=model_choice)
+            ft_models = ft_check.list_finetuned_models()
+            if ft_models:
+                ft_options = ["범용 ESM-2 (기본)"] + [m['name'] for m in ft_models]
+                ft_selected = st.selectbox("사용할 모델", ft_options, index=0)
+                if ft_selected != "범용 ESM-2 (기본)":
+                    finetuned_name = ft_selected.replace(f"_{model_choice}", "")
+                    st.success(f"🎯 펩톤 특화 모델 사용 중")
+                else:
+                    st.info("범용 모델 사용 중")
+            else:
+                st.caption("Fine-tuned 모델 없음 (7번 페이지에서 학습)")
+        except Exception:
+            st.caption("Fine-tuned 모델 확인 불가")
 
     if not TORCH_OK:
         st.error(
@@ -169,7 +201,7 @@ def main():
             else:
                 with st.spinner(f"ESM-2 ({model_choice}) 모델 로딩 및 임베딩 추출 중..."):
                     try:
-                        embedder = get_plm_embedder(model_choice)
+                        embedder = get_plm_embedder(model_choice, finetuned_name)
                         embedding = embedder.get_embedding(clean_seq)
                         seq_embedding = embedding.mean(axis=0)
 
@@ -225,7 +257,7 @@ def main():
         if st.button("유사도 계산", key="sim_btn"):
             with st.spinner("임베딩 기반 유사도 계산 중..."):
                 try:
-                    embedder = get_plm_embedder(model_choice)
+                    embedder = get_plm_embedder(model_choice, finetuned_name)
                     similarity = embedder.compute_similarity(seq_a.upper(), seq_b.upper())
                     st.metric("코사인 유사도", f"{similarity:.4f}")
 
@@ -269,7 +301,7 @@ def main():
 
             with st.spinner("Zero-shot scoring 중..."):
                 try:
-                    embedder = get_plm_embedder(model_choice)
+                    embedder = get_plm_embedder(model_choice, finetuned_name)
                     results = embedder.zero_shot_score(clean_wt, mutations)
 
                     # 결과 테이블
@@ -357,7 +389,7 @@ def main():
                 with st.spinner("ESM-2 마스크 생성 중..."):
                     try:
                         gen_manager = get_deep_generator()
-                        gen_manager._plm_embedder = get_plm_embedder(model_choice)
+                        gen_manager._plm_embedder = get_plm_embedder(model_choice, finetuned_name)
                         results = gen_manager.generate(
                             "esm_masked",
                             sequence=template_seq.upper(),
@@ -390,7 +422,7 @@ def main():
                 with st.spinner(f"ESM-2 반복 최적화 ({n_iters}회)..."):
                     try:
                         gen_manager = get_deep_generator()
-                        gen_manager._plm_embedder = get_plm_embedder(model_choice)
+                        gen_manager._plm_embedder = get_plm_embedder(model_choice, finetuned_name)
                         trajectory = gen_manager.generate(
                             "esm_refinement",
                             sequence=start_seq.upper(),
@@ -529,7 +561,7 @@ def main():
 
             with st.spinner("ESM-2 임베딩 추출 + 활성 예측 중..."):
                 try:
-                    embedder = get_plm_embedder(model_choice)
+                    embedder = get_plm_embedder(model_choice, finetuned_name)
                     embedding = embedder.get_sequence_embedding(clean_pred)
 
                     from fitness_predictor import FitnessPredictor
@@ -647,7 +679,7 @@ def main():
             if len(seqs) < 2:
                 st.error("최소 2개 이상의 유효한 서열이 필요합니다.")
             else:
-                embedder = get_plm_embedder(model_choice)
+                embedder = get_plm_embedder(model_choice, finetuned_name)
                 progress = st.progress(0, text="분석 시작...")
 
                 # ---- 임베딩 추출 ----
