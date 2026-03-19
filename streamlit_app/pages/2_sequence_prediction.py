@@ -112,6 +112,41 @@ def main():
 
                     st.dataframe(df, use_container_width=True, hide_index=True)
 
+                    # ---- AI 분석 연계 ----
+                    st.markdown("---")
+                    st.markdown("#### 🤖 AI 심층 분석 연계")
+
+                    # session_state에 서열 저장
+                    all_seqs = [s['sequence'] for s in sequences_with_mw]
+                    st.session_state['generated_sequences'] = all_seqs
+                    st.session_state['generated_source'] = f"2번 페이지 ({selected_sample}, {method})"
+
+                    col_ai1, col_ai2, col_ai3 = st.columns(3)
+                    with col_ai1:
+                        if st.button("🧬 Top 서열 → 임베딩 분석", key="send_embed"):
+                            st.session_state['ai_input_sequence'] = all_seqs[0]
+                            st.session_state['ai_target_tab'] = 'embedding'
+                            st.info(f"✅ `{all_seqs[0][:30]}...` → 6번 AI 분석 페이지로 이동하세요")
+                    with col_ai2:
+                        if st.button("🔬 Top 서열 → 변이 예측", key="send_mutation"):
+                            st.session_state['ai_input_sequence'] = all_seqs[0]
+                            st.session_state['ai_target_tab'] = 'mutation'
+                            st.info(f"✅ `{all_seqs[0][:30]}...` → 6번 AI 분석 페이지로 이동하세요")
+                    with col_ai3:
+                        if st.button("📊 Top 서열 → 활성 예측", key="send_predict"):
+                            st.session_state['ai_input_sequence'] = all_seqs[0]
+                            st.session_state['ai_target_tab'] = 'prediction'
+                            st.info(f"✅ `{all_seqs[0][:30]}...` → 6번 AI 분석 페이지로 이동하세요")
+
+                    # 배치 전송
+                    n_batch = st.slider("배치 분석할 서열 수", 1, min(20, len(all_seqs)), 5, key="batch_n")
+                    if st.button("📦 상위 N개 서열 일괄 전송", key="send_batch"):
+                        st.session_state['ai_batch_sequences'] = all_seqs[:n_batch]
+                        st.session_state['ai_batch_source'] = f"{selected_sample} Top {n_batch}"
+                        st.success(f"✅ {n_batch}개 서열이 AI 분석 페이지로 전송되었습니다!")
+
+                    st.markdown("---")
+
                     # Visualize top sequence
                     st.markdown("#### Top Sequence Visualization")
                     top_seq = sequences_with_mw[0]['sequence']

@@ -186,6 +186,37 @@ def main():
                                     f"({motif['activity']}): {motif['description']}"
                                 )
 
+                # ---- AI 분석 연계 ----
+                if top_seqs:
+                    st.markdown("---")
+                    st.markdown("#### 🤖 AI 심층 분석 연계")
+
+                    # session_state에 모티프 보유 서열 저장
+                    motif_sequences = [s['sequence'] for s in top_seqs]
+                    st.session_state['bioactive_sequences'] = motif_sequences
+                    st.session_state['bioactive_source'] = f"3번 페이지 ({selected_sample})"
+
+                    col_ai1, col_ai2 = st.columns(2)
+                    with col_ai1:
+                        selected_motif_seq = st.selectbox(
+                            "AI 분석할 서열 선택",
+                            motif_sequences,
+                            key="select_motif_seq"
+                        )
+                    with col_ai2:
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
+                            st.session_state['ai_input_sequence'] = selected_motif_seq
+                            st.session_state['ai_target_tab'] = 'prediction'
+                            st.info(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
+
+                    if st.button("📦 모티프 보유 서열 전체 → AI 배치 분석", key="send_motif_batch"):
+                        st.session_state['ai_batch_sequences'] = motif_sequences
+                        st.session_state['ai_batch_source'] = f"{selected_sample} 모티프 후보 {len(motif_sequences)}개"
+                        st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
+
+                    st.markdown("---")
+
                 # Recommendations
                 st.markdown("#### Activity-based Recommendations")
 

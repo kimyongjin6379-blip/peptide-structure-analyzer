@@ -107,9 +107,31 @@ def main():
         )
         return
 
+    # ---- 다른 페이지에서 전송된 서열 확인 ----
+    transferred_seq = st.session_state.get('ai_input_sequence', None)
+    transferred_batch = st.session_state.get('ai_batch_sequences', None)
+    transfer_source = st.session_state.get('ai_batch_source', '')
+
+    if transferred_seq or transferred_batch:
+        st.markdown("---")
+        st.markdown("### 📨 전송된 서열")
+        if transferred_seq:
+            st.success(f"**단일 서열**: `{transferred_seq[:60]}{'...' if len(transferred_seq) > 60 else ''}`")
+        if transferred_batch:
+            st.info(f"**배치 서열**: {len(transferred_batch)}개 ({transfer_source})")
+
+        col_clear1, col_clear2 = st.columns([1, 4])
+        with col_clear1:
+            if st.button("🗑️ 전송 데이터 초기화", key="clear_transfer"):
+                for key in ['ai_input_sequence', 'ai_target_tab', 'ai_batch_sequences', 'ai_batch_source']:
+                    st.session_state.pop(key, None)
+                st.rerun()
+        st.markdown("---")
+
     # ---- 탭 구성 ----
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "🧬 서열 임베딩", "🔬 변이 예측", "🧪 DL 서열 생성", "📊 활성 예측"
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🧬 서열 임베딩", "🔬 변이 예측", "🧪 DL 서열 생성", "📊 활성 예측",
+        "📦 배치 분석"
     ])
 
     # ============================================================
@@ -122,19 +144,24 @@ def main():
             "서열의 기능적 특성을 분석합니다."
         )
 
+        # 전송된 서열이 있으면 기본값으로 사용
+        default_seq = transferred_seq if transferred_seq else "ACDEFGHIKLMNPQRSTVWY"
+
         col1, col2 = st.columns([2, 1])
         with col1:
             input_sequence = st.text_area(
                 "아미노산 서열 입력",
-                value="ACDEFGHIKLMNPQRSTVWY",
+                value=default_seq,
                 height=100,
-                help="표준 20종 아미노산 문자만 입력"
+                help="표준 20종 아미노산 문자만 입력. 2번/3번 페이지에서 전송된 서열이 자동 입력됩니다."
             )
         with col2:
             st.markdown("**입력 정보**")
             clean_seq = "".join(c for c in input_sequence.upper() if c in "ACDEFGHIKLMNPQRSTVWY")
             st.write(f"서열 길이: {len(clean_seq)}")
             st.write(f"선택 모델: {model_choice}")
+            if transferred_seq:
+                st.caption("📨 2/3번 페이지에서 전송됨")
 
         if st.button("🚀 임베딩 추출", key="embed_btn"):
             if len(clean_seq) < 3:
@@ -221,11 +248,13 @@ def main():
             "변이가 단백질 기능에 미치는 영향을 예측합니다."
         )
 
+        default_wt = transferred_seq if transferred_seq else "MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQQIAATGFHISDVHCEASKSYLNN"
         wt_sequence = st.text_area(
             "야생형(Wild-type) 서열",
-            value="MKTAYIAKQRQISFVKSHFSRQLEERLGLIEVQAPILSRVGDGTQDNLSGAEKAVQVKVKALPDAQFEVVHSLAKWKRQQIAATGFHISDVHCEASKSYLNN",
+            value=default_wt,
             height=80,
-            key="wt_seq"
+            key="wt_seq",
+            help="2번/3번 페이지에서 전송된 서열이 자동 입력됩니다."
         )
 
         mutations_input = st.text_input(
@@ -484,11 +513,13 @@ def main():
             "기존 규칙 기반 예측(3번 페이지)보다 정확한 딥러닝 예측입니다."
         )
 
+        default_pred = transferred_seq if transferred_seq else "ACDEFGHIKLMNPQRSTVWY"
         pred_sequence = st.text_area(
             "예측할 서열",
-            value="ACDEFGHIKLMNPQRSTVWY",
+            value=default_pred,
             height=80,
-            key="pred_seq"
+            key="pred_seq",
+            help="2번/3번 페이지에서 전송된 서열이 자동 입력됩니다."
         )
 
         use_uncertainty = st.checkbox("불확실성 추정 포함 (MC Dropout)", value=True)
@@ -558,6 +589,202 @@ def main():
 
                 except Exception as e:
                     st.error(f"오류: {str(e)}")
+
+
+    # ============================================================
+    # 탭 5: 배치 분석 (2번/3번 페이지 연계)
+    # ============================================================
+    with tab5:
+        st.markdown("## 📦 배치 서열 분석")
+        st.markdown(
+            "2번(서열 생성) 또는 3번(모티프 검색) 페이지에서 전송된 **여러 서열을 한 번에** 분석합니다."
+        )
+
+        # 배치 서열 소스 확인
+        batch_seqs = transferred_batch or []
+        batch_source = transfer_source or "없음"
+
+        if not batch_seqs:
+            st.info(
+                "📌 **배치 서열을 불러오는 방법:**\n\n"
+                "1. **2번 페이지** → 서열 생성 → '상위 N개 서열 일괄 전송' 클릭\n"
+                "2. **3번 페이지** → 모티프 검색 → '모티프 보유 서열 전체 → AI 배치 분석' 클릭\n"
+                "3. 이 페이지로 돌아오면 자동 로드됩니다.\n\n"
+                "또는 아래에 직접 입력하세요."
+            )
+
+        # 직접 입력도 가능
+        manual_batch = st.text_area(
+            "서열 직접 입력 (줄바꿈으로 구분)",
+            value="\n".join(batch_seqs) if batch_seqs else "",
+            height=200,
+            key="batch_manual",
+            help="2번/3번 페이지에서 전송된 서열이 자동 입력됩니다. 직접 수정도 가능합니다."
+        )
+
+        if batch_seqs:
+            st.success(f"📨 전송 소스: {batch_source} | {len(batch_seqs)}개 서열 로드됨")
+
+        # 분석 옵션
+        st.markdown("### 분석 옵션")
+        col1, col2 = st.columns(2)
+        with col1:
+            do_embedding = st.checkbox("ESM-2 임베딩 유사도 분석", value=True)
+            do_fitness = st.checkbox("Zero-shot Fitness 스코어링", value=True)
+        with col2:
+            do_activity = st.checkbox("생리활성 예측", value=True)
+            do_clustering = st.checkbox("서열 클러스터링", value=True)
+
+        if st.button("🚀 배치 분석 실행", key="batch_run", type="primary"):
+            # 서열 파싱
+            seqs = [
+                "".join(c for c in line.strip().upper() if c in "ACDEFGHIKLMNPQRSTVWY")
+                for line in manual_batch.strip().split("\n")
+                if line.strip()
+            ]
+            seqs = [s for s in seqs if len(s) >= 3]
+
+            if len(seqs) < 2:
+                st.error("최소 2개 이상의 유효한 서열이 필요합니다.")
+            else:
+                embedder = get_plm_embedder(model_choice)
+                progress = st.progress(0, text="분석 시작...")
+
+                # ---- 임베딩 추출 ----
+                all_embeddings = []
+                for i, seq in enumerate(seqs):
+                    progress.progress(
+                        (i + 1) / len(seqs),
+                        text=f"임베딩 추출 중... ({i+1}/{len(seqs)})"
+                    )
+                    try:
+                        emb = embedder.get_sequence_embedding(seq)
+                        all_embeddings.append(emb)
+                    except Exception:
+                        all_embeddings.append(None)
+
+                progress.progress(1.0, text="분석 완료!")
+
+                valid_indices = [i for i, e in enumerate(all_embeddings) if e is not None]
+                valid_seqs = [seqs[i] for i in valid_indices]
+                valid_embs = [all_embeddings[i] for i in valid_indices]
+
+                st.success(f"✅ {len(valid_seqs)}/{len(seqs)}개 서열 분석 완료")
+
+                # ---- Zero-shot Fitness ----
+                if do_fitness and valid_seqs:
+                    st.markdown("### 🔬 Zero-shot Fitness 스코어")
+                    fitness_scores = []
+                    for seq in valid_seqs:
+                        try:
+                            score = embedder.get_sequence_log_likelihood(seq)
+                            fitness_scores.append(score)
+                        except Exception:
+                            fitness_scores.append(0.0)
+
+                    fitness_df = pd.DataFrame({
+                        "서열": [s[:30] + "..." if len(s) > 30 else s for s in valid_seqs],
+                        "전체 서열": valid_seqs,
+                        "길이": [len(s) for s in valid_seqs],
+                        "Fitness Score": fitness_scores
+                    }).sort_values("Fitness Score", ascending=False)
+
+                    st.dataframe(
+                        fitness_df[["서열", "길이", "Fitness Score"]],
+                        use_container_width=True, hide_index=True
+                    )
+
+                    fig = px.bar(
+                        fitness_df, x="서열", y="Fitness Score",
+                        color="Fitness Score",
+                        color_continuous_scale="RdYlGn",
+                        title="서열별 Fitness Score (높을수록 진화적으로 타당)"
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # Top 추천
+                    best = fitness_df.iloc[0]
+                    st.info(f"🏆 **최고 Fitness 서열**: `{best['전체 서열']}` (Score: {best['Fitness Score']:.4f})")
+
+                # ---- 유사도 행렬 ----
+                if do_embedding and len(valid_embs) >= 2:
+                    st.markdown("### 🧬 임베딩 기반 유사도 행렬")
+                    import numpy as np_batch
+                    emb_matrix = np_batch.array(valid_embs)
+                    norms = np_batch.linalg.norm(emb_matrix, axis=1, keepdims=True)
+                    norms[norms == 0] = 1
+                    normalized = emb_matrix / norms
+                    sim_matrix = normalized @ normalized.T
+
+                    labels = [s[:15] + "..." if len(s) > 15 else s for s in valid_seqs]
+                    fig = go.Figure(data=go.Heatmap(
+                        z=sim_matrix, x=labels, y=labels,
+                        colorscale="Blues", zmin=0, zmax=1
+                    ))
+                    fig.update_layout(title="서열 간 코사인 유사도", height=500)
+                    st.plotly_chart(fig, use_container_width=True)
+
+                # ---- 클러스터링 ----
+                if do_clustering and len(valid_embs) >= 3:
+                    st.markdown("### 📊 서열 클러스터링 (PCA + K-means)")
+                    from sklearn.decomposition import PCA
+                    from sklearn.cluster import KMeans
+
+                    emb_matrix = np.array(valid_embs)
+                    n_clusters = min(3, len(valid_embs))
+
+                    pca = PCA(n_components=2)
+                    coords = pca.fit_transform(emb_matrix)
+
+                    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+                    clusters = kmeans.fit_predict(emb_matrix)
+
+                    cluster_df = pd.DataFrame({
+                        "PC1": coords[:, 0], "PC2": coords[:, 1],
+                        "Cluster": [f"Cluster {c}" for c in clusters],
+                        "서열": [s[:20] + "..." if len(s) > 20 else s for s in valid_seqs],
+                        "전체 서열": valid_seqs
+                    })
+
+                    fig = px.scatter(
+                        cluster_df, x="PC1", y="PC2",
+                        color="Cluster", hover_data=["서열"],
+                        title=f"ESM-2 임베딩 기반 서열 클러스터링 ({n_clusters} clusters)"
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+
+                # ---- 활성 예측 ----
+                if do_activity and valid_embs:
+                    st.markdown("### 💊 배치 생리활성 예측")
+                    from fitness_predictor import FitnessPredictor
+                    predictor = FitnessPredictor(
+                        embedding_dim=embedder._model_info.get("dim", 320)
+                    )
+
+                    activity_rows = []
+                    for i, (seq, emb) in enumerate(zip(valid_seqs, valid_embs)):
+                        try:
+                            results = predictor.predict(emb)
+                            row = {"서열": seq[:25] + "..." if len(seq) > 25 else seq}
+                            for act, data in results.items():
+                                row[act] = data["score"]
+                            activity_rows.append(row)
+                        except Exception:
+                            pass
+
+                    if activity_rows:
+                        act_df = pd.DataFrame(activity_rows)
+                        st.dataframe(act_df, use_container_width=True, hide_index=True)
+
+                        # 활성별 Top 서열
+                        st.markdown("#### 🏆 활성별 최고 후보")
+                        act_cols = [c for c in act_df.columns if c != "서열"]
+                        for act in act_cols:
+                            best_idx = act_df[act].idxmax()
+                            st.write(
+                                f"**{act}**: `{act_df.loc[best_idx, '서열']}` "
+                                f"(Score: {act_df.loc[best_idx, act]:.3f})"
+                            )
 
 
 if __name__ == "__main__":
