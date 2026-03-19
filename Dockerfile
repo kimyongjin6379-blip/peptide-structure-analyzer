@@ -1,0 +1,66 @@
+# ============================================================
+# Peptide Structure Analyzer - Railway Deployment
+# PyTorch(CPU) + ESM-2 + Streamlit 통합 컨테이너
+# ============================================================
+
+FROM python:3.11-slim
+
+# 시스템 패키지 설치 (HMMER, 빌드 도구 등)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    g++ \
+    hmmer \
+    clustalo \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 작업 디렉토리
+WORKDIR /app
+
+# ---- 1단계: PyTorch CPU 먼저 설치 (캐시 효율) ----
+# GPU 없는 Railway에서는 CPU 버전으로 충분 (용량 ~200MB vs GPU ~2GB)
+RUN pip install --no-cache-dir \
+    torch==2.2.0+cpu \
+    --index-url https://download.pytorch.org/whl/cpu
+
+# ---- 2단계: ML/DL 핵심 패키지 설치 ----
+RUN pip install --no-cache-dir \
+    fair-esm==2.0.0 \
+    transformers>=4.36.0 \
+    tokenizers>=0.15.0 \
+    accelerate>=0.25.0 \
+    safetensors>=0.4.0
+
+# ---- 3단계: 나머지 requirements 설치 ----
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# ---- 4단계: 앱 코드 복사 ----
+COPY . .
+
+# ---- 5단계: 모델 캐시 디렉토리 ----
+# Railway Volume 마운트 포인트 (ESM-2 가중치 영구 저장)
+RUN mkdir -p /app/model_cache /app/data/cache/structures
+ENV TORCH_HOME=/app/model_cache
+ENV HF_HOME=/app/model_cache
+ENV TRANSFORMERS_CACHE=/app/model_cache
+
+# ---- 6단계: Streamlit 설정 ----
+RUN mkdir -p /app/.streamlit
+COPY .streamlit/config.toml /app/.streamlit/config.toml
+
+# ---- 포트 설정 ----
+EXPOSE 8501
+
+# ---- 헬스체크 ----
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+# ---- 실행 ----
+CMD ["streamlit", "run", "streamlit_app/app.py", \
+     "--server.port=8501", \
+     "--server.address=0.0.0.0", \
+     "--server.headless=true", \
+     "--browser.gatherUsageStats=false"]
