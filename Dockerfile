@@ -20,7 +20,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # ---- 1단계: PyTorch CPU 먼저 설치 (캐시 효율) ----
-# GPU 없는 Railway에서는 CPU 버전으로 충분 (용량 ~200MB vs GPU ~2GB)
 RUN pip install --no-cache-dir \
     torch==2.2.0+cpu \
     --index-url https://download.pytorch.org/whl/cpu
@@ -41,7 +40,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # ---- 5단계: 모델 캐시 디렉토리 ----
-# Railway Volume 마운트 포인트 (ESM-2 가중치 영구 저장)
 RUN mkdir -p /app/model_cache /app/data/cache/structures
 ENV TORCH_HOME=/app/model_cache
 ENV HF_HOME=/app/model_cache
@@ -51,16 +49,14 @@ ENV TRANSFORMERS_CACHE=/app/model_cache
 RUN mkdir -p /app/.streamlit
 COPY .streamlit/config.toml /app/.streamlit/config.toml
 
-# ---- 포트 설정 ----
-EXPOSE 8501
+# ---- Railway는 $PORT 환경변수를 사용 ----
+# CMD는 railway.json의 startCommand가 오버라이드함
+# 로컬 테스트용 기본값
+ENV PORT=8501
+EXPOSE ${PORT}
 
-# ---- 헬스체크 ----
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD curl -f http://localhost:8501/_stcore/health || exit 1
-
-# ---- 실행 ----
-CMD ["streamlit", "run", "streamlit_app/app.py", \
-     "--server.port=8501", \
-     "--server.address=0.0.0.0", \
-     "--server.headless=true", \
-     "--browser.gatherUsageStats=false"]
+CMD streamlit run streamlit_app/app.py \
+    --server.port=${PORT} \
+    --server.address=0.0.0.0 \
+    --server.headless=true \
+    --browser.gatherUsageStats=false
