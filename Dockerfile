@@ -49,14 +49,9 @@ ENV TRANSFORMERS_CACHE=/app/model_cache
 RUN mkdir -p /app/.streamlit
 COPY .streamlit/config.toml /app/.streamlit/config.toml
 
-# ---- Railway는 $PORT 환경변수를 사용 ----
-# CMD는 railway.json의 startCommand가 오버라이드함
-# 로컬 테스트용 기본값
-ENV PORT=8501
-EXPOSE ${PORT}
+# ---- 시작 스크립트 ----
+# Railway가 PORT 환경변수를 설정함 (기본값 8501)
+RUN echo '#!/bin/bash\nstreamlit run streamlit_app/app.py --server.port=${PORT:-8501} --server.address=0.0.0.0 --server.headless=true --browser.gatherUsageStats=false' > /app/start.sh \
+    && chmod +x /app/start.sh
 
-CMD streamlit run streamlit_app/app.py \
-    --server.port=${PORT} \
-    --server.address=0.0.0.0 \
-    --server.headless=true \
-    --browser.gatherUsageStats=false
+CMD ["/bin/bash", "/app/start.sh"]

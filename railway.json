@@ -5,7 +5,6 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "streamlit run streamlit_app/app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true --browser.gatherUsageStats=false",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 5
   }
