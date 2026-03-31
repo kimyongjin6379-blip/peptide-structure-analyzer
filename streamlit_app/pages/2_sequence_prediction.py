@@ -10,10 +10,12 @@ sys.path.insert(0, str(src_path))
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator, AbundancePredictor
 from visualizer_2d import PeptideDiagram
 from utils import calculate_sequence_mw, save_fasta
+from plm_embedder import PLMEmbedder
 
 st.set_page_config(page_title="Sequence Prediction", page_icon="🧬", layout="wide")
 
@@ -23,6 +25,13 @@ def load_data():
     loader = CompositionLoader()
     loader.load_data()
     return loader
+
+
+@st.cache_resource
+def load_plm_embedder():
+    embedder = PLMEmbedder(model_name="esm2_t6_8M", device="cpu")
+    embedder.load_model()
+    return embedder
 
 
 def main():
@@ -224,6 +233,114 @@ def main():
             )
 
             st.info(f"Exporting top {len(top_sequences)} sequences")
+
+        # ============================================================
+        # ESM-2 Re-ranking
+        # ============================================================
+        st.markdown("---")
+        with st.expander("🧬 ESM-2 Re-ranking 결과", expanded=False):
+            st.markdown("ESM-2 단백질 언어 모델을 활용하여 생성된 서열의 진화적 적합성(fitness)을 평가하고 재순위화합니다.")
+
+            sequences_for_rerank = result.get('sequences_with_mw', [])
+
+            if sequences_for_rerank:
+                if st.button("🔬 ESM-2 Re-ranking 실행", key="run_esm2_rerank"):
+                    embedder = load_plm_embedder()
+
+                    with st.spinner("ESM-2 fitness scoring 중... (서열당 수 초 소요)"):
+                        rerank_data = []
+                        progress_bar = st.progress(0)
+
+                        for idx, seq_info in enumerate(sequences_for_rerank):
+                            seq = seq_info['sequence']
+                            likelihood = seq_info['likelihood_score']
+
+                            fitness = embedder.get_fitness_score(seq)
+
+                            combined = likelihood * 0.4 + fitness * 0.6
+
+                            rerank_data.append({
+                                'sequence': seq,
+                                'length': seq_info['length'],
+                                'likelihood_score': likelihood,
+                                'esm2_fitness': fitness,
+                                'combined_score': round(combined, 6),
+                                'molecular_weight': seq_info['molecular_weight'],
+                            })
+
+                            progress_bar.progress((idx + 1) / len(sequences_for_rerank))
+
+                        progress_bar.empty()
+
+                    # Store in session state
+                    st.session_state['esm2_rerank_data'] = rerank_data
+
+                # Display results if available
+                if 'esm2_rerank_data' in st.session_state:
+                    rerank_data = st.session_state['esm2_rerank_data']
+
+                    # Before/After comparison
+                    st.markdown("#### Markov-only vs ESM-2 Re-ranked 비교")
+
+                    col_before, col_after = st.columns(2)
+
+                    # Markov-only ranking (original order)
+                    markov_ranked = sorted(rerank_data, key=lambda x: x['likelihood_score'], reverse=True)
+                    # ESM-2 re-ranked (combined score)
+                    esm2_ranked = sorted(rerank_data, key=lambda x: x['combined_score'], reverse=True)
+
+                    with col_before:
+                        st.markdown("**Markov-only Ranking (기존)**")
+                        for i, item in enumerate(markov_ranked[:10], 1):
+                            score_str = f"{item['likelihood_score']:.6f}" if item['likelihood_score'] > 0.0001 else f"{item['likelihood_score']:.2e}"
+                            st.write(f"{i}. `{item['sequence']}` (score: {score_str})")
+
+                    with col_after:
+                        st.markdown("**ESM-2 Re-ranked (개선)**")
+                        for i, item in enumerate(esm2_ranked[:10], 1):
+                            st.write(f"{i}. `{item['sequence']}` (combined: {item['combined_score']:.4f})")
+
+                    # Full re-ranked table
+                    st.markdown("#### ESM-2 Re-ranked 전체 결과")
+
+                    df_rerank = pd.DataFrame(esm2_ranked)
+                    df_rerank.insert(0, 'rank', range(1, len(df_rerank) + 1))
+
+                    df_display = df_rerank[['rank', 'sequence', 'length', 'likelihood_score', 'esm2_fitness', 'combined_score', 'molecular_weight']].copy()
+                    df_display.columns = ['Rank', 'Sequence', 'Length', 'Likelihood', 'ESM-2 Fitness', 'Combined Score', 'MW (Da)']
+
+                    df_display['Likelihood'] = df_display['Likelihood'].apply(
+                        lambda x: f"{x:.6f}" if x > 0.0001 else f"{x:.2e}"
+                    )
+                    df_display['ESM-2 Fitness'] = df_display['ESM-2 Fitness'].apply(lambda x: f"{x:.4f}")
+                    df_display['Combined Score'] = df_display['Combined Score'].apply(lambda x: f"{x:.4f}")
+                    df_display['MW (Da)'] = df_display['MW (Da)'].apply(lambda x: f"{x:.1f}")
+
+                    st.dataframe(df_display, use_container_width=True, hide_index=True)
+
+                    # Improvement suggestions for top sequences
+                    st.markdown("#### 🔧 개선 제안 (Top 서열)")
+                    st.markdown("ESM-2가 각 위치에서 더 적합한 아미노산을 제안합니다.")
+
+                    top_for_suggestions = esm2_ranked[:3]
+                    embedder = load_plm_embedder()
+
+                    for rank_idx, item in enumerate(top_for_suggestions, 1):
+                        seq = item['sequence']
+                        with st.spinner(f"서열 #{rank_idx} 개선안 분석 중..."):
+                            suggestions = embedder.get_improvement_suggestions(seq, top_n=3)
+
+                        if suggestions:
+                            st.markdown(f"**#{rank_idx} `{seq}`** (fitness: {item['esm2_fitness']:.4f})")
+                            for sug in suggestions:
+                                st.write(
+                                    f"  - 위치 {sug['position']}: "
+                                    f"**{sug['current_aa']}** -> **{sug['suggested_aa']}** "
+                                    f"(확률: {sug['current_prob']:.3f} -> {sug['suggested_prob']:.3f}, "
+                                    f"변이: `{sug['mutation']}`, gain: +{sug['probability_gain']:.3f})"
+                                )
+                        else:
+                            st.markdown(f"**#{rank_idx} `{seq}`** - 이미 최적화된 서열입니다.")
 
         # ============================================================
         # AI 분석 연계 (결과 표시 영역 바깥, session_state 블록 안)

@@ -10,9 +10,12 @@ sys.path.insert(0, str(src_path))
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 from data_loader import CompositionLoader
 from bioactive_predictor import BioactivePredictor, ActivityScorer
 from visualizer_2d import BioactivityVisualizer
+from plm_embedder import PLMEmbedder
+from fitness_predictor import FitnessPredictor
 
 st.set_page_config(page_title="Bioactive Search", page_icon="💊", layout="wide")
 
@@ -22,6 +25,19 @@ def load_data():
     loader = CompositionLoader()
     loader.load_data()
     return loader
+
+
+@st.cache_resource
+def load_plm_embedder():
+    embedder = PLMEmbedder(model_name="esm2_t6_8M", device="cpu")
+    embedder.load_model()
+    return embedder
+
+
+@st.cache_resource
+def load_fitness_predictor():
+    predictor = FitnessPredictor(embedding_dim=320)
+    return predictor
 
 
 def main():
@@ -114,6 +130,81 @@ def main():
         ])
 
         st.dataframe(df, use_container_width=True, hide_index=True)
+
+        # DL-based Activity Prediction
+        st.markdown("---")
+        st.markdown("### 🤖 DL 기반 활성 예측 (ESM-2 + MLP)")
+        st.markdown("규칙 기반 스코어를 딥러닝 모델로 보강하여 앙상블 예측을 수행합니다.")
+
+        if st.button("🧬 DL 활성 예측 실행", key="run_dl_prediction"):
+            embedder = load_plm_embedder()
+            fitness_pred = load_fitness_predictor()
+
+            # Generate top sequences for this sample to embed
+            from sequence_predictor import AbundancePredictor
+            abundance_pred = AbundancePredictor(loader)
+            gen_result = abundance_pred.predict_for_sample(
+                selected_sample,
+                length_range=(5, 12),
+                n_sequences=10,
+                method="markov"
+            )
+
+            top_seqs = [s['sequence'] for s in gen_result.get('sequences_with_mw', [])[:5]]
+
+            if top_seqs:
+                with st.spinner("ESM-2 임베딩 추출 및 DL 활성 예측 중..."):
+                    dl_results = []
+                    for seq in top_seqs:
+                        emb = embedder.get_sequence_embedding(seq)
+                        dl_pred = fitness_pred.predict(emb)
+
+                        # Ensemble with rule-based scores
+                        ensemble_scores = {}
+                        for act_name, act_score in activity_scores.items():
+                            rule_score = act_score
+                            dl_score = dl_pred.get(act_name, {}).get('score', 0.5)
+                            ensemble = rule_score * 0.4 + dl_score * 0.6
+                            # Confidence: both agree = high, one high = medium, disagree = low
+                            both_high = rule_score > 0.5 and dl_score > 0.5
+                            both_low = rule_score <= 0.5 and dl_score <= 0.5
+                            if both_high or both_low:
+                                confidence = "★★★"
+                            elif rule_score > 0.6 or dl_score > 0.6:
+                                confidence = "★★"
+                            else:
+                                confidence = "★"
+                            ensemble_scores[act_name] = {
+                                'rule': round(rule_score, 4),
+                                'dl': round(dl_score, 4),
+                                'ensemble': round(ensemble, 4),
+                                'confidence': confidence
+                            }
+
+                        dl_results.append({
+                            'sequence': seq,
+                            'scores': ensemble_scores
+                        })
+
+                st.session_state['dl_activity_results'] = dl_results
+
+        if 'dl_activity_results' in st.session_state:
+            dl_results = st.session_state['dl_activity_results']
+
+            for seq_result in dl_results:
+                with st.expander(f"서열: `{seq_result['sequence']}`"):
+                    rows = []
+                    for act_name, scores in sorted(seq_result['scores'].items(),
+                                                     key=lambda x: x[1]['ensemble'],
+                                                     reverse=True):
+                        rows.append({
+                            'Activity': act_name.title(),
+                            'Rule-based': f"{scores['rule']:.3f}",
+                            'DL Score': f"{scores['dl']:.3f}",
+                            'Ensemble (R*0.4 + DL*0.6)': f"{scores['ensemble']:.3f}",
+                            'Confidence': scores['confidence']
+                        })
+                    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     with tab2:
         st.markdown("### Motif Search in Generated Sequences")
@@ -216,6 +307,104 @@ def main():
                         st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
 
                     st.markdown("---")
+
+                # ---- 유사 모티프 검색 (ESM-2 기반) ----
+                st.markdown("---")
+                st.markdown("#### 🔬 유사 모티프 검색 (ESM-2 Embedding)")
+                st.markdown("정확히 일치하지 않지만 ESM-2 임베딩 기반으로 유사한 모티프를 탐지합니다.")
+
+                if st.button("🧬 유사 모티프 검색 실행", key="run_similar_motif"):
+                    embedder = load_plm_embedder()
+
+                    # Get all known motifs from the predictor
+                    known_motifs = predictor.motif_finder.motifs
+
+                    # Get generated sequences
+                    gen_sequences = [s['sequence'] for s in motif_findings.get('top_sequences', [])]
+                    # Also include sequences without exact matches
+                    all_gen_seqs = comprehensive.get('all_sequences', gen_sequences)
+                    if not all_gen_seqs:
+                        all_gen_seqs = gen_sequences
+
+                    similar_results = []
+
+                    with st.spinner("ESM-2 임베딩으로 유사 모티프 검색 중..."):
+                        # Pre-compute motif embeddings
+                        motif_embeddings = {}
+                        for motif_data in known_motifs:
+                            motif_seq = motif_data['sequence']
+                            if len(motif_seq) >= 3:  # Only meaningful motifs
+                                try:
+                                    motif_emb = embedder.get_motif_embedding(motif_seq)
+                                    motif_embeddings[motif_seq] = {
+                                        'embedding': motif_emb,
+                                        'activity': motif_data['activity'],
+                                        'description': motif_data['description']
+                                    }
+                                except Exception:
+                                    continue
+
+                        # Sliding window search on generated sequences
+                        for seq in all_gen_seqs[:20]:  # Limit to top 20 for performance
+                            for motif_seq, motif_info in motif_embeddings.items():
+                                motif_len = len(motif_seq)
+                                if motif_len > len(seq):
+                                    continue
+
+                                # Skip if exact match already found
+                                if motif_seq in seq:
+                                    continue
+
+                                for start in range(len(seq) - motif_len + 1):
+                                    subseq = seq[start:start + motif_len]
+                                    try:
+                                        sub_emb = embedder.get_motif_embedding(subseq)
+                                        # Cosine similarity
+                                        dot = np.dot(sub_emb, motif_info['embedding'])
+                                        norm1 = np.linalg.norm(sub_emb)
+                                        norm2 = np.linalg.norm(motif_info['embedding'])
+                                        sim = dot / (norm1 * norm2 + 1e-10)
+
+                                        if sim > 0.85:
+                                            similar_results.append({
+                                                'sequence': seq,
+                                                'subsequence': subseq,
+                                                'position': start + 1,
+                                                'known_motif': motif_seq,
+                                                'similarity': round(float(sim), 4),
+                                                'activity': motif_info['activity'],
+                                                'description': motif_info['description']
+                                            })
+                                    except Exception:
+                                        continue
+
+                    st.session_state['similar_motif_results'] = similar_results
+
+                if 'similar_motif_results' in st.session_state:
+                    similar_results = st.session_state['similar_motif_results']
+
+                    if similar_results:
+                        st.success(f"유사 모티프 {len(similar_results)}개 발견!")
+
+                        sim_df = pd.DataFrame(similar_results)
+                        sim_df = sim_df.sort_values('similarity', ascending=False)
+                        sim_df_display = sim_df[['sequence', 'subsequence', 'position',
+                                                  'known_motif', 'similarity', 'activity']].copy()
+                        sim_df_display.columns = ['서열', '부분 서열', '위치', '유사 모티프',
+                                                   '유사도', '활성']
+                        sim_df_display['유사도'] = sim_df_display['유사도'].apply(lambda x: f"{x:.4f}")
+
+                        st.dataframe(sim_df_display, use_container_width=True, hide_index=True)
+
+                        # Summary by activity
+                        st.markdown("**활성별 유사 모티프 분포:**")
+                        activity_counts = sim_df['activity'].value_counts()
+                        for act, cnt in activity_counts.items():
+                            st.write(f"- **{act.title()}**: {cnt}개 유사 모티프")
+                    else:
+                        st.info("유사도 0.85 이상의 유사 모티프가 발견되지 않았습니다.")
+
+                st.markdown("---")
 
                 # Recommendations
                 st.markdown("#### Activity-based Recommendations")

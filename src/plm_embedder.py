@@ -340,6 +340,71 @@ class PLMEmbedder:
 
         return importance
 
+    def get_fitness_score(self, sequence: str) -> float:
+        """
+        서열의 전체 fitness score 계산 (pseudo-log-likelihood)
+        낮을수록 진화적으로 타당한 서열
+
+        Returns normalized score between 0 and 1 (1 = best)
+        """
+        importance = self.get_residue_importance(sequence)
+        avg_nll = np.mean(list(importance.values()))
+        # Convert to 0-1 score (lower NLL = higher fitness)
+        # Typical range: 1-8 for NLL, so sigmoid-like normalization
+        score = 1.0 / (1.0 + np.exp((avg_nll - 4.0) / 1.5))
+        return round(float(score), 4)
+
+    def get_improvement_suggestions(self, sequence: str, top_n: int = 3) -> list:
+        """
+        서열의 각 위치에서 더 좋은 아미노산을 제안
+
+        Returns list of dicts with position, current_aa, suggested_aa, probability_gain
+        """
+        self.load_model()
+        import torch
+
+        suggestions = []
+        data = [("protein", sequence)]
+        _, _, batch_tokens = self.batch_converter(data)
+        batch_tokens = batch_tokens.to(self.device)
+
+        for i in range(len(sequence)):
+            masked = batch_tokens.clone()
+            masked[0, i + 1] = self.alphabet.mask_idx
+
+            with torch.no_grad():
+                logits = self.model(masked)["logits"]
+
+            probs = torch.softmax(logits[0, i + 1], dim=-1)
+            current_aa = sequence[i]
+            current_idx = self.alphabet.get_idx(current_aa)
+            current_prob = probs[current_idx].item()
+
+            # Find the best amino acid for this position
+            best_prob, best_idx = probs.max(dim=-1)
+            best_aa = self.alphabet.get_tok(best_idx.item())
+
+            if best_aa != current_aa and best_aa in "ACDEFGHIKLMNPQRSTVWY":
+                gain = best_prob.item() - current_prob
+                if gain > 0.05:  # Only suggest if meaningful improvement
+                    suggestions.append({
+                        "position": i + 1,
+                        "current_aa": current_aa,
+                        "suggested_aa": best_aa,
+                        "current_prob": round(current_prob, 4),
+                        "suggested_prob": round(best_prob.item(), 4),
+                        "probability_gain": round(gain, 4),
+                        "mutation": f"{current_aa}{i+1}{best_aa}"
+                    })
+
+        # Sort by gain, return top_n
+        suggestions.sort(key=lambda x: x["probability_gain"], reverse=True)
+        return suggestions[:top_n]
+
+    def get_motif_embedding(self, motif: str) -> np.ndarray:
+        """짧은 모티프의 임베딩 (유사 모티프 검색용)"""
+        return self.get_sequence_embedding(motif)
+
     def get_model_info(self) -> dict:
         """현재 로드된 모델 정보"""
         return {
