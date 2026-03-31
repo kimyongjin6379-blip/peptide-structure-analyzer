@@ -353,18 +353,13 @@ def main():
         if all_seqs:
             st.markdown(f"**생성된 서열**: {len(all_seqs)}개 | **Top 서열**: `{all_seqs[0]}`")
 
-            col_ai1, col_ai2, col_ai3 = st.columns(3)
+            col_ai1, col_ai2 = st.columns(2)
             with col_ai1:
                 if st.button("🧬 Top 서열 → 임베딩 분석", key="send_embed"):
                     st.session_state['ai_input_sequence'] = all_seqs[0]
                     st.session_state['ai_target_tab'] = 'embedding'
                     st.success(f"✅ 전송 완료! 사이드바에서 **AI 심층 분석** 페이지로 이동하세요.")
             with col_ai2:
-                if st.button("🔬 Top 서열 → 변이 예측", key="send_mutation"):
-                    st.session_state['ai_input_sequence'] = all_seqs[0]
-                    st.session_state['ai_target_tab'] = 'mutation'
-                    st.success(f"✅ 전송 완료! 사이드바에서 **AI 심층 분석** 페이지로 이동하세요.")
-            with col_ai3:
                 if st.button("📊 Top 서열 → 활성 예측", key="send_predict"):
                     st.session_state['ai_input_sequence'] = all_seqs[0]
                     st.session_state['ai_target_tab'] = 'prediction'
@@ -376,12 +371,6 @@ def main():
                 st.session_state['ai_batch_sequences'] = all_seqs[:n_batch]
                 st.session_state['ai_batch_source'] = f"{gen_sample} Top {n_batch}"
                 st.success(f"✅ {n_batch}개 서열 전송 완료! 사이드바에서 **AI 심층 분석** 페이지로 이동하세요.")
-
-        # 결과 초기화 버튼
-        st.markdown("---")
-        if st.button("🔄 새로운 서열 생성하기", key="reset_results"):
-            del st.session_state['seq_gen_result']
-            st.rerun()
 
 
 if __name__ == "__main__":
