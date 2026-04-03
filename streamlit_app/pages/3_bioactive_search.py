@@ -226,210 +226,214 @@ def main():
                     n_sequences=n_sequences,
                     length_range=length_range
                 )
+                # session_state에 결과 저장 (페이지 리렌더링 시에도 유지)
+                st.session_state['motif_comprehensive'] = comprehensive
+                st.session_state['motif_sample'] = selected_sample
 
-                st.success("Search complete!")
+        # session_state에서 결과 표시
+        if 'motif_comprehensive' in st.session_state:
+            comprehensive = st.session_state['motif_comprehensive']
+            motif_sample = st.session_state.get('motif_sample', '')
 
-                # Motif findings
-                motif_findings = comprehensive['motif_findings']
+            st.success("Search complete!")
 
-                col1, col2, col3 = st.columns(3)
+            # Motif findings
+            motif_findings = comprehensive['motif_findings']
 
-                with col1:
-                    st.metric("Sequences Generated", comprehensive['generated_sequences'])
+            col1, col2, col3 = st.columns(3)
 
-                with col2:
-                    st.metric("Sequences with Motifs", motif_findings['total_sequences_with_motifs'])
+            with col1:
+                st.metric("Sequences Generated", comprehensive['generated_sequences'])
 
-                with col3:
-                    st.metric("Total Motifs Found", motif_findings['total_motifs_found'])
+            with col2:
+                st.metric("Sequences with Motifs", motif_findings['total_sequences_with_motifs'])
 
-                # Motifs by activity
-                if motif_findings['by_activity']:
-                    st.markdown("#### Motifs by Activity")
+            with col3:
+                st.metric("Total Motifs Found", motif_findings['total_motifs_found'])
 
-                    for activity, count in sorted(
-                        motif_findings['by_activity'].items(),
-                        key=lambda x: x[1],
-                        reverse=True
-                    ):
-                        st.write(f"**{activity.title()}**: {count} sequences")
+            # Motifs by activity
+            if motif_findings['by_activity']:
+                st.markdown("#### Motifs by Activity")
 
-                # Top sequences with motifs
-                st.markdown("#### Top Sequences with Motifs")
+                for activity, count in sorted(
+                    motif_findings['by_activity'].items(),
+                    key=lambda x: x[1],
+                    reverse=True
+                ):
+                    st.write(f"**{activity.title()}**: {count} sequences")
 
-                top_seqs = motif_findings.get('top_sequences', [])[:10]
+            # Top sequences with motifs
+            st.markdown("#### Top Sequences with Motifs")
 
-                for seq_data in top_seqs:
-                    with st.expander(
-                        f"{seq_data['sequence']} ({seq_data['n_motifs']} motifs, "
-                        f"score: {seq_data['likelihood_score']:.4f})"
-                    ):
-                        st.write(f"**Activities:** {', '.join(seq_data['activities'])}")
+            top_seqs = motif_findings.get('top_sequences', [])[:10]
 
-                        # Show all motifs in this sequence
-                        sequences_with_motifs = comprehensive.get('sequences_with_motifs', {})
-                        if seq_data['sequence'] in sequences_with_motifs:
-                            motifs = sequences_with_motifs[seq_data['sequence']]['motifs']
+            for seq_data in top_seqs:
+                with st.expander(
+                    f"{seq_data['sequence']} ({seq_data['n_motifs']} motifs, "
+                    f"score: {seq_data['likelihood_score']:.4f})"
+                ):
+                    st.write(f"**Activities:** {', '.join(seq_data['activities'])}")
 
-                            for motif in motifs:
-                                st.write(
-                                    f"- **{motif['motif']}** at position {motif['position']} "
-                                    f"({motif['activity']}): {motif['description']}"
-                                )
+                    # Show all motifs in this sequence
+                    sequences_with_motifs = comprehensive.get('sequences_with_motifs', {})
+                    if seq_data['sequence'] in sequences_with_motifs:
+                        motifs = sequences_with_motifs[seq_data['sequence']]['motifs']
 
-                # ---- AI 분석 연계 ----
-                if top_seqs:
-                    st.markdown("---")
-                    st.markdown("#### 🤖 AI 심층 분석 연계")
+                        for motif in motifs:
+                            st.write(
+                                f"- **{motif['motif']}** at position {motif['position']} "
+                                f"({motif['activity']}): {motif['description']}"
+                            )
 
-                    # session_state에 모티프 보유 서열 저장
-                    motif_sequences = [s['sequence'] for s in top_seqs]
-                    st.session_state['bioactive_sequences'] = motif_sequences
-                    st.session_state['bioactive_source'] = f"3번 페이지 ({selected_sample})"
-
-                    col_ai1, col_ai2 = st.columns(2)
-                    with col_ai1:
-                        selected_motif_seq = st.selectbox(
-                            "AI 분석할 서열 선택",
-                            motif_sequences,
-                            key="select_motif_seq"
-                        )
-                    with col_ai2:
-                        st.markdown("<br>", unsafe_allow_html=True)
-                        if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
-                            st.session_state['ai_input_sequence'] = selected_motif_seq
-                            st.session_state['ai_target_tab'] = 'prediction'
-                            st.info(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
-
-                    if st.button("📦 모티프 보유 서열 전체 → AI 배치 분석", key="send_motif_batch"):
-                        st.session_state['ai_batch_sequences'] = motif_sequences
-                        st.session_state['ai_batch_source'] = f"{selected_sample} 모티프 후보 {len(motif_sequences)}개"
-                        st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
-
-                    st.markdown("---")
-
-                # ---- 유사 모티프 검색 (ESM-2 기반) ----
+            # ---- AI 분석 연계 ----
+            if top_seqs:
                 st.markdown("---")
-                st.markdown("#### 🔬 유사 모티프 검색 (ESM-2 Embedding)")
-                st.markdown("정확히 일치하지 않지만 ESM-2 임베딩 기반으로 유사한 모티프를 탐지합니다.")
+                st.markdown("#### 🤖 AI 심층 분석 연계")
 
-                if st.button("🧬 유사 모티프 검색 실행", key="run_similar_motif"):
-                    embedder = load_plm_embedder()
+                # session_state에 모티프 보유 서열 저장
+                motif_sequences = [s['sequence'] for s in top_seqs]
+                st.session_state['bioactive_sequences'] = motif_sequences
+                st.session_state['bioactive_source'] = f"3번 페이지 ({motif_sample})"
 
-                    # Get all known motifs from the predictor
-                    known_motifs = predictor.motif_finder.motifs
+                col_ai1, col_ai2 = st.columns(2)
+                with col_ai1:
+                    selected_motif_seq = st.selectbox(
+                        "AI 분석할 서열 선택",
+                        motif_sequences,
+                        key="select_motif_seq"
+                    )
+                with col_ai2:
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
+                        st.session_state['ai_input_sequence'] = selected_motif_seq
+                        st.session_state['ai_target_tab'] = 'prediction'
+                        st.success(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
 
-                    # Get generated sequences
-                    gen_sequences = [s['sequence'] for s in motif_findings.get('top_sequences', [])]
-                    # Also include sequences without exact matches
-                    all_gen_seqs = comprehensive.get('all_sequences', gen_sequences)
-                    if not all_gen_seqs:
-                        all_gen_seqs = gen_sequences
+                if st.button("📦 모티프 보유 서열 전체 → AI 배치 분석", key="send_motif_batch"):
+                    st.session_state['ai_batch_sequences'] = motif_sequences
+                    st.session_state['ai_batch_source'] = f"{motif_sample} 모티프 후보 {len(motif_sequences)}개"
+                    st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
 
-                    similar_results = []
+                st.markdown("---")
 
-                    with st.spinner("ESM-2 임베딩으로 유사 모티프 검색 중..."):
-                        # Pre-compute motif embeddings
-                        motif_embeddings = {}
-                        for motif_data in known_motifs:
-                            motif_seq = motif_data['sequence']
-                            if len(motif_seq) >= 3:  # Only meaningful motifs
+            # ---- 유사 모티프 검색 (ESM-2 기반) ----
+            st.markdown("---")
+            st.markdown("#### 🔬 유사 모티프 검색 (ESM-2 Embedding)")
+            st.markdown("정확히 일치하지 않지만 ESM-2 임베딩 기반으로 유사한 모티프를 탐지합니다.")
+
+            if st.button("🧬 유사 모티프 검색 실행", key="run_similar_motif"):
+                embedder = load_plm_embedder()
+
+                # Get all known motifs
+                motif_finder_predictor = BioactivePredictor(loader)
+                known_motifs = motif_finder_predictor.motif_finder.motifs
+
+                # Get generated sequences
+                gen_sequences = [s['sequence'] for s in motif_findings.get('top_sequences', [])]
+                all_gen_seqs = comprehensive.get('all_sequences', gen_sequences)
+                if not all_gen_seqs:
+                    all_gen_seqs = gen_sequences
+
+                similar_results = []
+
+                with st.spinner("ESM-2 임베딩으로 유사 모티프 검색 중..."):
+                    # Pre-compute motif embeddings
+                    motif_embeddings = {}
+                    for motif_data in known_motifs:
+                        motif_seq = motif_data['sequence']
+                        if len(motif_seq) >= 3:
+                            try:
+                                motif_emb = embedder.get_motif_embedding(motif_seq)
+                                motif_embeddings[motif_seq] = {
+                                    'embedding': motif_emb,
+                                    'activity': motif_data['activity'],
+                                    'description': motif_data['description']
+                                }
+                            except Exception:
+                                continue
+
+                    # Sliding window search
+                    for seq in all_gen_seqs[:20]:
+                        for motif_seq, motif_info in motif_embeddings.items():
+                            motif_len = len(motif_seq)
+                            if motif_len > len(seq):
+                                continue
+                            if motif_seq in seq:
+                                continue
+
+                            for start in range(len(seq) - motif_len + 1):
+                                subseq = seq[start:start + motif_len]
                                 try:
-                                    motif_emb = embedder.get_motif_embedding(motif_seq)
-                                    motif_embeddings[motif_seq] = {
-                                        'embedding': motif_emb,
-                                        'activity': motif_data['activity'],
-                                        'description': motif_data['description']
-                                    }
+                                    sub_emb = embedder.get_motif_embedding(subseq)
+                                    dot = np.dot(sub_emb, motif_info['embedding'])
+                                    norm1 = np.linalg.norm(sub_emb)
+                                    norm2 = np.linalg.norm(motif_info['embedding'])
+                                    sim = dot / (norm1 * norm2 + 1e-10)
+
+                                    if sim > 0.85:
+                                        similar_results.append({
+                                            'sequence': seq,
+                                            'subsequence': subseq,
+                                            'position': start + 1,
+                                            'known_motif': motif_seq,
+                                            'similarity': round(float(sim), 4),
+                                            'activity': motif_info['activity'],
+                                            'description': motif_info['description']
+                                        })
                                 except Exception:
                                     continue
 
-                        # Sliding window search on generated sequences
-                        for seq in all_gen_seqs[:20]:  # Limit to top 20 for performance
-                            for motif_seq, motif_info in motif_embeddings.items():
-                                motif_len = len(motif_seq)
-                                if motif_len > len(seq):
-                                    continue
+                st.session_state['similar_motif_results'] = similar_results
 
-                                # Skip if exact match already found
-                                if motif_seq in seq:
-                                    continue
+            if 'similar_motif_results' in st.session_state:
+                similar_results = st.session_state['similar_motif_results']
 
-                                for start in range(len(seq) - motif_len + 1):
-                                    subseq = seq[start:start + motif_len]
-                                    try:
-                                        sub_emb = embedder.get_motif_embedding(subseq)
-                                        # Cosine similarity
-                                        dot = np.dot(sub_emb, motif_info['embedding'])
-                                        norm1 = np.linalg.norm(sub_emb)
-                                        norm2 = np.linalg.norm(motif_info['embedding'])
-                                        sim = dot / (norm1 * norm2 + 1e-10)
+                if similar_results:
+                    st.success(f"유사 모티프 {len(similar_results)}개 발견!")
 
-                                        if sim > 0.85:
-                                            similar_results.append({
-                                                'sequence': seq,
-                                                'subsequence': subseq,
-                                                'position': start + 1,
-                                                'known_motif': motif_seq,
-                                                'similarity': round(float(sim), 4),
-                                                'activity': motif_info['activity'],
-                                                'description': motif_info['description']
-                                            })
-                                    except Exception:
-                                        continue
+                    sim_df = pd.DataFrame(similar_results)
+                    sim_df = sim_df.sort_values('similarity', ascending=False)
+                    sim_df_display = sim_df[['sequence', 'subsequence', 'position',
+                                              'known_motif', 'similarity', 'activity']].copy()
+                    sim_df_display.columns = ['서열', '부분 서열', '위치', '유사 모티프',
+                                               '유사도', '활성']
+                    sim_df_display['유사도'] = sim_df_display['유사도'].apply(lambda x: f"{x:.4f}")
 
-                    st.session_state['similar_motif_results'] = similar_results
+                    st.dataframe(sim_df_display, use_container_width=True, hide_index=True)
 
-                if 'similar_motif_results' in st.session_state:
-                    similar_results = st.session_state['similar_motif_results']
+                    st.markdown("**활성별 유사 모티프 분포:**")
+                    activity_counts = sim_df['activity'].value_counts()
+                    for act, cnt in activity_counts.items():
+                        st.write(f"- **{act.title()}**: {cnt}개 유사 모티프")
+                else:
+                    st.info("유사도 0.85 이상의 유사 모티프가 발견되지 않았습니다.")
 
-                    if similar_results:
-                        st.success(f"유사 모티프 {len(similar_results)}개 발견!")
+            st.markdown("---")
 
-                        sim_df = pd.DataFrame(similar_results)
-                        sim_df = sim_df.sort_values('similarity', ascending=False)
-                        sim_df_display = sim_df[['sequence', 'subsequence', 'position',
-                                                  'known_motif', 'similarity', 'activity']].copy()
-                        sim_df_display.columns = ['서열', '부분 서열', '위치', '유사 모티프',
-                                                   '유사도', '활성']
-                        sim_df_display['유사도'] = sim_df_display['유사도'].apply(lambda x: f"{x:.4f}")
+            # Recommendations
+            st.markdown("#### Activity-based Recommendations")
 
-                        st.dataframe(sim_df_display, use_container_width=True, hide_index=True)
+            recommendations = comprehensive.get('recommendations', {})
 
-                        # Summary by activity
-                        st.markdown("**활성별 유사 모티프 분포:**")
-                        activity_counts = sim_df['activity'].value_counts()
-                        for act, cnt in activity_counts.items():
-                            st.write(f"- **{act.title()}**: {cnt}개 유사 모티프")
+            for activity, rec in recommendations.items():
+                with st.expander(
+                    f"{activity.title()} "
+                    f"(Composition score: {rec['composition_score']:.3f}, "
+                    f"{rec['n_candidates']} candidates)"
+                ):
+                    rec_seqs = rec.get('top_sequences', [])
+
+                    if rec_seqs:
+                        st.write("**Top Candidate:**")
+                        top = rec_seqs[0]
+                        st.code(top['sequence'], language=None)
+                        st.write(f"Likelihood: {top['likelihood_score']:.4f}")
+                        st.write(f"Motifs found: {top['n_motifs']}")
+
+                        for motif in top['motifs']:
+                            st.write(f"  - {motif['motif']} at position {motif['position']}")
                     else:
-                        st.info("유사도 0.85 이상의 유사 모티프가 발견되지 않았습니다.")
-
-                st.markdown("---")
-
-                # Recommendations
-                st.markdown("#### Activity-based Recommendations")
-
-                recommendations = comprehensive.get('recommendations', {})
-
-                for activity, rec in recommendations.items():
-                    with st.expander(
-                        f"{activity.title()} "
-                        f"(Composition score: {rec['composition_score']:.3f}, "
-                        f"{rec['n_candidates']} candidates)"
-                    ):
-                        top_seqs = rec.get('top_sequences', [])
-
-                        if top_seqs:
-                            st.write("**Top Candidate:**")
-                            top = top_seqs[0]
-                            st.code(top['sequence'], language=None)
-                            st.write(f"Likelihood: {top['likelihood_score']:.4f}")
-                            st.write(f"Motifs found: {top['n_motifs']}")
-
-                            for motif in top['motifs']:
-                                st.write(f"  - {motif['motif']} at position {motif['position']}")
-                        else:
-                            st.info("No sequences with motifs found for this activity")
+                        st.info("No sequences with motifs found for this activity")
 
     with tab3:
         st.markdown("### Compare Bioactivity Profiles")
