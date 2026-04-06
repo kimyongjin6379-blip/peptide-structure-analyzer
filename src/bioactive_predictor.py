@@ -32,18 +32,24 @@ class BioactiveMotifFinder:
             db_path: 모티프 데이터베이스 경로 (None이면 기본 경로)
         """
         if db_path is None:
-            db_path = get_data_dir() / 'bioactive_peptide_db.json'
+            # Prefer comprehensive DB if available
+            comprehensive = get_data_dir() / 'bioactive_peptide_db_comprehensive.json'
+            if comprehensive.exists():
+                db_path = comprehensive
+            else:
+                db_path = get_data_dir() / 'bioactive_peptide_db.json'
         else:
             db_path = Path(db_path)
 
         self.db_path = db_path
         self.motifs = []
         self.activity_rules = {}
+        self.is_comprehensive = False
         self._load_database()
 
     def _load_database(self):
         """
-        데이터베이스 로딩
+        데이터베이스 로딩 (기존 52개 DB 및 comprehensive DB 모두 지원)
         """
         if not self.db_path.exists():
             print(f"[WARNING] Database not found: {self.db_path}")
@@ -51,17 +57,43 @@ class BioactiveMotifFinder:
 
         with open(self.db_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
+
+        # Comprehensive DB format (from build_bioactive_db.py)
+        if 'peptides' in data and 'metadata' in data:
+            self.is_comprehensive = True
+            self.motifs = []
+            for p in data['peptides']:
+                activities = p.get('activities', ['unknown'])
+                primary_activity = activities[0] if activities else 'unknown'
+                self.motifs.append({
+                    'sequence': p['sequence'],
+                    'activity': primary_activity,
+                    'all_activities': activities,
+                    'description': p.get('description', ''),
+                    'references': p.get('references', []),
+                    'source': p.get('source_protein', ''),
+                    'IC50': p.get('ic50'),
+                    'molecular_weight': p.get('molecular_weight'),
+                    'length': p.get('length', len(p['sequence'])),
+                    'db_sources': p.get('db_sources', []),
+                })
+            self.activity_rules = data.get('activity_rules', {})
+            meta = data['metadata']
+            print(f"[OK] Loaded {len(self.motifs)} peptides from comprehensive DB "
+                  f"({meta.get('activity_types', '?')} activity types)")
+        else:
+            # Original format
             self.motifs = data.get('motifs', [])
             self.activity_rules = data.get('activity_rules', {})
+            print(f"[OK] Loaded {len(self.motifs)} motifs from database")
 
-        print(f"[OK] Loaded {len(self.motifs)} motifs from database")
-
-    def find_motifs_in_sequence(self, sequence: str) -> List[Dict]:
+    def find_motifs_in_sequence(self, sequence: str, min_motif_length: int = 3) -> List[Dict]:
         """
         서열에서 모티프 검색
 
         Args:
             sequence: 아미노산 서열
+            min_motif_length: 최소 모티프 길이 (기본 3, 2글자 디펩타이드 노이즈 방지)
 
         Returns:
             발견된 모티프 리스트
@@ -74,15 +106,29 @@ class BioactiveMotifFinder:
         for motif_data in self.motifs:
             motif_seq = motif_data['sequence']
 
+            # Skip too-short motifs to reduce noise
+            if len(motif_seq) < min_motif_length:
+                continue
+
             # 정규표현식으로 모든 위치 찾기
             for match in re.finditer(motif_seq, sequence):
-                found_motifs.append({
+                entry = {
                     'motif': motif_seq,
                     'position': match.start(),
                     'activity': motif_data['activity'],
                     'description': motif_data['description'],
                     'references': motif_data.get('references', [])
-                })
+                }
+                # Add comprehensive DB fields if available
+                if motif_data.get('all_activities'):
+                    entry['all_activities'] = motif_data['all_activities']
+                if motif_data.get('IC50'):
+                    entry['IC50'] = motif_data['IC50']
+                if motif_data.get('source'):
+                    entry['source'] = motif_data['source']
+                if motif_data.get('molecular_weight'):
+                    entry['molecular_weight'] = motif_data['molecular_weight']
+                found_motifs.append(entry)
 
         return found_motifs
 

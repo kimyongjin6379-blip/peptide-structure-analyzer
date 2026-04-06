@@ -1,0 +1,3 @@
+data/raw_db/
+src/__pycache__/
+streamlit_app/pages/__pycache__/

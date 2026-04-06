@@ -209,6 +209,15 @@ def main():
     with tab2:
         st.markdown("### Motif Search in Generated Sequences")
 
+        # Show DB info
+        temp_predictor = BioactivePredictor(loader)
+        n_motifs = len(temp_predictor.motif_finder.motifs)
+        is_comprehensive = getattr(temp_predictor.motif_finder, 'is_comprehensive', False)
+        if is_comprehensive:
+            st.info(f"📊 Comprehensive DB: **{n_motifs:,}** bioactive peptides (BIOPEP-UWM + curated)")
+        else:
+            st.info(f"📊 Database: **{n_motifs}** bioactive motifs")
+
         # Parameters
         col1, col2 = st.columns(2)
 
