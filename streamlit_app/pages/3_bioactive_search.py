@@ -70,26 +70,28 @@ def main():
     ])
 
     with tab1:
-        st.markdown("### Bioactivity Profile: 예측 → DB 매칭 → 스코어링")
+        st.markdown("### Bioactivity Profile: Markov → ESM-2 필터 → DB 매칭 → 스코어링")
         st.markdown(
-            "펩톤 조성에서 서열을 생성하고, **4,162개 DB**와 매칭하여 "
-            "활성 프로파일을 산출합니다."
+            "펩톤 조성에서 서열을 생성하고, **ESM-2로 생물학적 타당성을 검증**한 후, "
+            "**4,162개 DB**와 매칭하여 활성 프로파일을 산출합니다."
         )
 
-        col_p1, col_p2 = st.columns(2)
+        col_p1, col_p2, col_p3 = st.columns(3)
         with col_p1:
-            profile_n_seq = st.number_input("생성 서열 수", 50, 500, 200, key="profile_n")
+            profile_n_seq = st.number_input("초기 생성 서열 수", 100, 1000, 500, step=100, key="profile_n")
         with col_p2:
             profile_len = st.slider("서열 길이 범위", 3, 20, (3, 12), key="profile_len")
+        with col_p3:
+            esm2_top_n = st.number_input("ESM-2 필터 후 상위 N개", 50, 500, 200, step=50, key="esm2_top")
 
         if st.button("🎯 활성 프로파일 분석", type="primary", key="run_profile"):
-            with st.spinner("서열 생성 → DB 매칭 → 활성 스코어링 중..."):
-                from sequence_predictor import SequenceGenerator
-                from collections import Counter
+            from sequence_predictor import SequenceGenerator
+            from collections import Counter
 
-                # Step 1: 서열 생성
-                taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
-                if taa_comp:
+            taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
+            if taa_comp:
+                # Step 1: Markov 서열 생성
+                with st.spinner(f"Step 1/3: Markov 서열 {profile_n_seq}개 생성 중..."):
                     generator = SequenceGenerator(taa_comp)
                     sequences = generator.generate_sequences(
                         length_range=profile_len,
@@ -97,17 +99,59 @@ def main():
                         method='markov'
                     )
 
-                    # Step 2: DB 매칭
+                # Step 2: ESM-2 fitness scoring & filtering
+                with st.spinner(f"Step 2/3: ESM-2 fitness 평가 중... ({len(sequences)}개 서열)"):
+                    embedder = load_plm_embedder()
+                    scored_sequences = []
+                    progress_bar = st.progress(0)
+
+                    for idx, (seq, likelihood) in enumerate(sequences):
+                        fitness = embedder.get_fitness_score(seq)
+                        combined = likelihood * 0.4 + fitness * 0.6
+                        scored_sequences.append({
+                            'sequence': seq,
+                            'likelihood': likelihood,
+                            'esm2_fitness': fitness,
+                            'combined_score': combined,
+                        })
+                        if (idx + 1) % 10 == 0:
+                            progress_bar.progress((idx + 1) / len(sequences))
+
+                    progress_bar.empty()
+
+                    # Sort by combined score and take top N
+                    scored_sequences.sort(key=lambda x: x['combined_score'], reverse=True)
+                    top_sequences = scored_sequences[:esm2_top_n]
+
+                    avg_fitness_all = sum(s['esm2_fitness'] for s in scored_sequences) / len(scored_sequences)
+                    avg_fitness_top = sum(s['esm2_fitness'] for s in top_sequences) / len(top_sequences)
+
+                # Step 3: DB 매칭 & 활성 스코어링
+                with st.spinner(f"Step 3/3: DB 매칭 ({len(top_sequences)}개 → 4,162개 DB)..."):
                     finder = BioactivePredictor(loader).motif_finder
                     all_hits = []
                     seq_with_hits = 0
-                    for seq, score in sequences:
+                    hit_sequences_detail = []
+
+                    for s in top_sequences:
+                        seq = s['sequence']
                         motifs = finder.find_motifs_in_sequence(seq, min_motif_length=3)
                         if motifs:
                             seq_with_hits += 1
                             all_hits.extend(motifs)
+                            hit_sequences_detail.append({
+                                'sequence': seq,
+                                'esm2_fitness': s['esm2_fitness'],
+                                'combined_score': s['combined_score'],
+                                'motifs_found': len(motifs),
+                                'activities': list(set(
+                                    act for m in motifs
+                                    for act in m.get('all_activities', [m['activity']])
+                                    if act != 'unknown'
+                                )),
+                            })
 
-                    # Step 3: 활성별 스코어링
+                    # Activity scoring
                     activity_hit_counts = Counter()
                     activity_peptides = {}
                     for hit in all_hits:
@@ -119,7 +163,6 @@ def main():
                                     activity_peptides[act] = set()
                                 activity_peptides[act].add(hit['motif'])
 
-                    # Normalize to 0-1 scores
                     if activity_hit_counts:
                         max_hits = max(activity_hit_counts.values())
                         activity_scores = {
@@ -133,10 +176,15 @@ def main():
                         'activity_scores': activity_scores,
                         'activity_hit_counts': dict(activity_hit_counts),
                         'activity_peptides': {k: list(v) for k, v in activity_peptides.items()},
-                        'total_sequences': len(sequences),
+                        'total_generated': len(sequences),
+                        'esm2_filtered': len(top_sequences),
                         'seq_with_hits': seq_with_hits,
                         'total_hits': len(all_hits),
                         'sample_id': selected_sample,
+                        'avg_fitness_all': round(avg_fitness_all, 4),
+                        'avg_fitness_top': round(avg_fitness_top, 4),
+                        'hit_sequences': sorted(hit_sequences_detail,
+                                                key=lambda x: x['combined_score'], reverse=True)[:20],
                     }
 
         # Display results from session_state
@@ -144,17 +192,28 @@ def main():
             result = st.session_state['profile_result']
             activity_scores = result['activity_scores']
 
-            # Summary metrics
-            c1, c2, c3, c4 = st.columns(4)
+            # Pipeline summary
+            st.markdown("#### 파이프라인 요약")
+            c1, c2, c3, c4, c5 = st.columns(5)
             with c1:
-                st.metric("생성 서열", result['total_sequences'])
+                st.metric("Markov 생성", result['total_generated'])
             with c2:
-                st.metric("DB 매칭 서열", result['seq_with_hits'])
+                st.metric("ESM-2 필터", result['esm2_filtered'],
+                          delta=f"avg fitness {result['avg_fitness_top']:.3f}")
             with c3:
-                hit_rate = result['seq_with_hits'] / max(result['total_sequences'], 1) * 100
-                st.metric("매칭률", f"{hit_rate:.1f}%")
+                st.metric("DB 매칭 서열", result['seq_with_hits'])
             with c4:
+                hit_rate = result['seq_with_hits'] / max(result['esm2_filtered'], 1) * 100
+                st.metric("매칭률", f"{hit_rate:.1f}%")
+            with c5:
                 st.metric("총 히트 수", result['total_hits'])
+
+            # ESM-2 filtering effect
+            st.caption(
+                f"📊 ESM-2 필터 효과: 전체 평균 fitness {result['avg_fitness_all']:.4f} → "
+                f"상위 {result['esm2_filtered']}개 평균 {result['avg_fitness_top']:.4f} "
+                f"(+{result['avg_fitness_top'] - result['avg_fitness_all']:.4f})"
+            )
 
             if activity_scores:
                 # Radar chart - top 12 activities for readability
@@ -206,81 +265,21 @@ def main():
                             st.markdown("**매칭된 생리활성 펩타이드:**")
                             for pep in sorted(peptides, key=len, reverse=True)[:10]:
                                 st.code(pep, language=None)
+                # Hit sequences detail table
+                if result.get('hit_sequences'):
+                    st.markdown("### 🧬 DB 매칭된 상위 서열 (ESM-2 스코어 포함)")
+                    hit_rows = []
+                    for hs in result['hit_sequences']:
+                        hit_rows.append({
+                            'Sequence': hs['sequence'],
+                            'ESM-2 Fitness': f"{hs['esm2_fitness']:.4f}",
+                            'Combined Score': f"{hs['combined_score']:.4f}",
+                            'Motifs Found': hs['motifs_found'],
+                            'Activities': ', '.join(hs['activities'][:5]),
+                        })
+                    st.dataframe(pd.DataFrame(hit_rows), use_container_width=True, hide_index=True)
             else:
                 st.warning("매칭된 생리활성 펩타이드가 없습니다. 서열 수를 늘려보세요.")
-
-            # DL-based Activity Prediction (ESM-2 보강)
-            st.markdown("---")
-            st.markdown("### 🤖 ESM-2 DL 활성 예측 (앙상블)")
-            st.markdown("DB 매칭 스코어를 ESM-2 딥러닝 모델로 보강합니다.")
-
-            if st.button("🧬 DL 활성 예측 실행", key="run_dl_prediction"):
-                embedder = load_plm_embedder()
-                fitness_pred = load_fitness_predictor()
-
-                from sequence_predictor import AbundancePredictor
-                abundance_pred = AbundancePredictor(loader)
-                gen_result = abundance_pred.predict_for_sample(
-                    result['sample_id'],
-                    length_range=(5, 12),
-                    n_sequences=10,
-                    method="markov"
-                )
-
-                top_seqs = [s['sequence'] for s in gen_result.get('sequences_with_mw', [])[:5]]
-
-                if top_seqs:
-                    with st.spinner("ESM-2 임베딩 추출 및 DL 활성 예측 중..."):
-                        dl_results = []
-                        for seq in top_seqs:
-                            emb = embedder.get_sequence_embedding(seq)
-                            dl_pred = fitness_pred.predict(emb)
-
-                            ensemble_scores = {}
-                            for act_name, db_score in activity_scores.items():
-                                dl_score = dl_pred.get(act_name, {}).get('score', 0.5)
-                                ensemble = db_score * 0.4 + dl_score * 0.6
-                                both_high = db_score > 0.5 and dl_score > 0.5
-                                both_low = db_score <= 0.5 and dl_score <= 0.5
-                                if both_high or both_low:
-                                    confidence = "★★★"
-                                elif db_score > 0.6 or dl_score > 0.6:
-                                    confidence = "★★"
-                                else:
-                                    confidence = "★"
-                                ensemble_scores[act_name] = {
-                                    'db': round(db_score, 4),
-                                    'dl': round(dl_score, 4),
-                                    'ensemble': round(ensemble, 4),
-                                    'confidence': confidence
-                                }
-
-                            dl_results.append({
-                                'sequence': seq,
-                                'scores': ensemble_scores
-                            })
-
-                    st.session_state['dl_activity_results'] = dl_results
-
-            if 'dl_activity_results' in st.session_state:
-                dl_results = st.session_state['dl_activity_results']
-
-                for seq_result in dl_results:
-                    with st.expander(f"서열: `{seq_result['sequence']}`"):
-                        rows = []
-                        for act_name, scores in sorted(
-                            seq_result['scores'].items(),
-                            key=lambda x: x[1]['ensemble'],
-                            reverse=True
-                        ):
-                            rows.append({
-                                'Activity': act_name.replace('_', ' ').title(),
-                                'DB Score': f"{scores['db']:.3f}",
-                                'DL Score': f"{scores['dl']:.3f}",
-                                'Ensemble (DB*0.4 + DL*0.6)': f"{scores['ensemble']:.3f}",
-                                'Confidence': scores['confidence']
-                            })
-                        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     with tab2:
         st.markdown("### Motif Search in Generated Sequences")
