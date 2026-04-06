@@ -64,147 +64,223 @@ def main():
 
     # Tabs for different analyses
     tab1, tab2, tab3 = st.tabs([
-        "🎯 Composition-based Prediction",
+        "🎯 DB-based Activity Profile",
         "🔍 Motif Search",
         "📊 Compare Samples"
     ])
 
     with tab1:
-        st.markdown("### Activity Prediction from Composition")
-
-        scorer = ActivityScorer()
-        result = scorer.predict_for_sample(selected_sample, loader)
-
-        # Activity scores radar chart
-        activity_scores = result.get('activity_scores', {})
-
-        fig = BioactivityVisualizer.plot_activity_scores(
-            activity_scores,
-            title=f"Bioactivity Profile - {selected_sample}"
+        st.markdown("### Bioactivity Profile: 예측 → DB 매칭 → 스코어링")
+        st.markdown(
+            "펩톤 조성에서 서열을 생성하고, **4,162개 DB**와 매칭하여 "
+            "활성 프로파일을 산출합니다."
         )
-        st.plotly_chart(fig, use_container_width=True)
 
-        # Top 3 activities
-        st.markdown("### Top 3 Predicted Activities")
+        col_p1, col_p2 = st.columns(2)
+        with col_p1:
+            profile_n_seq = st.number_input("생성 서열 수", 50, 500, 200, key="profile_n")
+        with col_p2:
+            profile_len = st.slider("서열 길이 범위", 3, 20, (3, 12), key="profile_len")
 
-        ranked = sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)
+        if st.button("🎯 활성 프로파일 분석", type="primary", key="run_profile"):
+            with st.spinner("서열 생성 → DB 매칭 → 활성 스코어링 중..."):
+                from sequence_predictor import SequenceGenerator
+                from collections import Counter
 
-        for i, (activity, score) in enumerate(ranked[:3], 1):
-            details = result['activity_details'][activity]
+                # Step 1: 서열 생성
+                taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
+                if taa_comp:
+                    generator = SequenceGenerator(taa_comp)
+                    sequences = generator.generate_sequences(
+                        length_range=profile_len,
+                        n_sequences=profile_n_seq,
+                        method='markov'
+                    )
 
-            with st.expander(f"#{i} {activity.title()} (Score: {score:.3f})", expanded=(i==1)):
-                col1, col2 = st.columns([1, 2])
+                    # Step 2: DB 매칭
+                    finder = BioactivePredictor(loader).motif_finder
+                    all_hits = []
+                    seq_with_hits = 0
+                    for seq, score in sequences:
+                        motifs = finder.find_motifs_in_sequence(seq, min_motif_length=3)
+                        if motifs:
+                            seq_with_hits += 1
+                            all_hits.extend(motifs)
 
-                with col1:
-                    st.metric("Score", f"{score:.3f}")
-                    st.metric("Threshold", f"{details['threshold']:.2f}")
+                    # Step 3: 활성별 스코어링
+                    activity_hit_counts = Counter()
+                    activity_peptides = {}
+                    for hit in all_hits:
+                        activities = hit.get('all_activities', [hit['activity']])
+                        for act in activities:
+                            if act != 'unknown':
+                                activity_hit_counts[act] += 1
+                                if act not in activity_peptides:
+                                    activity_peptides[act] = set()
+                                activity_peptides[act].add(hit['motif'])
 
-                    if details['above_threshold']:
-                        st.success("✅ Above threshold")
+                    # Normalize to 0-1 scores
+                    if activity_hit_counts:
+                        max_hits = max(activity_hit_counts.values())
+                        activity_scores = {
+                            act: round(count / max_hits, 4)
+                            for act, count in activity_hit_counts.items()
+                        }
                     else:
-                        st.warning("⚠️ Below threshold")
+                        activity_scores = {}
 
-                with col2:
-                    st.markdown(f"**Description:** {details['description']}")
+                    st.session_state['profile_result'] = {
+                        'activity_scores': activity_scores,
+                        'activity_hit_counts': dict(activity_hit_counts),
+                        'activity_peptides': {k: list(v) for k, v in activity_peptides.items()},
+                        'total_sequences': len(sequences),
+                        'seq_with_hits': seq_with_hits,
+                        'total_hits': len(all_hits),
+                        'sample_id': selected_sample,
+                    }
 
-                    st.markdown("**Contributing Amino Acids:**")
-                    contrib_aas = details['contributing_amino_acids']
+        # Display results from session_state
+        if 'profile_result' in st.session_state:
+            result = st.session_state['profile_result']
+            activity_scores = result['activity_scores']
 
-                    for aa_info in contrib_aas:
-                        st.write(
-                            f"- **{aa_info['amino_acid']}**: {aa_info['percentage']:.2f}% "
-                            f"(weight: {aa_info['weight']}, contribution: {aa_info['contribution']:.3f})"
-                        )
+            # Summary metrics
+            c1, c2, c3, c4 = st.columns(4)
+            with c1:
+                st.metric("생성 서열", result['total_sequences'])
+            with c2:
+                st.metric("DB 매칭 서열", result['seq_with_hits'])
+            with c3:
+                hit_rate = result['seq_with_hits'] / max(result['total_sequences'], 1) * 100
+                st.metric("매칭률", f"{hit_rate:.1f}%")
+            with c4:
+                st.metric("총 히트 수", result['total_hits'])
 
-        # All activities table
-        st.markdown("### All Activities")
+            if activity_scores:
+                # Radar chart - top 12 activities for readability
+                top_activities = dict(
+                    sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)[:12]
+                )
 
-        df = pd.DataFrame([
-            {
-                'Activity': act.title(),
-                'Score': f"{score:.3f}",
-                'Threshold': f"{result['activity_details'][act]['threshold']:.2f}",
-                'Above Threshold': '✅' if result['activity_details'][act]['above_threshold'] else '❌'
-            }
-            for act, score in sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)
-        ])
+                fig = BioactivityVisualizer.plot_activity_scores(
+                    top_activities,
+                    title=f"DB-based Bioactivity Profile - {result['sample_id']}"
+                )
+                st.plotly_chart(fig, use_container_width=True)
 
-        st.dataframe(df, use_container_width=True, hide_index=True)
+                # Detailed table
+                st.markdown("### 활성별 상세 (전체)")
+                rows = []
+                for act, score in sorted(activity_scores.items(), key=lambda x: x[1], reverse=True):
+                    hits = result['activity_hit_counts'].get(act, 0)
+                    peptides = result['activity_peptides'].get(act, [])
+                    top_peps = sorted(peptides, key=len, reverse=True)[:5]
+                    rows.append({
+                        'Activity': act.replace('_', ' ').title(),
+                        'Score': f"{score:.3f}",
+                        'DB Hits': hits,
+                        'Unique Motifs': len(peptides),
+                        'Top Matched Peptides': ', '.join(top_peps),
+                    })
+                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-        # DL-based Activity Prediction
-        st.markdown("---")
-        st.markdown("### 🤖 DL 기반 활성 예측 (ESM-2 + MLP)")
-        st.markdown("규칙 기반 스코어를 딥러닝 모델로 보강하여 앙상블 예측을 수행합니다.")
+                # Top 3 activities detail
+                st.markdown("### Top 3 활성 분석")
+                ranked = sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)
 
-        if st.button("🧬 DL 활성 예측 실행", key="run_dl_prediction"):
-            embedder = load_plm_embedder()
-            fitness_pred = load_fitness_predictor()
+                for i, (activity, score) in enumerate(ranked[:3], 1):
+                    peptides = result['activity_peptides'].get(activity, [])
+                    hits = result['activity_hit_counts'].get(activity, 0)
 
-            # Generate top sequences for this sample to embed
-            from sequence_predictor import AbundancePredictor
-            abundance_pred = AbundancePredictor(loader)
-            gen_result = abundance_pred.predict_for_sample(
-                selected_sample,
-                length_range=(5, 12),
-                n_sequences=10,
-                method="markov"
-            )
+                    with st.expander(
+                        f"#{i} {activity.replace('_', ' ').title()} "
+                        f"(Score: {score:.3f}, Hits: {hits})",
+                        expanded=(i == 1)
+                    ):
+                        col1, col2 = st.columns([1, 2])
+                        with col1:
+                            st.metric("Score", f"{score:.3f}")
+                            st.metric("DB Hits", hits)
+                            st.metric("Unique Motifs", len(peptides))
+                        with col2:
+                            st.markdown("**매칭된 생리활성 펩타이드:**")
+                            for pep in sorted(peptides, key=len, reverse=True)[:10]:
+                                st.code(pep, language=None)
+            else:
+                st.warning("매칭된 생리활성 펩타이드가 없습니다. 서열 수를 늘려보세요.")
 
-            top_seqs = [s['sequence'] for s in gen_result.get('sequences_with_mw', [])[:5]]
+            # DL-based Activity Prediction (ESM-2 보강)
+            st.markdown("---")
+            st.markdown("### 🤖 ESM-2 DL 활성 예측 (앙상블)")
+            st.markdown("DB 매칭 스코어를 ESM-2 딥러닝 모델로 보강합니다.")
 
-            if top_seqs:
-                with st.spinner("ESM-2 임베딩 추출 및 DL 활성 예측 중..."):
-                    dl_results = []
-                    for seq in top_seqs:
-                        emb = embedder.get_sequence_embedding(seq)
-                        dl_pred = fitness_pred.predict(emb)
+            if st.button("🧬 DL 활성 예측 실행", key="run_dl_prediction"):
+                embedder = load_plm_embedder()
+                fitness_pred = load_fitness_predictor()
 
-                        # Ensemble with rule-based scores
-                        ensemble_scores = {}
-                        for act_name, act_score in activity_scores.items():
-                            rule_score = act_score
-                            dl_score = dl_pred.get(act_name, {}).get('score', 0.5)
-                            ensemble = rule_score * 0.4 + dl_score * 0.6
-                            # Confidence: both agree = high, one high = medium, disagree = low
-                            both_high = rule_score > 0.5 and dl_score > 0.5
-                            both_low = rule_score <= 0.5 and dl_score <= 0.5
-                            if both_high or both_low:
-                                confidence = "★★★"
-                            elif rule_score > 0.6 or dl_score > 0.6:
-                                confidence = "★★"
-                            else:
-                                confidence = "★"
-                            ensemble_scores[act_name] = {
-                                'rule': round(rule_score, 4),
-                                'dl': round(dl_score, 4),
-                                'ensemble': round(ensemble, 4),
-                                'confidence': confidence
-                            }
+                from sequence_predictor import AbundancePredictor
+                abundance_pred = AbundancePredictor(loader)
+                gen_result = abundance_pred.predict_for_sample(
+                    result['sample_id'],
+                    length_range=(5, 12),
+                    n_sequences=10,
+                    method="markov"
+                )
 
-                        dl_results.append({
-                            'sequence': seq,
-                            'scores': ensemble_scores
-                        })
+                top_seqs = [s['sequence'] for s in gen_result.get('sequences_with_mw', [])[:5]]
 
-                st.session_state['dl_activity_results'] = dl_results
+                if top_seqs:
+                    with st.spinner("ESM-2 임베딩 추출 및 DL 활성 예측 중..."):
+                        dl_results = []
+                        for seq in top_seqs:
+                            emb = embedder.get_sequence_embedding(seq)
+                            dl_pred = fitness_pred.predict(emb)
 
-        if 'dl_activity_results' in st.session_state:
-            dl_results = st.session_state['dl_activity_results']
+                            ensemble_scores = {}
+                            for act_name, db_score in activity_scores.items():
+                                dl_score = dl_pred.get(act_name, {}).get('score', 0.5)
+                                ensemble = db_score * 0.4 + dl_score * 0.6
+                                both_high = db_score > 0.5 and dl_score > 0.5
+                                both_low = db_score <= 0.5 and dl_score <= 0.5
+                                if both_high or both_low:
+                                    confidence = "★★★"
+                                elif db_score > 0.6 or dl_score > 0.6:
+                                    confidence = "★★"
+                                else:
+                                    confidence = "★"
+                                ensemble_scores[act_name] = {
+                                    'db': round(db_score, 4),
+                                    'dl': round(dl_score, 4),
+                                    'ensemble': round(ensemble, 4),
+                                    'confidence': confidence
+                                }
 
-            for seq_result in dl_results:
-                with st.expander(f"서열: `{seq_result['sequence']}`"):
-                    rows = []
-                    for act_name, scores in sorted(seq_result['scores'].items(),
-                                                     key=lambda x: x[1]['ensemble'],
-                                                     reverse=True):
-                        rows.append({
-                            'Activity': act_name.title(),
-                            'Rule-based': f"{scores['rule']:.3f}",
-                            'DL Score': f"{scores['dl']:.3f}",
-                            'Ensemble (R*0.4 + DL*0.6)': f"{scores['ensemble']:.3f}",
-                            'Confidence': scores['confidence']
-                        })
-                    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                            dl_results.append({
+                                'sequence': seq,
+                                'scores': ensemble_scores
+                            })
+
+                    st.session_state['dl_activity_results'] = dl_results
+
+            if 'dl_activity_results' in st.session_state:
+                dl_results = st.session_state['dl_activity_results']
+
+                for seq_result in dl_results:
+                    with st.expander(f"서열: `{seq_result['sequence']}`"):
+                        rows = []
+                        for act_name, scores in sorted(
+                            seq_result['scores'].items(),
+                            key=lambda x: x[1]['ensemble'],
+                            reverse=True
+                        ):
+                            rows.append({
+                                'Activity': act_name.replace('_', ' ').title(),
+                                'DB Score': f"{scores['db']:.3f}",
+                                'DL Score': f"{scores['dl']:.3f}",
+                                'Ensemble (DB*0.4 + DL*0.6)': f"{scores['ensemble']:.3f}",
+                                'Confidence': scores['confidence']
+                            })
+                        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
     with tab2:
         st.markdown("### Motif Search in Generated Sequences")
@@ -467,44 +543,57 @@ def main():
 
         if len(selected_samples) >= 2:
             if st.button("📊 Compare Activities"):
-                with st.spinner("Analyzing samples..."):
+                with st.spinner("DB 매칭 기반 비교 분석 중... (샘플당 200개 서열 생성)"):
                     predictor = BioactivePredictor(loader)
                     comparison = predictor.compare_samples_bioactivity(selected_samples)
 
-                    # Radar chart comparison
-                    samples_activities = comparison.get('sample_scores', {})
+                    st.session_state['compare_result'] = comparison
+
+            if 'compare_result' in st.session_state:
+                comparison = st.session_state['compare_result']
+                samples_activities = comparison.get('sample_scores', {})
+
+                if samples_activities:
+                    # Use top 10 activities across all samples for radar chart
+                    all_acts = {}
+                    for scores in samples_activities.values():
+                        for act, score in scores.items():
+                            all_acts[act] = max(all_acts.get(act, 0), score)
+                    top_acts = sorted(all_acts, key=all_acts.get, reverse=True)[:10]
+
+                    # Filter to top activities
+                    filtered = {}
+                    for sid, scores in samples_activities.items():
+                        filtered[sid] = {act: scores.get(act, 0) for act in top_acts}
 
                     fig = BioactivityVisualizer.plot_activity_comparison(
-                        samples_activities,
-                        title="Bioactivity Comparison"
+                        filtered,
+                        title="DB-based Bioactivity Comparison"
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
                     # Best samples by activity
                     st.markdown("#### Best Samples by Activity")
-
                     best_samples = comparison.get('best_samples_by_activity', {})
 
                     df = pd.DataFrame([
                         {
-                            'Activity': act.title(),
+                            'Activity': act.replace('_', ' ').title(),
                             'Best Sample': data['sample_id'],
                             'Score': f"{data['score']:.3f}"
                         }
                         for act, data in sorted(best_samples.items())
                     ])
-
                     st.dataframe(df, use_container_width=True, hide_index=True)
 
                     # Detailed scores table
                     st.markdown("#### Detailed Scores")
-
                     detailed_df = pd.DataFrame(samples_activities).T
                     detailed_df = detailed_df.round(3)
                     st.dataframe(detailed_df, use_container_width=True)
 
         else:
-            st.info("Please select at least 2 samples to compare")
+            st.info("비교할 샘플을 2개 이상 선택하세요.")
 
 
 if __name__ == "__main__":

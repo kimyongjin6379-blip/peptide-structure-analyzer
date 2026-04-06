@@ -458,12 +458,16 @@ class BioactivePredictor:
 
         return recommendations
 
-    def compare_samples_bioactivity(self, sample_ids: List[str]) -> Dict:
+    def compare_samples_bioactivity(self, sample_ids: List[str],
+                                     n_sequences: int = 200,
+                                     length_range: Tuple[int, int] = (3, 12)) -> Dict:
         """
-        여러 샘플의 생리활성 비교
+        여러 샘플의 생리활성 비교 (DB 매칭 기반)
 
         Args:
             sample_ids: 샘플 ID 리스트
+            n_sequences: 샘플당 생성 서열 수
+            length_range: 서열 길이 범위
 
         Returns:
             비교 결과
@@ -471,10 +475,36 @@ class BioactivePredictor:
         results = {}
 
         for sample_id in sample_ids:
-            composition_analysis = self.activity_scorer.predict_for_sample(
-                sample_id, self.loader
+            taa_comp = self.loader.get_peptide_composition(sample_id, normalize=True)
+            if not taa_comp:
+                continue
+
+            generator = SequenceGenerator(taa_comp)
+            sequences = generator.generate_sequences(
+                length_range=length_range,
+                n_sequences=n_sequences,
+                method='markov'
             )
-            results[sample_id] = composition_analysis.get('activity_scores', {})
+
+            # DB matching
+            activity_hit_counts = defaultdict(int)
+            for seq, score in sequences:
+                motifs = self.motif_finder.find_motifs_in_sequence(seq, min_motif_length=3)
+                for hit in motifs:
+                    activities = hit.get('all_activities', [hit['activity']])
+                    for act in activities:
+                        if act != 'unknown':
+                            activity_hit_counts[act] += 1
+
+            # Normalize
+            if activity_hit_counts:
+                max_hits = max(activity_hit_counts.values())
+                results[sample_id] = {
+                    act: round(count / max_hits, 4)
+                    for act, count in activity_hit_counts.items()
+                }
+            else:
+                results[sample_id] = {}
 
         # 활성별 최고 샘플
         activities = set()
