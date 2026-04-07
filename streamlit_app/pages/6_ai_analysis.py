@@ -773,16 +773,13 @@ def main():
 
                 st.success(f"✅ {len(valid_seqs)}/{len(seqs)}개 서열 분석 완료")
 
-                # ---- Zero-shot Fitness ----
+                # ---- Zero-shot Fitness (임베딩+로짓 기반) ----
                 if do_fitness and valid_seqs:
-                    st.markdown("### 🔬 Zero-shot Fitness 스코어")
-                    fitness_scores = []
-                    for seq in valid_seqs:
-                        try:
-                            score = embedder.get_sequence_log_likelihood(seq)
-                            fitness_scores.append(score)
-                        except Exception:
-                            fitness_scores.append(0.0)
+                    st.markdown("### 🔬 ESM-2 Fitness 스코어")
+                    with st.spinner(f"ESM-2 Fitness 평가 중... ({len(valid_seqs)}개 서열)"):
+                        fitness_scores = embedder.get_batch_fitness_scores(
+                            valid_seqs, batch_size=16
+                        )
 
                     fitness_df = pd.DataFrame({
                         "서열": [s[:30] + "..." if len(s) > 30 else s for s in valid_seqs],
