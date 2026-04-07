@@ -31,10 +31,34 @@ def main():
 
     loader = load_data()
 
+    # ---- 다른 페이지에서 전송된 서열 확인 ----
+    transferred_from_bioactive = st.session_state.get('structure_from_bioactive', False)
+    transferred_struct_seq = st.session_state.get('structure_sequence', None)
+
+    if transferred_from_bioactive and transferred_struct_seq:
+        st.info(
+            f"📨 **3번 페이지 (Bioactive Search)에서 전송된 서열**: "
+            f"`{transferred_struct_seq}`  (길이: {len(transferred_struct_seq)} AA)"
+        )
+        col_use, col_clear = st.columns([1, 1])
+        with col_use:
+            if st.button("✅ 이 서열로 3D 예측하기", type="primary", key="use_transferred"):
+                st.session_state['structure_from_bioactive'] = False
+                st.rerun()
+        with col_clear:
+            if st.button("🗑️ 전송 데이터 초기화", key="clear_transferred"):
+                st.session_state.pop('structure_sequence', None)
+                st.session_state.pop('structure_from_bioactive', None)
+                st.rerun()
+        st.markdown("---")
+
     # Input method
+    input_options = ["Generate from Sample", "Custom Sequence"]
+    default_input = 1 if (transferred_struct_seq and not transferred_from_bioactive) else 0
     input_method = st.radio(
         "Sequence Input Method:",
-        ["Generate from Sample", "Custom Sequence"]
+        input_options,
+        index=default_input
     )
 
     sequence = None
@@ -109,11 +133,14 @@ def main():
                 st.info(f"📊 Likelihood Score: {st.session_state['structure_sequence_score']:.4f}")
 
     else:
+        default_custom = transferred_struct_seq if transferred_struct_seq else "ARNDCEQGH"
         sequence = st.text_input(
             "Enter Sequence (1-letter codes, max 30 AA):",
-            value="ARNDCEQGH",
+            value=default_custom,
             max_chars=30
         ).upper()
+        if transferred_struct_seq:
+            st.caption("📨 Bioactive Search에서 전송된 서열이 자동 입력되었습니다.")
 
     if sequence:
         st.markdown("---")

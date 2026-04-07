@@ -300,26 +300,30 @@ def main():
                     st.session_state['bioactive_sequences'] = motif_sequences
                     st.session_state['bioactive_source'] = f"Bioactive Search ({result['sample_id']})"
 
-                    col_ai1, col_ai2 = st.columns(2)
+                    selected_motif_seq = st.selectbox(
+                        "전송할 서열 선택",
+                        motif_sequences,
+                        key="select_motif_seq"
+                    )
+
+                    col_ai1, col_ai2, col_ai3 = st.columns(3)
                     with col_ai1:
-                        selected_motif_seq = st.selectbox(
-                            "AI 분석할 서열 선택",
-                            motif_sequences,
-                            key="select_motif_seq"
-                        )
-                    with col_ai2:
-                        st.markdown("<br>", unsafe_allow_html=True)
-                        if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
+                        if st.button("🤖 → AI 활성 분석", key="send_motif_ai"):
                             st.session_state['ai_input_sequence'] = selected_motif_seq
                             st.session_state['ai_target_tab'] = 'prediction'
                             st.success(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
-
-                    if st.button("📦 매칭 서열 전체 → AI 배치 분석", key="send_motif_batch"):
-                        st.session_state['ai_batch_sequences'] = motif_sequences
-                        st.session_state['ai_batch_source'] = (
-                            f"{result['sample_id']} DB 매칭 후보 {len(motif_sequences)}개"
-                        )
-                        st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
+                    with col_ai2:
+                        if st.button("🔬 → 3D 구조 예측", key="send_motif_3d"):
+                            st.session_state['structure_sequence'] = selected_motif_seq
+                            st.session_state['structure_from_bioactive'] = True
+                            st.success(f"✅ `{selected_motif_seq}` → 5번 3D 구조 페이지로 이동하세요")
+                    with col_ai3:
+                        if st.button("📦 전체 → AI 배치", key="send_motif_batch"):
+                            st.session_state['ai_batch_sequences'] = motif_sequences
+                            st.session_state['ai_batch_source'] = (
+                                f"{result['sample_id']} DB 매칭 후보 {len(motif_sequences)}개"
+                            )
+                            st.success(f"✅ {len(motif_sequences)}개 서열 → 6번 AI 배치 분석으로 이동하세요")
 
             else:
                 st.warning("매칭된 생리활성 펩타이드가 없습니다. 서열 수를 늘려보세요.")
