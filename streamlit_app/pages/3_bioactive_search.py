@@ -99,14 +99,17 @@ def main():
                         method='markov'
                     )
 
-                # Step 2: ESM-2 fitness scoring & filtering
-                with st.spinner(f"Step 2/3: ESM-2 fitness 평가 중... ({len(sequences)}개 서열)"):
+                # Step 2: ESM-2 fitness scoring & filtering (임베딩 배치 방식 — 빠름)
+                with st.spinner(f"Step 2/3: ESM-2 임베딩 기반 fitness 평가 중... ({len(sequences)}개 서열)"):
                     embedder = load_plm_embedder()
-                    scored_sequences = []
-                    progress_bar = st.progress(0)
 
-                    for idx, (seq, likelihood) in enumerate(sequences):
-                        fitness = embedder.get_fitness_score(seq)
+                    # 배치로 한번에 fitness 계산 (서열당 forward pass 1회)
+                    seq_list = [seq for seq, _ in sequences]
+                    likelihood_list = [lik for _, lik in sequences]
+                    fitness_scores = embedder.get_batch_fitness_scores(seq_list, batch_size=16)
+
+                    scored_sequences = []
+                    for seq, likelihood, fitness in zip(seq_list, likelihood_list, fitness_scores):
                         combined = likelihood * 0.4 + fitness * 0.6
                         scored_sequences.append({
                             'sequence': seq,
@@ -114,10 +117,6 @@ def main():
                             'esm2_fitness': fitness,
                             'combined_score': combined,
                         })
-                        if (idx + 1) % 10 == 0:
-                            progress_bar.progress((idx + 1) / len(sequences))
-
-                    progress_bar.empty()
 
                     # Sort by combined score and take top N
                     scored_sequences.sort(key=lambda x: x['combined_score'], reverse=True)
