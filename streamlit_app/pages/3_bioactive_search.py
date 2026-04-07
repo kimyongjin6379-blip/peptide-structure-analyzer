@@ -1,5 +1,6 @@
 """
-Page 3: Bioactive Motif Search (핵심 페이지)
+Page 3: Bioactive Peptide Search
+Markov → ESM-2 필터 → DB(4,162) 매칭 → 활성 프로파일 + AI 연계
 """
 
 import sys
@@ -40,41 +41,43 @@ def load_fitness_predictor():
     return predictor
 
 
+@st.cache_resource
+def load_bioactive_predictor(_loader):
+    return BioactivePredictor(_loader)
+
+
 def main():
     st.title("💊 Bioactive Peptide Prediction")
-    st.markdown("Identify bioactive motifs and predict biological activities")
+    st.markdown("펩톤 조성 기반 생리활성 펩타이드 예측 및 DB 매칭")
     st.markdown("---")
 
     loader = load_data()
+    predictor = load_bioactive_predictor(loader)
 
-    # Get sample options with product names
+    # DB info
+    n_motifs = len(predictor.motif_finder.motifs)
+    is_comprehensive = getattr(predictor.motif_finder, 'is_comprehensive', False)
+    if is_comprehensive:
+        st.info(f"📊 Comprehensive DB: **{n_motifs:,}** bioactive peptides (BIOPEP-UWM + curated)")
+    else:
+        st.info(f"📊 Database: **{n_motifs}** bioactive motifs")
+
+    # Sample selection
     sample_options = loader.get_sample_options()
-
-    # Sample selection with product names
-    selected_display = st.selectbox(
-        "Select Sample:",
-        list(sample_options.keys()),
-        index=0
-    )
-
-    # Get actual sample_id
+    selected_display = st.selectbox("Select Sample:", list(sample_options.keys()), index=0)
     selected_sample = sample_options[selected_display]
 
     st.markdown("---")
 
-    # Tabs for different analyses
-    tab1, tab2, tab3 = st.tabs([
-        "🎯 DB-based Activity Profile",
-        "🔍 Motif Search",
+    # Two tabs: Activity Profile + Compare
+    tab1, tab2 = st.tabs([
+        "🎯 Activity Profile",
         "📊 Compare Samples"
     ])
 
+    # ========== TAB 1: Activity Profile (통합) ==========
     with tab1:
-        st.markdown("### Bioactivity Profile: Markov → ESM-2 필터 → DB 매칭 → 스코어링")
-        st.markdown(
-            "펩톤 조성에서 서열을 생성하고, **ESM-2로 생물학적 타당성을 검증**한 후, "
-            "**4,162개 DB**와 매칭하여 활성 프로파일을 산출합니다."
-        )
+        st.markdown("### Markov → ESM-2 필터 → DB 매칭 → 활성 프로파일")
 
         col_p1, col_p2, col_p3 = st.columns(3)
         with col_p1:
@@ -90,7 +93,7 @@ def main():
 
             taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
             if taa_comp:
-                # Step 1: Markov 서열 생성
+                # Step 1: Markov
                 with st.spinner(f"Step 1/3: Markov 서열 {profile_n_seq}개 생성 중..."):
                     generator = SequenceGenerator(taa_comp)
                     sequences = generator.generate_sequences(
@@ -99,11 +102,9 @@ def main():
                         method='markov'
                     )
 
-                # Step 2: ESM-2 fitness scoring & filtering (임베딩 배치 방식 — 빠름)
+                # Step 2: ESM-2 임베딩 기반 fitness
                 with st.spinner(f"Step 2/3: ESM-2 임베딩 기반 fitness 평가 중... ({len(sequences)}개 서열)"):
                     embedder = load_plm_embedder()
-
-                    # 배치로 한번에 fitness 계산 (서열당 forward pass 1회)
                     seq_list = [seq for seq, _ in sequences]
                     likelihood_list = [lik for _, lik in sequences]
                     fitness_scores = embedder.get_batch_fitness_scores(seq_list, batch_size=16)
@@ -118,16 +119,15 @@ def main():
                             'combined_score': combined,
                         })
 
-                    # Sort by combined score and take top N
                     scored_sequences.sort(key=lambda x: x['combined_score'], reverse=True)
                     top_sequences = scored_sequences[:esm2_top_n]
 
                     avg_fitness_all = sum(s['esm2_fitness'] for s in scored_sequences) / len(scored_sequences)
                     avg_fitness_top = sum(s['esm2_fitness'] for s in top_sequences) / len(top_sequences)
 
-                # Step 3: DB 매칭 & 활성 스코어링
-                with st.spinner(f"Step 3/3: DB 매칭 ({len(top_sequences)}개 → 4,162개 DB)..."):
-                    finder = BioactivePredictor(loader).motif_finder
+                # Step 3: DB 매칭
+                with st.spinner(f"Step 3/3: DB 매칭 ({len(top_sequences)}개 → {n_motifs:,}개 DB)..."):
+                    finder = predictor.motif_finder
                     all_hits = []
                     seq_with_hits = 0
                     hit_sequences_detail = []
@@ -143,6 +143,7 @@ def main():
                                 'esm2_fitness': s['esm2_fitness'],
                                 'combined_score': s['combined_score'],
                                 'motifs_found': len(motifs),
+                                'motifs_detail': motifs,
                                 'activities': list(set(
                                     act for m in motifs
                                     for act in m.get('all_activities', [m['activity']])
@@ -186,7 +187,7 @@ def main():
                                                 key=lambda x: x['combined_score'], reverse=True)[:20],
                     }
 
-        # Display results from session_state
+        # ---- Display results ----
         if 'profile_result' in st.session_state:
             result = st.session_state['profile_result']
             activity_scores = result['activity_scores']
@@ -207,7 +208,6 @@ def main():
             with c5:
                 st.metric("총 히트 수", result['total_hits'])
 
-            # ESM-2 filtering effect
             st.caption(
                 f"📊 ESM-2 필터 효과: 전체 평균 fitness {result['avg_fitness_all']:.4f} → "
                 f"상위 {result['esm2_filtered']}개 평균 {result['avg_fitness_top']:.4f} "
@@ -215,19 +215,18 @@ def main():
             )
 
             if activity_scores:
-                # Radar chart - top 12 activities for readability
+                # ---- Radar chart ----
                 top_activities = dict(
                     sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)[:12]
                 )
-
                 fig = BioactivityVisualizer.plot_activity_scores(
                     top_activities,
-                    title=f"DB-based Bioactivity Profile - {result['sample_id']}"
+                    title=f"Bioactivity Profile - {result['sample_id']}"
                 )
                 st.plotly_chart(fig, use_container_width=True)
 
-                # Detailed table
-                st.markdown("### 활성별 상세 (전체)")
+                # ---- Activity detail table ----
+                st.markdown("### 활성별 상세")
                 rows = []
                 for act, score in sorted(activity_scores.items(), key=lambda x: x[1], reverse=True):
                     hits = result['activity_hit_counts'].get(act, 0)
@@ -242,14 +241,12 @@ def main():
                     })
                 st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-                # Top 3 activities detail
+                # ---- Top 3 activities ----
                 st.markdown("### Top 3 활성 분석")
                 ranked = sorted(activity_scores.items(), key=lambda x: x[1], reverse=True)
-
                 for i, (activity, score) in enumerate(ranked[:3], 1):
                     peptides = result['activity_peptides'].get(activity, [])
                     hits = result['activity_hit_counts'].get(activity, 0)
-
                     with st.expander(
                         f"#{i} {activity.replace('_', ' ').title()} "
                         f"(Score: {score:.3f}, Hits: {hits})",
@@ -264,7 +261,8 @@ def main():
                             st.markdown("**매칭된 생리활성 펩타이드:**")
                             for pep in sorted(peptides, key=len, reverse=True)[:10]:
                                 st.code(pep, language=None)
-                # Hit sequences detail table
+
+                # ---- Hit sequences table ----
                 if result.get('hit_sequences'):
                     st.markdown("### 🧬 DB 매칭된 상위 서열 (ESM-2 스코어 포함)")
                     hit_rows = []
@@ -277,274 +275,83 @@ def main():
                             'Activities': ', '.join(hs['activities'][:5]),
                         })
                     st.dataframe(pd.DataFrame(hit_rows), use_container_width=True, hide_index=True)
+
+                    # ---- Motif detail per sequence ----
+                    st.markdown("### 서열별 모티프 상세")
+                    for hs in result['hit_sequences'][:10]:
+                        with st.expander(
+                            f"`{hs['sequence']}` — {hs['motifs_found']} motifs, "
+                            f"fitness {hs['esm2_fitness']:.4f}"
+                        ):
+                            for m in hs.get('motifs_detail', []):
+                                ic50 = m.get('IC50', '')
+                                ic50_str = f" | IC50: {ic50}" if ic50 else ""
+                                acts = m.get('all_activities', [m['activity']])
+                                st.write(
+                                    f"- **{m['motif']}** @ pos {m['position']} — "
+                                    f"{', '.join(acts[:3])}{ic50_str}"
+                                )
+
+                    # ---- AI 분석 연계 ----
+                    st.markdown("---")
+                    st.markdown("### 🤖 AI 심층 분석 연계")
+
+                    motif_sequences = [hs['sequence'] for hs in result['hit_sequences']]
+                    st.session_state['bioactive_sequences'] = motif_sequences
+                    st.session_state['bioactive_source'] = f"Bioactive Search ({result['sample_id']})"
+
+                    col_ai1, col_ai2 = st.columns(2)
+                    with col_ai1:
+                        selected_motif_seq = st.selectbox(
+                            "AI 분석할 서열 선택",
+                            motif_sequences,
+                            key="select_motif_seq"
+                        )
+                    with col_ai2:
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
+                            st.session_state['ai_input_sequence'] = selected_motif_seq
+                            st.session_state['ai_target_tab'] = 'prediction'
+                            st.success(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
+
+                    if st.button("📦 매칭 서열 전체 → AI 배치 분석", key="send_motif_batch"):
+                        st.session_state['ai_batch_sequences'] = motif_sequences
+                        st.session_state['ai_batch_source'] = (
+                            f"{result['sample_id']} DB 매칭 후보 {len(motif_sequences)}개"
+                        )
+                        st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
+
             else:
                 st.warning("매칭된 생리활성 펩타이드가 없습니다. 서열 수를 늘려보세요.")
 
+    # ========== TAB 2: Compare Samples ==========
     with tab2:
-        st.markdown("### Motif Search in Generated Sequences")
-
-        # Show DB info
-        temp_predictor = BioactivePredictor(loader)
-        n_motifs = len(temp_predictor.motif_finder.motifs)
-        is_comprehensive = getattr(temp_predictor.motif_finder, 'is_comprehensive', False)
-        if is_comprehensive:
-            st.info(f"📊 Comprehensive DB: **{n_motifs:,}** bioactive peptides (BIOPEP-UWM + curated)")
-        else:
-            st.info(f"📊 Database: **{n_motifs}** bioactive motifs")
-
-        # Parameters
-        col1, col2 = st.columns(2)
-
-        with col1:
-            n_sequences = st.number_input("Number of sequences to generate", 20, 100, 50)
-
-        with col2:
-            length_range = st.slider("Sequence length range", 5, 15, (5, 12))
-
-        if st.button("🔍 Search Motifs", type="primary"):
-            with st.spinner("Generating sequences and searching motifs..."):
-                predictor = BioactivePredictor(loader)
-                comprehensive = predictor.predict_comprehensive(
-                    selected_sample,
-                    n_sequences=n_sequences,
-                    length_range=length_range
-                )
-                # session_state에 결과 저장 (페이지 리렌더링 시에도 유지)
-                st.session_state['motif_comprehensive'] = comprehensive
-                st.session_state['motif_sample'] = selected_sample
-
-        # session_state에서 결과 표시
-        if 'motif_comprehensive' in st.session_state:
-            comprehensive = st.session_state['motif_comprehensive']
-            motif_sample = st.session_state.get('motif_sample', '')
-
-            st.success("Search complete!")
-
-            # Motif findings
-            motif_findings = comprehensive['motif_findings']
-
-            col1, col2, col3 = st.columns(3)
-
-            with col1:
-                st.metric("Sequences Generated", comprehensive['generated_sequences'])
-
-            with col2:
-                st.metric("Sequences with Motifs", motif_findings['total_sequences_with_motifs'])
-
-            with col3:
-                st.metric("Total Motifs Found", motif_findings['total_motifs_found'])
-
-            # Motifs by activity
-            if motif_findings['by_activity']:
-                st.markdown("#### Motifs by Activity")
-
-                for activity, count in sorted(
-                    motif_findings['by_activity'].items(),
-                    key=lambda x: x[1],
-                    reverse=True
-                ):
-                    st.write(f"**{activity.title()}**: {count} sequences")
-
-            # Top sequences with motifs
-            st.markdown("#### Top Sequences with Motifs")
-
-            top_seqs = motif_findings.get('top_sequences', [])[:10]
-
-            for seq_data in top_seqs:
-                with st.expander(
-                    f"{seq_data['sequence']} ({seq_data['n_motifs']} motifs, "
-                    f"score: {seq_data['likelihood_score']:.4f})"
-                ):
-                    st.write(f"**Activities:** {', '.join(seq_data['activities'])}")
-
-                    # Show all motifs in this sequence
-                    sequences_with_motifs = comprehensive.get('sequences_with_motifs', {})
-                    if seq_data['sequence'] in sequences_with_motifs:
-                        motifs = sequences_with_motifs[seq_data['sequence']]['motifs']
-
-                        for motif in motifs:
-                            st.write(
-                                f"- **{motif['motif']}** at position {motif['position']} "
-                                f"({motif['activity']}): {motif['description']}"
-                            )
-
-            # ---- AI 분석 연계 ----
-            if top_seqs:
-                st.markdown("---")
-                st.markdown("#### 🤖 AI 심층 분석 연계")
-
-                # session_state에 모티프 보유 서열 저장
-                motif_sequences = [s['sequence'] for s in top_seqs]
-                st.session_state['bioactive_sequences'] = motif_sequences
-                st.session_state['bioactive_source'] = f"3번 페이지 ({motif_sample})"
-
-                col_ai1, col_ai2 = st.columns(2)
-                with col_ai1:
-                    selected_motif_seq = st.selectbox(
-                        "AI 분석할 서열 선택",
-                        motif_sequences,
-                        key="select_motif_seq"
-                    )
-                with col_ai2:
-                    st.markdown("<br>", unsafe_allow_html=True)
-                    if st.button("🤖 이 서열 → AI 분석으로 보내기", key="send_motif_ai"):
-                        st.session_state['ai_input_sequence'] = selected_motif_seq
-                        st.session_state['ai_target_tab'] = 'prediction'
-                        st.success(f"✅ `{selected_motif_seq}` → 6번 AI 분석 페이지로 이동하세요")
-
-                if st.button("📦 모티프 보유 서열 전체 → AI 배치 분석", key="send_motif_batch"):
-                    st.session_state['ai_batch_sequences'] = motif_sequences
-                    st.session_state['ai_batch_source'] = f"{motif_sample} 모티프 후보 {len(motif_sequences)}개"
-                    st.success(f"✅ {len(motif_sequences)}개 서열이 AI 분석 페이지로 전송되었습니다!")
-
-                st.markdown("---")
-
-            # ---- 유사 모티프 검색 (ESM-2 기반) ----
-            st.markdown("---")
-            st.markdown("#### 🔬 유사 모티프 검색 (ESM-2 Embedding)")
-            st.markdown("정확히 일치하지 않지만 ESM-2 임베딩 기반으로 유사한 모티프를 탐지합니다.")
-
-            if st.button("🧬 유사 모티프 검색 실행", key="run_similar_motif"):
-                embedder = load_plm_embedder()
-
-                # Get all known motifs
-                motif_finder_predictor = BioactivePredictor(loader)
-                known_motifs = motif_finder_predictor.motif_finder.motifs
-
-                # Get generated sequences
-                gen_sequences = [s['sequence'] for s in motif_findings.get('top_sequences', [])]
-                all_gen_seqs = comprehensive.get('all_sequences', gen_sequences)
-                if not all_gen_seqs:
-                    all_gen_seqs = gen_sequences
-
-                similar_results = []
-
-                with st.spinner("ESM-2 임베딩으로 유사 모티프 검색 중..."):
-                    # Pre-compute motif embeddings
-                    motif_embeddings = {}
-                    for motif_data in known_motifs:
-                        motif_seq = motif_data['sequence']
-                        if len(motif_seq) >= 3:
-                            try:
-                                motif_emb = embedder.get_motif_embedding(motif_seq)
-                                motif_embeddings[motif_seq] = {
-                                    'embedding': motif_emb,
-                                    'activity': motif_data['activity'],
-                                    'description': motif_data['description']
-                                }
-                            except Exception:
-                                continue
-
-                    # Sliding window search
-                    for seq in all_gen_seqs[:20]:
-                        for motif_seq, motif_info in motif_embeddings.items():
-                            motif_len = len(motif_seq)
-                            if motif_len > len(seq):
-                                continue
-                            if motif_seq in seq:
-                                continue
-
-                            for start in range(len(seq) - motif_len + 1):
-                                subseq = seq[start:start + motif_len]
-                                try:
-                                    sub_emb = embedder.get_motif_embedding(subseq)
-                                    dot = np.dot(sub_emb, motif_info['embedding'])
-                                    norm1 = np.linalg.norm(sub_emb)
-                                    norm2 = np.linalg.norm(motif_info['embedding'])
-                                    sim = dot / (norm1 * norm2 + 1e-10)
-
-                                    if sim > 0.85:
-                                        similar_results.append({
-                                            'sequence': seq,
-                                            'subsequence': subseq,
-                                            'position': start + 1,
-                                            'known_motif': motif_seq,
-                                            'similarity': round(float(sim), 4),
-                                            'activity': motif_info['activity'],
-                                            'description': motif_info['description']
-                                        })
-                                except Exception:
-                                    continue
-
-                st.session_state['similar_motif_results'] = similar_results
-
-            if 'similar_motif_results' in st.session_state:
-                similar_results = st.session_state['similar_motif_results']
-
-                if similar_results:
-                    st.success(f"유사 모티프 {len(similar_results)}개 발견!")
-
-                    sim_df = pd.DataFrame(similar_results)
-                    sim_df = sim_df.sort_values('similarity', ascending=False)
-                    sim_df_display = sim_df[['sequence', 'subsequence', 'position',
-                                              'known_motif', 'similarity', 'activity']].copy()
-                    sim_df_display.columns = ['서열', '부분 서열', '위치', '유사 모티프',
-                                               '유사도', '활성']
-                    sim_df_display['유사도'] = sim_df_display['유사도'].apply(lambda x: f"{x:.4f}")
-
-                    st.dataframe(sim_df_display, use_container_width=True, hide_index=True)
-
-                    st.markdown("**활성별 유사 모티프 분포:**")
-                    activity_counts = sim_df['activity'].value_counts()
-                    for act, cnt in activity_counts.items():
-                        st.write(f"- **{act.title()}**: {cnt}개 유사 모티프")
-                else:
-                    st.info("유사도 0.85 이상의 유사 모티프가 발견되지 않았습니다.")
-
-            st.markdown("---")
-
-            # Recommendations
-            st.markdown("#### Activity-based Recommendations")
-
-            recommendations = comprehensive.get('recommendations', {})
-
-            for activity, rec in recommendations.items():
-                with st.expander(
-                    f"{activity.title()} "
-                    f"(Composition score: {rec['composition_score']:.3f}, "
-                    f"{rec['n_candidates']} candidates)"
-                ):
-                    rec_seqs = rec.get('top_sequences', [])
-
-                    if rec_seqs:
-                        st.write("**Top Candidate:**")
-                        top = rec_seqs[0]
-                        st.code(top['sequence'], language=None)
-                        st.write(f"Likelihood: {top['likelihood_score']:.4f}")
-                        st.write(f"Motifs found: {top['n_motifs']}")
-
-                        for motif in top['motifs']:
-                            st.write(f"  - {motif['motif']} at position {motif['position']}")
-                    else:
-                        st.info("No sequences with motifs found for this activity")
-
-    with tab3:
         st.markdown("### Compare Bioactivity Profiles")
+        st.markdown("여러 펩톤의 DB 매칭 기반 활성 프로파일을 비교합니다.")
 
-        # Create reverse mapping for multiselect
         display_to_id = sample_options
         id_to_display = {v: k for k, v in sample_options.items()}
 
-        # Get default selections
         sample_ids = list(sample_options.values())
-        default_displays = [id_to_display[sid] for sid in sample_ids[:3]] if len(sample_ids) >= 3 else [id_to_display[sid] for sid in sample_ids]
+        default_displays = (
+            [id_to_display[sid] for sid in sample_ids[:3]]
+            if len(sample_ids) >= 3
+            else [id_to_display[sid] for sid in sample_ids]
+        )
 
         selected_displays = st.multiselect(
-            "Select samples to compare (max 5):",
+            "비교할 샘플 선택 (최대 5개):",
             list(sample_options.keys()),
             default=default_displays,
             max_selections=5
         )
 
-        # Convert display names back to sample IDs
         selected_samples = [display_to_id[display] for display in selected_displays]
 
         if len(selected_samples) >= 2:
-            if st.button("📊 Compare Activities"):
+            if st.button("📊 비교 분석 실행"):
                 with st.spinner("DB 매칭 기반 비교 분석 중... (샘플당 200개 서열 생성)"):
-                    predictor = BioactivePredictor(loader)
                     comparison = predictor.compare_samples_bioactivity(selected_samples)
-
                     st.session_state['compare_result'] = comparison
 
             if 'compare_result' in st.session_state:
@@ -552,14 +359,13 @@ def main():
                 samples_activities = comparison.get('sample_scores', {})
 
                 if samples_activities:
-                    # Use top 10 activities across all samples for radar chart
+                    # Top 10 activities for radar
                     all_acts = {}
                     for scores in samples_activities.values():
                         for act, score in scores.items():
                             all_acts[act] = max(all_acts.get(act, 0), score)
                     top_acts = sorted(all_acts, key=all_acts.get, reverse=True)[:10]
 
-                    # Filter to top activities
                     filtered = {}
                     for sid, scores in samples_activities.items():
                         filtered[sid] = {act: scores.get(act, 0) for act in top_acts}
@@ -570,10 +376,9 @@ def main():
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
-                    # Best samples by activity
+                    # Best samples
                     st.markdown("#### Best Samples by Activity")
                     best_samples = comparison.get('best_samples_by_activity', {})
-
                     df = pd.DataFrame([
                         {
                             'Activity': act.replace('_', ' ').title(),
@@ -584,7 +389,7 @@ def main():
                     ])
                     st.dataframe(df, use_container_width=True, hide_index=True)
 
-                    # Detailed scores table
+                    # Detailed scores
                     st.markdown("#### Detailed Scores")
                     detailed_df = pd.DataFrame(samples_activities).T
                     detailed_df = detailed_df.round(3)

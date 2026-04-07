@@ -536,13 +536,15 @@ def main():
                         st.dataframe(df, use_container_width=True)
 
     # ============================================================
-    # 탭 4: ML 기반 활성 예측
+    # 탭 4: DB + ESM-2 기반 활성 예측
     # ============================================================
     with tab4:
-        st.markdown("## ML 기반 활성 예측")
+        st.markdown("## DB + ESM-2 기반 생리활성 예측")
         st.markdown(
-            "ESM-2 임베딩을 기반으로 6가지 생리활성을 예측합니다.\n\n"
-            "기존 규칙 기반 예측(3번 페이지)보다 정확한 딥러닝 예측입니다."
+            "**4,162개 생리활성 펩타이드 DB** (BIOPEP-UWM 기반, 25가지 활성 유형)와 "
+            "**ESM-2 임베딩 유사도**를 결합하여 입력 서열의 생리활성을 예측합니다.\n\n"
+            "3번 페이지의 Markov+ESM-2+DB 파이프라인과 동일한 DB를 사용하되, "
+            "여기서는 **개별 서열 단위**로 더 정밀한 분석을 제공합니다."
         )
 
         default_pred = transferred_seq if transferred_seq else "ACDEFGHIKLMNPQRSTVWY"
@@ -554,73 +556,141 @@ def main():
             help="2번/3번 페이지에서 전송된 서열이 자동 입력됩니다."
         )
 
-        use_uncertainty = st.checkbox("불확실성 추정 포함 (MC Dropout)", value=True)
+        col_opt1, col_opt2 = st.columns(2)
+        with col_opt1:
+            min_motif_len = st.slider("최소 모티프 길이", 2, 5, 3, key="ai_min_motif",
+                                      help="짧은 디펩타이드 노이즈 제거용")
+        with col_opt2:
+            use_esm_similarity = st.checkbox("ESM-2 임베딩 유사도 포함", value=True,
+                                             help="DB 매칭 + ESM-2 코사인 유사도 결합")
 
         if st.button("📊 활성 예측", key="predict_btn"):
             clean_pred = "".join(c for c in pred_sequence.upper() if c in "ACDEFGHIKLMNPQRSTVWY")
 
-            with st.spinner("ESM-2 임베딩 추출 + 활성 예측 중..."):
-                try:
-                    embedder = get_plm_embedder(model_choice, finetuned_name)
-                    embedding = embedder.get_sequence_embedding(clean_pred)
-
-                    from fitness_predictor import FitnessPredictor
-                    predictor = FitnessPredictor(
-                        embedding_dim=embedder._model_info.get("dim", 320)
-                    )
-
-                    if use_uncertainty:
-                        results = predictor.predict_with_uncertainty(embedding)
-                    else:
-                        results = predictor.predict(embedding)
-
-                    # 결과 시각화
-                    activities = list(results.keys())
-                    scores = [results[a]["score"] for a in activities]
-                    confidences = [results[a]["confidence"] for a in activities]
-
-                    # 레이더 차트
-                    fig = go.Figure()
-                    fig.add_trace(go.Scatterpolar(
-                        r=scores + [scores[0]],
-                        theta=activities + [activities[0]],
-                        fill='toself',
-                        name='Prediction',
-                        fillcolor='rgba(31, 119, 180, 0.3)',
-                        line=dict(color='#1f77b4')
-                    ))
-                    fig.update_layout(
-                        polar=dict(radialaxis=dict(range=[0, 1])),
-                        title="생리활성 예측 프로필",
-                        height=500
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
-
-                    # 상세 테이블
-                    rows = []
-                    for activity, data in results.items():
-                        row = {
-                            "Activity": activity,
-                            "Score": data["score"],
-                            "Confidence": data["confidence"]
-                        }
-                        if "uncertainty" in data:
-                            row["Uncertainty"] = data["uncertainty"]
-                            row["Range"] = f"{data['range'][0]:.3f} ~ {data['range'][1]:.3f}"
-                        if "note" in data:
-                            row["Note"] = data["note"]
-                        rows.append(row)
-
-                    st.dataframe(pd.DataFrame(rows), use_container_width=True)
-
-                    if any("note" in results[a] for a in activities):
-                        st.warning(
-                            "⚠️ 학습된 모델이 없어 규칙 기반 fallback을 사용했습니다.\n"
-                            "DMS 데이터로 모델을 학습시키면 정확도가 크게 향상됩니다."
+            if len(clean_pred) < 3:
+                st.error("서열이 너무 짧습니다 (최소 3잔기)")
+            else:
+                with st.spinner("DB 매칭 + ESM-2 분석 중..."):
+                    try:
+                        # 1) DB 모티프 매칭
+                        from bioactive_predictor import BioactiveMotifFinder
+                        motif_finder = BioactiveMotifFinder()
+                        motifs_found = motif_finder.find_motifs_in_sequence(
+                            clean_pred, min_motif_length=min_motif_len
                         )
 
-                except Exception as e:
-                    st.error(f"오류: {str(e)}")
+                        # 2) 활성별 점수 집계
+                        activity_hits = {}
+                        matched_details = []
+                        for m in motifs_found:
+                            acts = m.get('all_activities', [m['activity']])
+                            for act in acts:
+                                if act and act != 'unknown':
+                                    activity_hits[act] = activity_hits.get(act, 0) + 1
+                            matched_details.append({
+                                "모티프": m['motif'],
+                                "위치": m['position'],
+                                "활성": ", ".join(m.get('all_activities', [m['activity']])),
+                                "설명": m.get('description', ''),
+                                "IC50": m.get('IC50', '-')
+                            })
+
+                        # 3) ESM-2 Fitness Score
+                        esm_fitness = None
+                        if use_esm_similarity:
+                            embedder = get_plm_embedder(model_choice, finetuned_name)
+                            fitness_results = embedder.get_batch_fitness_scores([clean_pred])
+                            if fitness_results:
+                                esm_fitness = fitness_results[0]
+
+                        # 4) 정규화 및 레이더 차트
+                        if activity_hits:
+                            max_hits = max(activity_hits.values())
+                            activity_scores = {
+                                act: round(count / max_hits, 4)
+                                for act, count in sorted(
+                                    activity_hits.items(),
+                                    key=lambda x: x[1], reverse=True
+                                )
+                            }
+
+                            # Top 12 활성만 레이더에 표시
+                            top_activities = list(activity_scores.keys())[:12]
+                            top_scores = [activity_scores[a] for a in top_activities]
+
+                            fig = go.Figure()
+                            fig.add_trace(go.Scatterpolar(
+                                r=top_scores + [top_scores[0]],
+                                theta=top_activities + [top_activities[0]],
+                                fill='toself',
+                                name='DB Match Score',
+                                fillcolor='rgba(31, 119, 180, 0.3)',
+                                line=dict(color='#1f77b4')
+                            ))
+                            fig.update_layout(
+                                polar=dict(radialaxis=dict(range=[0, 1])),
+                                title="생리활성 예측 프로필 (DB 매칭 기반)",
+                                height=500
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
+
+                            # 메트릭 카드
+                            mc1, mc2, mc3 = st.columns(3)
+                            with mc1:
+                                st.metric("DB 매칭 모티프", f"{len(motifs_found)}개")
+                            with mc2:
+                                st.metric("감지된 활성 유형", f"{len(activity_hits)}개")
+                            with mc3:
+                                if esm_fitness is not None:
+                                    st.metric("ESM-2 Fitness", f"{esm_fitness:.4f}")
+                                else:
+                                    st.metric("ESM-2 Fitness", "N/A")
+
+                            # 활성 테이블
+                            st.markdown("### 활성별 상세 점수")
+                            act_rows = []
+                            for act, score in activity_scores.items():
+                                level = "🟢 높음" if score >= 0.7 else ("🟡 중간" if score >= 0.4 else "🔵 낮음")
+                                act_rows.append({
+                                    "Activity": act,
+                                    "Hit Count": activity_hits[act],
+                                    "Score": score,
+                                    "Level": level
+                                })
+                            st.dataframe(pd.DataFrame(act_rows), use_container_width=True, hide_index=True)
+
+                            # 매칭된 모티프 상세
+                            if matched_details:
+                                st.markdown("### 매칭된 모티프 상세")
+                                st.dataframe(pd.DataFrame(matched_details), use_container_width=True, hide_index=True)
+
+                            # Top 3 분석
+                            st.markdown("### Top 3 활성 분석")
+                            top3 = list(activity_scores.items())[:3]
+                            for i, (act, score) in enumerate(top3):
+                                relevant = [m for m in motifs_found
+                                           if act in m.get('all_activities', [m['activity']])]
+                                seqs = list(set(m['motif'] for m in relevant))
+                                st.markdown(
+                                    f"**{i+1}. {act}** (Score: {score:.3f}) — "
+                                    f"매칭 모티프 {len(relevant)}개: "
+                                    f"`{'`, `'.join(seqs[:5])}`"
+                                    f"{'...' if len(seqs) > 5 else ''}"
+                                )
+
+                        else:
+                            st.warning(
+                                f"입력 서열 `{clean_pred}`에서 DB 매칭 모티프가 발견되지 않았습니다.\n\n"
+                                "서열이 너무 짧거나 DB에 없는 유형일 수 있습니다."
+                            )
+                            if esm_fitness is not None:
+                                st.info(f"ESM-2 Fitness Score: **{esm_fitness:.4f}** "
+                                       f"(1.0에 가까울수록 자연에서 발생 가능성 높음)")
+
+                    except Exception as e:
+                        st.error(f"오류: {str(e)}")
+                        import traceback
+                        st.code(traceback.format_exc())
 
 
     # ============================================================
@@ -640,7 +710,7 @@ def main():
             st.info(
                 "📌 **배치 서열을 불러오는 방법:**\n\n"
                 "1. **2번 페이지** → 서열 생성 → '상위 N개 서열 일괄 전송' 클릭\n"
-                "2. **3번 페이지** → 모티프 검색 → '모티프 보유 서열 전체 → AI 배치 분석' 클릭\n"
+                "2. **3번 페이지** → Activity Profile → 'Hit 서열 → AI 배치 분석' 클릭\n"
                 "3. 이 페이지로 돌아오면 자동 로드됩니다.\n\n"
                 "또는 아래에 직접 입력하세요."
             )
@@ -785,37 +855,52 @@ def main():
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
-                # ---- 활성 예측 ----
-                if do_activity and valid_embs:
-                    st.markdown("### 💊 배치 생리활성 예측")
-                    from fitness_predictor import FitnessPredictor
-                    predictor = FitnessPredictor(
-                        embedding_dim=embedder._model_info.get("dim", 320)
-                    )
+                # ---- 활성 예측 (DB 기반) ----
+                if do_activity and valid_seqs:
+                    st.markdown("### 💊 DB 기반 배치 생리활성 예측")
+                    st.caption("4,162개 생리활성 펩타이드 DB 매칭 기반")
+
+                    from bioactive_predictor import BioactiveMotifFinder
+                    motif_finder = BioactiveMotifFinder()
 
                     activity_rows = []
-                    for i, (seq, emb) in enumerate(zip(valid_seqs, valid_embs)):
-                        try:
-                            results = predictor.predict(emb)
-                            row = {"서열": seq[:25] + "..." if len(seq) > 25 else seq}
-                            for act, data in results.items():
-                                row[act] = data["score"]
-                            activity_rows.append(row)
-                        except Exception:
-                            pass
+                    all_activities_set = set()
+                    for seq in valid_seqs:
+                        motifs = motif_finder.find_motifs_in_sequence(seq, min_motif_length=3)
+                        act_counts = {}
+                        for m in motifs:
+                            for act in m.get('all_activities', [m['activity']]):
+                                if act and act != 'unknown':
+                                    act_counts[act] = act_counts.get(act, 0) + 1
+                                    all_activities_set.add(act)
+                        activity_rows.append({
+                            "서열": seq[:25] + "..." if len(seq) > 25 else seq,
+                            "전체 서열": seq,
+                            "모티프 수": len(motifs),
+                            "_act_counts": act_counts
+                        })
 
-                    if activity_rows:
-                        act_df = pd.DataFrame(activity_rows)
-                        st.dataframe(act_df, use_container_width=True, hide_index=True)
+                    # 활성별 점수 정규화
+                    top_acts = sorted(all_activities_set,
+                                     key=lambda a: sum(r["_act_counts"].get(a, 0) for r in activity_rows),
+                                     reverse=True)[:10]
 
-                        # 활성별 Top 서열
-                        st.markdown("#### 🏆 활성별 최고 후보")
-                        act_cols = [c for c in act_df.columns if c != "서열"]
-                        for act in act_cols:
+                    for row in activity_rows:
+                        for act in top_acts:
+                            row[act] = row["_act_counts"].get(act, 0)
+
+                    act_df = pd.DataFrame(activity_rows)
+                    display_cols = ["서열", "모티프 수"] + top_acts
+                    st.dataframe(act_df[display_cols], use_container_width=True, hide_index=True)
+
+                    # 활성별 Top 서열
+                    st.markdown("#### 🏆 활성별 최고 후보")
+                    for act in top_acts[:5]:
+                        if act_df[act].max() > 0:
                             best_idx = act_df[act].idxmax()
                             st.write(
                                 f"**{act}**: `{act_df.loc[best_idx, '서열']}` "
-                                f"(Score: {act_df.loc[best_idx, act]:.3f})"
+                                f"(매칭 {act_df.loc[best_idx, act]}회)"
                             )
 
 
