@@ -55,24 +55,32 @@ def main():
     # ─── 예측 방식 선택 ─────────────────────────────────
     st.markdown("### 🎯 예측 방식 선택")
 
+    mode_options = []
+    if digester:
+        mode_options.append("🔬 Hybrid: In Silico + Markov (권장)")
+        mode_options.append("🧪 In Silico Digestion only")
+    mode_options.append("📊 Markov Chain only (기존 방식)")
+
     mode = st.radio(
         "Prediction Mode:",
-        [
-            "🧪 In Silico Digestion (효소 공정 기반, 권장)",
-            "📊 Markov Chain (조성 기반, 기존 방식)"
-        ],
-        index=0 if digester else 1,
+        mode_options,
+        index=0,
         help=(
-            "In Silico Digestion: 회사 효소 공정 + 원료 단백질로 실제 분해 시뮬레이션\n"
-            "Markov Chain: TAA 조성 비율로 통계적 서열 생성"
+            "Hybrid: 효소 분해 시뮬레이션 + Markov 통계 생성 결합 (가장 풍부한 후보)\n"
+            "In Silico only: 효소 공정 + 원료 단백질만 사용 (결정론적)\n"
+            "Markov only: TAA 조성 비율 기반 통계 생성 (기존 방식)"
         )
     )
 
-    use_in_silico = mode.startswith("🧪")
+    use_hybrid = mode.startswith("🔬")
+    use_in_silico_only = mode.startswith("🧪")
+    use_in_silico = use_hybrid or use_in_silico_only
 
     if use_in_silico and not digester:
         st.error("In silico digester 로드 실패. Markov 방식으로 전환됩니다.")
         use_in_silico = False
+        use_hybrid = False
+        use_in_silico_only = False
 
     st.markdown("---")
 
@@ -166,8 +174,41 @@ def main():
     # ─── 생성 버튼 ────────────────────────────────────
     if st.button("🎲 Generate Sequences", type="primary"):
         with st.spinner("Generating sequences..."):
-            if use_in_silico:
-                # In Silico Digestion 실행
+            if use_hybrid:
+                # Hybrid: In Silico + Markov 결합
+                hybrid_result = digester.hybrid_digest_and_markov(
+                    selected_product,
+                    min_length=min_length,
+                    max_length=max_length,
+                    n_top_proteins=n_top_proteins,
+                    n_markov_sequences=500
+                )
+
+                # 결합된 서열들을 (sequence, score) 형식으로 변환
+                seq_score_list = [
+                    (c['sequence'], c['score'])
+                    for c in hybrid_result['combined_sequences']
+                ]
+
+                summary = digester.summarize(hybrid_result['in_silico_peptides'])
+
+                result = {
+                    'n_generated': len(seq_score_list),
+                    'sequences': seq_score_list,
+                    'sample_id': selected_product,
+                    'method': 'hybrid_in_silico_markov',
+                    'composition_used': hybrid_result['aa_composition'],
+                    'in_silico_peptides': hybrid_result['in_silico_peptides'],
+                    'in_silico_summary': summary,
+                    'hybrid_data': hybrid_result,
+                }
+
+                st.session_state['seq_gen_result'] = result
+                st.session_state['seq_gen_sample'] = selected_product
+                st.session_state['seq_gen_method'] = 'hybrid_in_silico_markov'
+
+            elif use_in_silico_only:
+                # In Silico Digestion only
                 peptides = digester.digest_product(
                     selected_product,
                     min_length=min_length,
@@ -177,9 +218,8 @@ def main():
                 unique_peptides = digester.get_unique_peptides(peptides)
                 summary = digester.summarize(unique_peptides)
 
-                # Markov 결과 형식과 호환되게 변환
                 seq_score_list = [
-                    (p.sequence, 1.0 / (1 + abs(p.length - 8)))  # 길이 기준 간단 점수
+                    (p.sequence, 1.0 / (1 + abs(p.length - 8)))
                     for p in unique_peptides
                 ]
                 seq_score_list.sort(key=lambda x: x[1], reverse=True)
@@ -189,7 +229,7 @@ def main():
                     'sequences': seq_score_list,
                     'sample_id': selected_product,
                     'method': 'in_silico_digestion',
-                    'composition_used': {},  # 빈 dict (in silico엔 해당 없음)
+                    'composition_used': {},
                     'in_silico_peptides': unique_peptides,
                     'in_silico_summary': summary,
                 }
@@ -218,8 +258,28 @@ def main():
 
         st.success(f"Generated {result['n_generated']} sequences! (Sample: {gen_sample}, Method: {gen_method})")
 
-        # In Silico Digestion 요약 표시
-        if gen_method == 'in_silico_digestion' and 'in_silico_summary' in result:
+        # Hybrid 모드 요약 표시
+        if gen_method == 'hybrid_in_silico_markov' and 'hybrid_data' in result:
+            hd = result['hybrid_data']
+            st.markdown("### 🔬 Hybrid 생성 결과 요약")
+            m1, m2, m3, m4 = st.columns(4)
+            with m1:
+                st.metric("총 펩타이드 (Union)", f"{len(hd['combined_sequences'])}개")
+            with m2:
+                st.metric("🔬 양쪽 확인 (BOTH)", f"{hd['overlap_count']}개",
+                         help="In silico와 Markov가 모두 생성 → 최고 신뢰도")
+            with m3:
+                st.metric("🧪 In Silico only", f"{hd['n_in_silico_only']}개")
+            with m4:
+                st.metric("📊 Markov only", f"{hd['n_markov_only']}개")
+
+            st.info(
+                "💡 **점수 가중치**: BOTH (1.3) > In Silico (1.0) > Markov (0.8)  \n"
+                "양쪽에서 동시에 생성된 서열은 결정론적 + 통계적 양쪽으로 검증된 것이라 신뢰도가 가장 높습니다."
+            )
+
+        # In Silico Digestion only 요약
+        elif gen_method == 'in_silico_digestion' and 'in_silico_summary' in result:
             summary = result['in_silico_summary']
             st.markdown("### 🧪 In Silico Digestion 요약")
             m1, m2, m3, m4 = st.columns(4)

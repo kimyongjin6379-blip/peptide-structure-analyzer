@@ -366,6 +366,143 @@ class InSilicoDigester:
                 seen[p.sequence] = p
         return list(seen.values())
 
+    def get_aa_composition_from_raw_proteins(self, material: str) -> Dict[str, float]:
+        """
+        원료 단백질 FASTA에서 AA 조성 계산 (Markov chain 입력용)
+
+        Returns:
+            {AA: percentage} 형식의 조성 비율
+        """
+        proteins = self.get_raw_proteins(material)
+        if not proteins:
+            return {}
+
+        from collections import Counter
+        all_aa = ''.join(p['sequence'] for p in proteins)
+        counts = Counter(all_aa)
+        total = sum(counts.values())
+        if total == 0:
+            return {}
+
+        valid_aa = 'ACDEFGHIKLMNPQRSTVWY'
+        return {aa: round(counts.get(aa, 0) / total * 100, 3)
+                for aa in valid_aa}
+
+    def hybrid_digest_and_markov(self, product_id: str,
+                                  min_length: int = 3,
+                                  max_length: int = 20,
+                                  n_top_proteins: int = 20,
+                                  n_markov_sequences: int = 500) -> Dict:
+        """
+        Hybrid 모드: In Silico Digestion + Markov Chain 결합
+
+        Args:
+            product_id: 제품 ID (예: "SOY-1")
+            min_length: 최소 펩타이드 길이
+            max_length: 최대 펩타이드 길이
+            n_top_proteins: in silico에 사용할 원료 상위 N개
+            n_markov_sequences: Markov로 생성할 추가 서열 수
+
+        Returns:
+            {
+              "in_silico_peptides": [DigestedPeptide, ...],
+              "markov_sequences": [(seq, score), ...],
+              "combined_sequences": [(seq, source, score), ...],
+              "overlap_count": int,
+              "aa_composition": {AA: %},
+              "product_id": str
+            }
+        """
+        # 1. In Silico Digestion
+        in_silico_peptides = self.digest_product(
+            product_id,
+            min_length=min_length,
+            max_length=max_length,
+            n_top_proteins=n_top_proteins
+        )
+        unique_in_silico = self.get_unique_peptides(in_silico_peptides)
+        in_silico_seqs = set(p.sequence for p in unique_in_silico)
+
+        # 2. AA 조성 추출
+        process = self.enzyme_processor.get_process(product_id)
+        material = process.raw_material_id if process else "soy"
+        if process and process.based_on:
+            # BIO 제품: 베이스 제품의 material 사용
+            base_process = self.enzyme_processor.get_process(process.based_on)
+            if base_process:
+                material = base_process.raw_material_id
+
+        aa_composition = self.get_aa_composition_from_raw_proteins(material)
+
+        # 3. Markov Chain (원료 단백질 AA 조성 기반)
+        markov_sequences = []
+        if aa_composition:
+            try:
+                from sequence_predictor import SequenceGenerator
+            except ImportError:
+                from .sequence_predictor import SequenceGenerator
+
+            generator = SequenceGenerator(aa_composition)
+            markov_sequences = generator.generate_sequences(
+                length_range=(min_length, max_length),
+                n_sequences=n_markov_sequences,
+                method='markov'
+            )
+
+        markov_seqs = set(seq for seq, _ in markov_sequences)
+
+        # 4. 결합 (Union + 소스 라벨링)
+        # 'both'      : in silico와 markov 모두 생성 → 최고 신뢰도
+        # 'in_silico' : in silico만 → 효소 분해 결정론적 산물
+        # 'markov'    : markov만 → 통계적 후보
+        combined = []
+
+        # In silico 펩타이드 먼저 추가
+        for p in unique_in_silico:
+            source = "both" if p.sequence in markov_seqs else "in_silico"
+            # 점수: in silico = 1.0 (결정론적), both = 1.3 (양쪽 확인)
+            score = 1.3 if source == "both" else 1.0
+            combined.append({
+                "sequence": p.sequence,
+                "length": p.length,
+                "mw_da": p.mw_da,
+                "source": source,
+                "score": score,
+                "source_protein": p.source_protein,
+                "source_protein_name": p.source_protein_name,
+                "digestion_stage": p.digestion_stage,
+            })
+
+        # Markov만 있는 서열 추가
+        for seq, markov_score in markov_sequences:
+            if seq not in in_silico_seqs:
+                combined.append({
+                    "sequence": seq,
+                    "length": len(seq),
+                    "mw_da": calc_peptide_mw(seq),
+                    "source": "markov",
+                    "score": 0.8 * markov_score,  # Markov는 가중치 낮춤
+                    "source_protein": "",
+                    "source_protein_name": "(Markov-generated)",
+                    "digestion_stage": "markov",
+                })
+
+        # 점수 내림차순 정렬
+        combined.sort(key=lambda x: x["score"], reverse=True)
+
+        overlap = sum(1 for c in combined if c["source"] == "both")
+
+        return {
+            "in_silico_peptides": unique_in_silico,
+            "markov_sequences": markov_sequences,
+            "combined_sequences": combined,
+            "overlap_count": overlap,
+            "n_in_silico_only": sum(1 for c in combined if c["source"] == "in_silico"),
+            "n_markov_only": sum(1 for c in combined if c["source"] == "markov"),
+            "aa_composition": aa_composition,
+            "product_id": product_id,
+        }
+
     def summarize(self, peptides: List[DigestedPeptide]) -> Dict:
         """펩타이드 풀 요약 통계"""
         if not peptides:

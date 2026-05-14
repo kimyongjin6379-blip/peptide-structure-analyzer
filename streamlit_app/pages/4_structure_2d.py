@@ -42,7 +42,7 @@ def main():
     # Input method
     input_options = ["Generate from Sample", "Custom Sequence"]
     if digester_available:
-        input_options.insert(0, "🧪 In Silico Digestion (효소 공정 기반)")
+        input_options.insert(0, "🔬 Hybrid: In Silico + Markov (권장)")
 
     input_method = st.radio(
         "Sequence Input Method:",
@@ -52,9 +52,9 @@ def main():
 
     sequence = None
 
-    # ─── In Silico Digestion 모드 ──────────────────
-    if input_method.startswith("🧪"):
-        st.markdown("### 🧪 In Silico Digestion")
+    # ─── Hybrid 모드 ──────────────────
+    if input_method.startswith("🔬"):
+        st.markdown("### 🔬 Hybrid (In Silico + Markov)")
         products = digester.enzyme_processor.list_products()
 
         col_p1, col_p2 = st.columns([1, 1])
@@ -67,28 +67,45 @@ def main():
                 "펩타이드 길이", 3, 30, (4, 15), key="2d_length"
             )
 
-        if st.button("🔬 펩타이드 생성", key="2d_digest"):
-            with st.spinner(f"{selected_product} 분해 시뮬레이션 중..."):
-                peptides = digester.digest_product(
+        if st.button("🔬 펩타이드 생성 (Hybrid)", key="2d_digest"):
+            with st.spinner(f"{selected_product} Hybrid 생성 중..."):
+                hybrid_result = digester.hybrid_digest_and_markov(
                     selected_product,
                     min_length=length_range[0],
                     max_length=length_range[1],
-                    n_top_proteins=20
+                    n_top_proteins=20,
+                    n_markov_sequences=200
                 )
-                unique_peptides = digester.get_unique_peptides(peptides)
-                unique_peptides.sort(key=lambda p: (p.length, p.mw_da))
-                st.session_state['2d_digested_peptides'] = unique_peptides
-                st.session_state['2d_digested_product'] = selected_product
-                st.success(f"✅ {len(unique_peptides)}개 펩타이드 생성됨")
+                # 점수 내림차순 + 최대 100개 (UI 부하 방지)
+                combined = hybrid_result['combined_sequences'][:100]
+                st.session_state['2d_hybrid_peptides'] = combined
+                st.session_state['2d_hybrid_product'] = selected_product
+                st.session_state['2d_hybrid_summary'] = {
+                    'both': hybrid_result['overlap_count'],
+                    'in_silico_only': hybrid_result['n_in_silico_only'],
+                    'markov_only': hybrid_result['n_markov_only'],
+                }
+                st.success(f"✅ {len(combined)}개 펩타이드 (상위 100)")
 
-        if '2d_digested_peptides' in st.session_state:
-            peptides = st.session_state['2d_digested_peptides']
-            product_name = st.session_state.get('2d_digested_product', '?')
+        if '2d_hybrid_peptides' in st.session_state:
+            peptides = st.session_state['2d_hybrid_peptides']
+            product_name = st.session_state.get('2d_hybrid_product', '?')
+            summary = st.session_state.get('2d_hybrid_summary', {})
 
-            st.markdown(f"### 📋 {product_name} 펩타이드 ({len(peptides)}개)")
+            st.markdown(f"### 📋 {product_name} 펩타이드")
+            sc1, sc2, sc3 = st.columns(3)
+            with sc1:
+                st.metric("🔬 BOTH", summary.get('both', 0))
+            with sc2:
+                st.metric("🧪 In Silico only", summary.get('in_silico_only', 0))
+            with sc3:
+                st.metric("📊 Markov only", summary.get('markov_only', 0))
 
+            # 소스 아이콘 매핑
+            source_icons = {'both': '🔬', 'in_silico': '🧪', 'markov': '📊'}
             options = [
-                f"{p.sequence}  ({p.length}AA, {p.mw_da:.0f}Da, from {p.source_protein})"
+                f"{source_icons.get(p['source'], '?')} {p['sequence']}  "
+                f"({p['length']}AA, {p['mw_da']:.0f}Da, score={p['score']:.2f})"
                 for p in peptides
             ]
             selected_idx = st.selectbox(
@@ -97,11 +114,17 @@ def main():
                 format_func=lambda i: options[i],
                 key="2d_peptide_select"
             )
-            sequence = peptides[selected_idx].sequence
             sel_p = peptides[selected_idx]
-            st.info(f"📌 선택: **{sel_p.sequence}** "
-                   f"({sel_p.length} AA, {sel_p.mw_da:.1f} Da, "
-                   f"원료: {sel_p.source_protein_name[:50]})")
+            sequence = sel_p['sequence']
+            source_label = {'both': '🔬 양쪽 확인',
+                           'in_silico': '🧪 In Silico 단독',
+                           'markov': '📊 Markov 단독'}[sel_p['source']]
+            st.info(
+                f"📌 선택: **{sel_p['sequence']}** "
+                f"({sel_p['length']} AA, {sel_p['mw_da']:.1f} Da)  \n"
+                f"출처: {source_label} | "
+                f"원료: {sel_p.get('source_protein_name', 'N/A')[:50]}"
+            )
             st.session_state['sequence'] = sequence
 
     elif input_method == "Generate from Sample":

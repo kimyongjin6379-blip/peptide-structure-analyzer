@@ -73,18 +73,27 @@ def main():
 
     col_mode1, col_mode2 = st.columns([2, 1])
     with col_mode1:
+        mode_options = []
+        if digester_available:
+            mode_options.append("🔬 Hybrid: In Silico + Markov (권장)")
+            mode_options.append("🧪 In Silico only")
+        mode_options.append("📊 Markov only (기존)")
+
         mode = st.radio(
             "서열 생성 방식:",
-            [
-                "🧪 In Silico Digestion (효소 공정 기반)",
-                "📊 Markov Chain (조성 기반)"
-            ],
-            index=0 if digester_available else 1,
+            mode_options,
+            index=0,
             horizontal=True,
             key="bioactive_mode",
-            help="In Silico: 효소 공정으로 실제 분해 시뮬레이션 / Markov: 조성 기반 통계 생성"
+            help=(
+                "Hybrid: 효소 분해 + Markov 결합 (BOTH 우선, In Silico, Markov 순)\n"
+                "In Silico only: 효소 공정 + 원료 단백질만\n"
+                "Markov only: TAA 조성 비율 기반"
+            )
         )
-    use_in_silico = mode.startswith("🧪")
+    use_hybrid = mode.startswith("🔬")
+    use_in_silico_only = mode.startswith("🧪")
+    use_in_silico = use_hybrid or use_in_silico_only
 
     if use_in_silico and digester_available:
         # 제품 선택 (효소 공정 자료가 있는 제품들)
@@ -129,10 +138,31 @@ def main():
             from sequence_predictor import SequenceGenerator
             from collections import Counter
 
-            # Step 1: 서열 생성 (In Silico Digestion 또는 Markov)
+            # Step 1: 서열 생성 (Hybrid / In Silico only / Markov only)
             sequences = []
+            hybrid_data = None
 
-            if use_in_silico and digester_available:
+            if use_hybrid and digester_available:
+                with st.spinner(f"Step 1/3: Hybrid 서열 생성 ({selected_sample})..."):
+                    hybrid_data = digester.hybrid_digest_and_markov(
+                        selected_sample,
+                        min_length=profile_len[0],
+                        max_length=profile_len[1],
+                        n_top_proteins=20,
+                        n_markov_sequences=profile_n_seq
+                    )
+                    sequences = [
+                        (c['sequence'], c['score'])
+                        for c in hybrid_data['combined_sequences']
+                    ]
+                    st.info(
+                        f"📊 Hybrid 생성 결과: 총 {len(sequences)}개 "
+                        f"(🔬 BOTH {hybrid_data['overlap_count']} | "
+                        f"🧪 In Silico {hybrid_data['n_in_silico_only']} | "
+                        f"📊 Markov {hybrid_data['n_markov_only']})"
+                    )
+
+            elif use_in_silico_only and digester_available:
                 with st.spinner(f"Step 1/3: In silico digestion 실행 중 ({selected_sample})..."):
                     peptides = digester.digest_product(
                         selected_sample,
@@ -141,11 +171,10 @@ def main():
                         n_top_proteins=20
                     )
                     unique_peptides = digester.get_unique_peptides(peptides)
-                    # (sequence, score) 형식으로 변환
                     sequences = [(p.sequence, 1.0 / (1 + abs(p.length - 8)))
                                  for p in unique_peptides]
-                    st.info(f"📊 In silico digestion: {len(unique_peptides)}개 unique 펩타이드 생성 "
-                           f"(원료 {len(set(p.source_protein for p in unique_peptides))}개)")
+                    st.info(f"📊 In silico digestion: {len(unique_peptides)}개 unique 펩타이드 생성")
+
             else:
                 taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
                 if taa_comp:
