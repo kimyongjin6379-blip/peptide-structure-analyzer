@@ -1,0 +1,375 @@
+{
+  "_metadata": {
+    "version": "1.0",
+    "last_updated": "2026-05-14",
+    "description": "회사 펩톤 제품별 효소 공정 메타데이터",
+    "products_covered": 13,
+    "products_excluded": ["PPR Type4 (포크 펩톤, 공정 정보 미확정)"]
+  },
+
+  "enzymes": {
+    "Alcalase": {
+      "manufacturer": "Novozymes",
+      "source": "Bacillus licheniformis",
+      "type": "endopeptidase",
+      "subtype": "subtilisin (serine protease)",
+      "merops_id": "S08.001",
+      "specificity": "broad",
+      "cleaves_after": ["F", "Y", "W", "L", "M", "A"],
+      "exo_activity": false,
+      "optimum_pH": [7.0, 9.0],
+      "optimum_temp_c": [55, 65],
+      "function_summary": "광범위 endopeptidase, 큰 펩타이드 1차 분해"
+    },
+
+    "Flavourzyme": {
+      "manufacturer": "Novozymes",
+      "source": "Aspergillus oryzae",
+      "type": "complex (endo + exo)",
+      "subtype": "peptidase complex (Leucyl aminopeptidase + endoprotease)",
+      "specificity": "broad",
+      "cleaves_after": "broad random",
+      "exo_activity": true,
+      "exo_targets": ["L", "I", "V", "F", "Y"],
+      "exo_terminal": "both_N_and_C",
+      "optimum_pH": [5.0, 7.0],
+      "optimum_temp_c": [50, 55],
+      "function_summary": "endo + exo 복합활성, 유리 AA 방출 + debittering"
+    },
+
+    "ZF101": {
+      "manufacturer": "Angel Yeast",
+      "product_name": "Annzyme Complex Protease ZF101",
+      "source": "Yeast-based complex",
+      "type": "complex (endo + exo)",
+      "subtype": "복합 단백질 분해 효소",
+      "specificity": "broad",
+      "cleaves_after": "broad random (DH-controlled)",
+      "target_avg_peptide_mw": 1000,
+      "exo_activity": true,
+      "exo_targets": ["L", "I", "V", "F", "Y"],
+      "exo_terminal": "both_N_and_C",
+      "exo_function": "hydrophobic_terminal_trimming (debittering)",
+      "optimum_pH": [6.0, 7.5],
+      "optimum_temp_c": [55, 60],
+      "primary_use": "HVP / 식물성 펩톤 생산",
+      "function_summary": "Flavourzyme 유사 (endo + exo + 쓴맛 억제)",
+      "note": "정확한 cleavage specificity 미공개 (제조사 NDA 필요)"
+    }
+  },
+
+  "products": {
+    "SOY-1": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "soy",
+        "form": "비알파화 탈지대두",
+        "concentration_pct": 10.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.1,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 55,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "기본 대두 펩톤"
+    },
+
+    "SOY-N+": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "soy",
+        "form": "ISP (5%) + 비알파화 DFS (5%)",
+        "concentration_pct": 10.0,
+        "composition": [
+          {"type": "ISP", "pct": 5.0},
+          {"type": "비알파화 DFS", "pct": 5.0}
+        ]
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.1,
+        "temperature_c": 56,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 56,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "ISP 혼합으로 단백질 농도/순도 향상"
+    },
+
+    "SOY-L": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "soy",
+        "form": "비알파화 탈지대두",
+        "concentration_pct": 10.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.1,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 55,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": [
+        {"type": "Maltodextrin", "timing": "during_hydrolysis", "note": "중간 첨가"}
+      ],
+      "notes": "SOY-1과 거의 동일, 말토덱스트린 첨가로 lactose 등 일부 특성 조정"
+    },
+
+    "SOY-P": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "soy",
+        "form": "탈지대두분",
+        "concentration_pct": 10.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.2,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "Alcalase", "concentration_pct": 1.3}
+        ],
+        "temperature_c": 60,
+        "duration_hours": 20
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "Alcalase 단독 시스템 (Flavourzyme/ZF101 미사용) — 다른 SOY 라인업 대비 큰 펩타이드 비율 높을 것으로 예상, debittering 약함"
+    },
+
+    "SOY-B": {
+      "category": "1st_gen",
+      "is_blend": true,
+      "raw_material": {
+        "id": "soy",
+        "form": "SOY-1 + 탈지대두 혼합",
+        "concentration_pct": 100.0,
+        "composition": [
+          {"type": "SOY-1", "pct": 90.0},
+          {"type": "탈지대두", "pct": 10.0}
+        ]
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": null,
+      "additives": null,
+      "notes": "효소 미사용, 단순 blending 제품 (SOY-1의 분해 펩타이드 + 미분해 단백질 혼합)"
+    },
+
+    "RICE-1": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "rice",
+        "form": "쌀단백",
+        "concentration_pct": 15.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.2,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 56,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "쌀단백 고농도 처리 (15%)"
+    },
+
+    "WHEAT-1": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "wheat",
+        "form": "Vital Wheat Gluten",
+        "concentration_pct": 10.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.2,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 56,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "Gluten 기반, Q/P-rich 펩타이드 다량 예상"
+    },
+
+    "PEA-1": {
+      "category": "1st_gen",
+      "raw_material": {
+        "id": "pea",
+        "form": "완두단백",
+        "concentration_pct": 15.0
+      },
+      "pretreatment": {
+        "enzyme": "Alcalase",
+        "concentration_pct": 0.2,
+        "temperature_c": 60,
+        "duration_min": 30
+      },
+      "main_hydrolysis": {
+        "enzymes": [
+          {"enzyme": "ZF101", "concentration_pct": 2.0},
+          {"enzyme": "Flavourzyme", "concentration_pct": 0.25}
+        ],
+        "temperature_c": 56,
+        "duration_hours": 24
+      },
+      "post_treatment": null,
+      "additives": null,
+      "notes": "완두단백 고농도 처리 (15%)"
+    },
+
+    "SOY-BIO": {
+      "category": "2nd_gen_bio",
+      "based_on": "SOY-1",
+      "raw_material": {
+        "id": "soy",
+        "form": "SOY-1 (재처리 입력)",
+        "concentration_pct": 20.0
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": {
+        "type": "UF (Ultrafiltration)",
+        "reactor_temperature_c": 60,
+        "reactor_duration_min": 30,
+        "uf_cutoff_kda": 3,
+        "uf_duration_hours": 10.3
+      },
+      "additives": null,
+      "notes": "SOY-1을 UF 3K Da 컷오프로 후처리 → 짧은 펩타이드 농축"
+    },
+
+    "SOY-BIO N50": {
+      "category": "2nd_gen_bio",
+      "based_on": "SOY-N+",
+      "raw_material": {
+        "id": "soy",
+        "form": "SOY-N+ (재처리 입력)",
+        "concentration_pct": 20.0
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": {
+        "type": "UF (Ultrafiltration)",
+        "reactor_temperature_c": 60,
+        "reactor_duration_min": 30,
+        "uf_cutoff_kda": 3,
+        "uf_duration_hours": 8.1
+      },
+      "additives": null,
+      "notes": "SOY-N+ 기반 BIO, UF 8.1시간 (다른 BIO 대비 빠른 처리 → 단백질 분해도 차이 가능성)"
+    },
+
+    "RICE-BIO": {
+      "category": "2nd_gen_bio",
+      "based_on": "RICE-1",
+      "raw_material": {
+        "id": "rice",
+        "form": "RICE-1 (재처리 입력)",
+        "concentration_pct": 20.0
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": {
+        "type": "UF (Ultrafiltration)",
+        "reactor_temperature_c": 60,
+        "reactor_duration_min": 15,
+        "uf_cutoff_kda": 3,
+        "uf_duration_hours": 6.7
+      },
+      "additives": null,
+      "notes": "RICE-1 기반 BIO, 가장 짧은 처리 시간"
+    },
+
+    "WHEAT-BIO": {
+      "category": "2nd_gen_bio",
+      "based_on": "WHEAT-1",
+      "raw_material": {
+        "id": "wheat",
+        "form": "WHEAT-1 (재처리 입력)",
+        "concentration_pct": 20.0
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": {
+        "type": "UF (Ultrafiltration)",
+        "reactor_temperature_c": 60,
+        "reactor_duration_min": 30,
+        "uf_cutoff_kda": 3,
+        "uf_duration_hours": 10.5
+      },
+      "additives": null,
+      "notes": "WHEAT-1 기반 BIO"
+    },
+
+    "PEA-BIO": {
+      "category": "2nd_gen_bio",
+      "based_on": "PEA-1",
+      "raw_material": {
+        "id": "pea",
+        "form": "PEA-1 (재처리 입력)",
+        "concentration_pct": 20.0
+      },
+      "pretreatment": null,
+      "main_hydrolysis": null,
+      "post_treatment": {
+        "type": "UF (Ultrafiltration)",
+        "reactor_temperature_profile": [
+          {"phase": "초기", "temperature_c": 60},
+          {"phase": "후반", "temperature_c": 65, "duration_min": 90}
+        ],
+        "uf_cutoff_kda": 3,
+        "uf_duration_hours": 9.0
+      },
+      "additives": null,
+      "notes": "PEA-1 기반 BIO, 60→65°C 승온 1.5시간 (다른 BIO와 차별점)"
+    }
+  }
+}
