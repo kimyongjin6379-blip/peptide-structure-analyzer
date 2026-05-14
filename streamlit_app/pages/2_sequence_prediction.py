@@ -171,6 +171,23 @@ def main():
             help="markov: 전이 확률 기반 | random: 단순 무작위 | frequent: 빈도 우선"
         )
 
+    # ─── 헬퍼: result에 표시용 필드 추가 ────────────
+    def enrich_result_for_display(seq_score_list):
+        """sequences_with_mw, by_length, composition 등 표시용 필드 생성"""
+        from collections import defaultdict
+        sequences_with_mw = []
+        by_length = defaultdict(list)
+        for seq, score in seq_score_list[:200]:  # 상위 200개만
+            mw = calculate_sequence_mw(seq)
+            sequences_with_mw.append({
+                'sequence': seq,
+                'length': len(seq),
+                'likelihood_score': float(score),
+                'molecular_weight': float(mw),
+            })
+            by_length[len(seq)].append((seq, score))
+        return sequences_with_mw, dict(by_length)
+
     # ─── 생성 버튼 ────────────────────────────────────
     if st.button("🎲 Generate Sequences", type="primary"):
         with st.spinner("Generating sequences..."):
@@ -184,17 +201,18 @@ def main():
                     n_markov_sequences=500
                 )
 
-                # 결합된 서열들을 (sequence, score) 형식으로 변환
                 seq_score_list = [
                     (c['sequence'], c['score'])
                     for c in hybrid_result['combined_sequences']
                 ]
-
+                sequences_with_mw, by_length = enrich_result_for_display(seq_score_list)
                 summary = digester.summarize(hybrid_result['in_silico_peptides'])
 
                 result = {
                     'n_generated': len(seq_score_list),
                     'sequences': seq_score_list,
+                    'sequences_with_mw': sequences_with_mw,
+                    'by_length': by_length,
                     'sample_id': selected_product,
                     'method': 'hybrid_in_silico_markov',
                     'composition_used': hybrid_result['aa_composition'],
@@ -208,7 +226,6 @@ def main():
                 st.session_state['seq_gen_method'] = 'hybrid_in_silico_markov'
 
             elif use_in_silico_only:
-                # In Silico Digestion only
                 peptides = digester.digest_product(
                     selected_product,
                     min_length=min_length,
@@ -223,10 +240,13 @@ def main():
                     for p in unique_peptides
                 ]
                 seq_score_list.sort(key=lambda x: x[1], reverse=True)
+                sequences_with_mw, by_length = enrich_result_for_display(seq_score_list)
 
                 result = {
                     'n_generated': len(unique_peptides),
                     'sequences': seq_score_list,
+                    'sequences_with_mw': sequences_with_mw,
+                    'by_length': by_length,
                     'sample_id': selected_product,
                     'method': 'in_silico_digestion',
                     'composition_used': {},
