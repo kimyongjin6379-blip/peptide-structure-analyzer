@@ -151,15 +151,22 @@ def main():
                         n_top_proteins=20,
                         n_markov_sequences=profile_n_seq
                     )
-                    sequences = [
-                        (c['sequence'], c['score'])
-                        for c in hybrid_data['combined_sequences']
-                    ]
+                    # ESM-2 평가 부담 방지: 상위 N개로 제한 (점수 내림차순)
+                    max_for_esm = max(profile_n_seq, 1000)
+                    combined_top = hybrid_data['combined_sequences'][:max_for_esm]
+                    sequences = [(c['sequence'], c['score']) for c in combined_top]
+
+                    # 소스별 카운트 (필터링 후)
+                    src_counts = {'both': 0, 'in_silico': 0, 'markov': 0}
+                    for c in combined_top:
+                        src_counts[c['source']] = src_counts.get(c['source'], 0) + 1
+
                     st.info(
-                        f"📊 Hybrid 생성 결과: 총 {len(sequences)}개 "
-                        f"(🔬 BOTH {hybrid_data['overlap_count']} | "
-                        f"🧪 In Silico {hybrid_data['n_in_silico_only']} | "
-                        f"📊 Markov {hybrid_data['n_markov_only']})"
+                        f"📊 Hybrid 생성 결과: 총 {len(hybrid_data['combined_sequences'])}개 "
+                        f"중 ESM-2 평가 대상 {len(sequences)}개  \n"
+                        f"(🔬 BOTH {src_counts['both']} | "
+                        f"🧪 In Silico {src_counts['in_silico']} | "
+                        f"📊 Markov {src_counts['markov']})"
                     )
 
             elif use_in_silico_only and digester_available:
