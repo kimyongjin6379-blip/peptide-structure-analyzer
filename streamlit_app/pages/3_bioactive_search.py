@@ -62,10 +62,48 @@ def main():
     else:
         st.info(f"📊 Database: **{n_motifs}** bioactive motifs")
 
-    # Sample selection
-    sample_options = loader.get_sample_options()
-    selected_display = st.selectbox("Select Sample:", list(sample_options.keys()), index=0)
-    selected_sample = sample_options[selected_display]
+    # ─── 예측 방식 선택 ─────────────────────────────────
+    try:
+        from in_silico_digester import InSilicoDigester
+        digester = InSilicoDigester()
+        digester_available = True
+    except Exception:
+        digester = None
+        digester_available = False
+
+    col_mode1, col_mode2 = st.columns([2, 1])
+    with col_mode1:
+        mode = st.radio(
+            "서열 생성 방식:",
+            [
+                "🧪 In Silico Digestion (효소 공정 기반)",
+                "📊 Markov Chain (조성 기반)"
+            ],
+            index=0 if digester_available else 1,
+            horizontal=True,
+            key="bioactive_mode",
+            help="In Silico: 효소 공정으로 실제 분해 시뮬레이션 / Markov: 조성 기반 통계 생성"
+        )
+    use_in_silico = mode.startswith("🧪")
+
+    if use_in_silico and digester_available:
+        # 제품 선택 (효소 공정 자료가 있는 제품들)
+        products = digester.enzyme_processor.list_products()
+        with col_mode2:
+            selected_sample = st.selectbox(
+                "제품 선택:",
+                products,
+                index=0,
+                key="profile_product"
+            )
+    else:
+        # 기존 샘플 선택 (TAA 조성 데이터)
+        sample_options = loader.get_sample_options()
+        with col_mode2:
+            selected_display = st.selectbox("Select Sample:",
+                                            list(sample_options.keys()),
+                                            index=0, key="profile_sample")
+        selected_sample = sample_options[selected_display]
 
     st.markdown("---")
 
@@ -91,16 +129,35 @@ def main():
             from sequence_predictor import SequenceGenerator
             from collections import Counter
 
-            taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
-            if taa_comp:
-                # Step 1: Markov
-                with st.spinner(f"Step 1/3: Markov 서열 {profile_n_seq}개 생성 중..."):
-                    generator = SequenceGenerator(taa_comp)
-                    sequences = generator.generate_sequences(
-                        length_range=profile_len,
-                        n_sequences=profile_n_seq,
-                        method='markov'
+            # Step 1: 서열 생성 (In Silico Digestion 또는 Markov)
+            sequences = []
+
+            if use_in_silico and digester_available:
+                with st.spinner(f"Step 1/3: In silico digestion 실행 중 ({selected_sample})..."):
+                    peptides = digester.digest_product(
+                        selected_sample,
+                        min_length=profile_len[0],
+                        max_length=profile_len[1],
+                        n_top_proteins=20
                     )
+                    unique_peptides = digester.get_unique_peptides(peptides)
+                    # (sequence, score) 형식으로 변환
+                    sequences = [(p.sequence, 1.0 / (1 + abs(p.length - 8)))
+                                 for p in unique_peptides]
+                    st.info(f"📊 In silico digestion: {len(unique_peptides)}개 unique 펩타이드 생성 "
+                           f"(원료 {len(set(p.source_protein for p in unique_peptides))}개)")
+            else:
+                taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
+                if taa_comp:
+                    with st.spinner(f"Step 1/3: Markov 서열 {profile_n_seq}개 생성 중..."):
+                        generator = SequenceGenerator(taa_comp)
+                        sequences = generator.generate_sequences(
+                            length_range=profile_len,
+                            n_sequences=profile_n_seq,
+                            method='markov'
+                        )
+
+            if sequences:
 
                 # Step 2: ESM-2 임베딩 기반 fitness
                 with st.spinner(f"Step 2/3: ESM-2 임베딩 기반 fitness 평가 중... ({len(sequences)}개 서열)"):

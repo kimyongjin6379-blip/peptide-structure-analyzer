@@ -30,15 +30,81 @@ def main():
 
     loader = load_data()
 
+    # In silico digester 로드
+    try:
+        from in_silico_digester import InSilicoDigester
+        digester = InSilicoDigester()
+        digester_available = True
+    except Exception:
+        digester = None
+        digester_available = False
+
     # Input method
+    input_options = ["Generate from Sample", "Custom Sequence"]
+    if digester_available:
+        input_options.insert(0, "🧪 In Silico Digestion (효소 공정 기반)")
+
     input_method = st.radio(
         "Sequence Input Method:",
-        ["Generate from Sample", "Custom Sequence"]
+        input_options,
+        index=0
     )
 
     sequence = None
 
-    if input_method == "Generate from Sample":
+    # ─── In Silico Digestion 모드 ──────────────────
+    if input_method.startswith("🧪"):
+        st.markdown("### 🧪 In Silico Digestion")
+        products = digester.enzyme_processor.list_products()
+
+        col_p1, col_p2 = st.columns([1, 1])
+        with col_p1:
+            selected_product = st.selectbox(
+                "제품 선택:", products, index=0, key="2d_product"
+            )
+        with col_p2:
+            length_range = st.slider(
+                "펩타이드 길이", 3, 30, (4, 15), key="2d_length"
+            )
+
+        if st.button("🔬 펩타이드 생성", key="2d_digest"):
+            with st.spinner(f"{selected_product} 분해 시뮬레이션 중..."):
+                peptides = digester.digest_product(
+                    selected_product,
+                    min_length=length_range[0],
+                    max_length=length_range[1],
+                    n_top_proteins=20
+                )
+                unique_peptides = digester.get_unique_peptides(peptides)
+                unique_peptides.sort(key=lambda p: (p.length, p.mw_da))
+                st.session_state['2d_digested_peptides'] = unique_peptides
+                st.session_state['2d_digested_product'] = selected_product
+                st.success(f"✅ {len(unique_peptides)}개 펩타이드 생성됨")
+
+        if '2d_digested_peptides' in st.session_state:
+            peptides = st.session_state['2d_digested_peptides']
+            product_name = st.session_state.get('2d_digested_product', '?')
+
+            st.markdown(f"### 📋 {product_name} 펩타이드 ({len(peptides)}개)")
+
+            options = [
+                f"{p.sequence}  ({p.length}AA, {p.mw_da:.0f}Da, from {p.source_protein})"
+                for p in peptides
+            ]
+            selected_idx = st.selectbox(
+                "시각화할 펩타이드 선택:",
+                range(len(options)),
+                format_func=lambda i: options[i],
+                key="2d_peptide_select"
+            )
+            sequence = peptides[selected_idx].sequence
+            sel_p = peptides[selected_idx]
+            st.info(f"📌 선택: **{sel_p.sequence}** "
+                   f"({sel_p.length} AA, {sel_p.mw_da:.1f} Da, "
+                   f"원료: {sel_p.source_protein_name[:50]})")
+            st.session_state['sequence'] = sequence
+
+    elif input_method == "Generate from Sample":
         # Get sample options with product names
         sample_options = loader.get_sample_options()
 

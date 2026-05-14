@@ -34,74 +34,216 @@ def load_plm_embedder():
     return embedder
 
 
+@st.cache_resource
+def load_digester():
+    """In silico digester 로드"""
+    try:
+        from in_silico_digester import InSilicoDigester
+        return InSilicoDigester()
+    except Exception as e:
+        return None
+
+
 def main():
     st.title("🧬 Peptide Sequence Prediction")
-    st.markdown("Generate probable peptide sequences based on amino acid composition")
+    st.markdown("Generate probable peptide sequences from peptone samples")
     st.markdown("---")
 
     loader = load_data()
+    digester = load_digester()
 
-    # Get sample options with product names
-    sample_options = loader.get_sample_options()
+    # ─── 예측 방식 선택 ─────────────────────────────────
+    st.markdown("### 🎯 예측 방식 선택")
 
-    # Sample selection with product names
-    selected_display = st.selectbox(
-        "Select Sample:",
-        list(sample_options.keys()),
-        index=0
+    mode = st.radio(
+        "Prediction Mode:",
+        [
+            "🧪 In Silico Digestion (효소 공정 기반, 권장)",
+            "📊 Markov Chain (조성 기반, 기존 방식)"
+        ],
+        index=0 if digester else 1,
+        help=(
+            "In Silico Digestion: 회사 효소 공정 + 원료 단백질로 실제 분해 시뮬레이션\n"
+            "Markov Chain: TAA 조성 비율로 통계적 서열 생성"
+        )
     )
 
-    # Get actual sample_id
-    selected_sample = sample_options[selected_display]
+    use_in_silico = mode.startswith("🧪")
+
+    if use_in_silico and not digester:
+        st.error("In silico digester 로드 실패. Markov 방식으로 전환됩니다.")
+        use_in_silico = False
 
     st.markdown("---")
 
-    # Prediction parameters
-    st.markdown("### Prediction Parameters")
+    # ─── 모드별 설정 ──────────────────────────────────
+    if use_in_silico:
+        # In Silico Digestion 모드
+        st.markdown("### 🧪 In Silico Digestion 설정")
 
-    col1, col2, col3 = st.columns(3)
+        products = digester.enzyme_processor.list_products()
 
-    with col1:
-        min_length = st.number_input("Min Length (AA)", min_value=3, max_value=20, value=5)
+        col_p1, col_p2 = st.columns([2, 1])
+        with col_p1:
+            selected_product = st.selectbox(
+                "제품 선택:",
+                products,
+                index=0,
+                help="회사 효소 공정 자료가 있는 제품들"
+            )
+        with col_p2:
+            process = digester.enzyme_processor.get_process(selected_product)
+            if process:
+                st.metric("원료", process.raw_material_id)
+                st.metric("효소", ", ".join(process.enzymes_used) or "—")
 
-    with col2:
-        max_length = st.number_input("Max Length (AA)", min_value=3, max_value=20, value=12)
+        # 공정 상세 표시
+        if process:
+            with st.expander("📋 공정 상세 보기"):
+                st.markdown(f"**원료**: {process.raw_material_form} "
+                           f"({process.raw_concentration_pct}%)")
+                if process.pretreatment:
+                    e = process.pretreatment.enzymes[0]
+                    st.markdown(f"**전처리**: {e['enzyme']} {e['concentration_pct']}% "
+                               f"@ {process.pretreatment.temperature_c}°C × "
+                               f"{process.pretreatment.duration_min}분")
+                if process.main_hydrolysis:
+                    enz_str = " + ".join(
+                        f"{e['enzyme']} {e['concentration_pct']}%"
+                        for e in process.main_hydrolysis.enzymes
+                    )
+                    st.markdown(f"**메인 분해**: {enz_str} @ "
+                               f"{process.main_hydrolysis.temperature_c}°C × "
+                               f"{process.main_hydrolysis.duration_hours}시간")
+                if process.has_uf:
+                    st.markdown(f"**UF 컷오프**: {process.uf_cutoff_kda} kDa")
+                if process.notes:
+                    st.caption(f"📝 {process.notes}")
 
-    with col3:
-        n_sequences = st.number_input("Number of Sequences", min_value=10, max_value=200, value=50)
-
-    method = st.selectbox(
-        "Generation Method:",
-        ["markov", "random", "frequent"],
-        index=0,
-        help="markov: Uses transition probabilities | random: Simple random | frequent: Prefers abundant AAs"
-    )
-
-    # ---- 생성 버튼: 결과를 session_state에 저장 ----
-    if st.button("🎲 Generate Sequences", type="primary"):
-        with st.spinner("Generating sequences..."):
-            taa_comp = loader.get_peptide_composition(selected_sample, normalize=True)
-
-            predictor = AbundancePredictor(loader)
-            result = predictor.predict_for_sample(
-                selected_sample,
-                length_range=(min_length, max_length),
-                n_sequences=n_sequences,
-                method=method
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            min_length = st.number_input("Min Length (AA)", min_value=2,
+                                         max_value=30, value=3)
+        with col2:
+            max_length = st.number_input("Max Length (AA)", min_value=3,
+                                         max_value=50, value=20)
+        with col3:
+            n_top_proteins = st.number_input(
+                "원료 단백질 상위 N개",
+                min_value=5, max_value=100, value=20,
+                help="모든 원료 단백질 대신 길이 기준 상위 N개만 사용"
             )
 
-            # session_state에 결과 저장 (리렌더링 후에도 유지)
-            st.session_state['seq_gen_result'] = result
-            st.session_state['seq_gen_sample'] = selected_sample
-            st.session_state['seq_gen_method'] = method
+    else:
+        # Markov Chain 모드 (기존)
+        sample_options = loader.get_sample_options()
+        selected_display = st.selectbox(
+            "Select Sample:",
+            list(sample_options.keys()),
+            index=0
+        )
+        selected_sample = sample_options[selected_display]
+
+        st.markdown("### Markov Parameters")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            min_length = st.number_input("Min Length (AA)", min_value=3,
+                                         max_value=20, value=5)
+        with col2:
+            max_length = st.number_input("Max Length (AA)", min_value=3,
+                                         max_value=20, value=12)
+        with col3:
+            n_sequences = st.number_input("Number of Sequences",
+                                          min_value=10, max_value=200, value=50)
+
+        method = st.selectbox(
+            "Generation Method:",
+            ["markov", "random", "frequent"],
+            index=0,
+            help="markov: 전이 확률 기반 | random: 단순 무작위 | frequent: 빈도 우선"
+        )
+
+    # ─── 생성 버튼 ────────────────────────────────────
+    if st.button("🎲 Generate Sequences", type="primary"):
+        with st.spinner("Generating sequences..."):
+            if use_in_silico:
+                # In Silico Digestion 실행
+                peptides = digester.digest_product(
+                    selected_product,
+                    min_length=min_length,
+                    max_length=max_length,
+                    n_top_proteins=n_top_proteins
+                )
+                unique_peptides = digester.get_unique_peptides(peptides)
+                summary = digester.summarize(unique_peptides)
+
+                # Markov 결과 형식과 호환되게 변환
+                seq_score_list = [
+                    (p.sequence, 1.0 / (1 + abs(p.length - 8)))  # 길이 기준 간단 점수
+                    for p in unique_peptides
+                ]
+                seq_score_list.sort(key=lambda x: x[1], reverse=True)
+
+                result = {
+                    'n_generated': len(unique_peptides),
+                    'sequences': seq_score_list,
+                    'sample_id': selected_product,
+                    'method': 'in_silico_digestion',
+                    'composition_used': {},  # 빈 dict (in silico엔 해당 없음)
+                    'in_silico_peptides': unique_peptides,
+                    'in_silico_summary': summary,
+                }
+
+                st.session_state['seq_gen_result'] = result
+                st.session_state['seq_gen_sample'] = selected_product
+                st.session_state['seq_gen_method'] = 'in_silico_digestion'
+            else:
+                # 기존 Markov Chain
+                predictor = AbundancePredictor(loader)
+                result = predictor.predict_for_sample(
+                    selected_sample,
+                    length_range=(min_length, max_length),
+                    n_sequences=n_sequences,
+                    method=method
+                )
+                st.session_state['seq_gen_result'] = result
+                st.session_state['seq_gen_sample'] = selected_sample
+                st.session_state['seq_gen_method'] = method
 
     # ---- 결과 표시: session_state에서 읽음 (버튼 블록 바깥!) ----
     if 'seq_gen_result' in st.session_state:
         result = st.session_state['seq_gen_result']
-        gen_sample = st.session_state.get('seq_gen_sample', selected_sample)
-        gen_method = st.session_state.get('seq_gen_method', method)
+        gen_sample = st.session_state.get('seq_gen_sample', '?')
+        gen_method = st.session_state.get('seq_gen_method', '?')
 
         st.success(f"Generated {result['n_generated']} sequences! (Sample: {gen_sample}, Method: {gen_method})")
+
+        # In Silico Digestion 요약 표시
+        if gen_method == 'in_silico_digestion' and 'in_silico_summary' in result:
+            summary = result['in_silico_summary']
+            st.markdown("### 🧪 In Silico Digestion 요약")
+            m1, m2, m3, m4 = st.columns(4)
+            with m1:
+                st.metric("총 펩타이드 (중복 제거)", f"{summary['n_unique']}개")
+            with m2:
+                st.metric("원료 단백질 수", f"{summary['n_source_proteins']}개")
+            with m3:
+                st.metric("평균 길이", f"{summary['length_avg']} AA")
+            with m4:
+                st.metric("평균 분자량", f"{summary['mw_avg']:.0f} Da")
+
+            # 출처 단백질별 펩타이드 분포
+            with st.expander("📊 원료 단백질별 펩타이드 분포"):
+                from collections import Counter
+                source_counts = Counter(
+                    p.source_protein_name[:50]
+                    for p in result['in_silico_peptides']
+                )
+                source_df = pd.DataFrame(
+                    sorted(source_counts.items(), key=lambda x: -x[1])[:15],
+                    columns=['원료 단백질', '생성 펩타이드 수']
+                )
+                st.dataframe(source_df, use_container_width=True, hide_index=True)
 
         # Display results in tabs
         tab1, tab2, tab3, tab4 = st.tabs([
