@@ -1,0 +1,2761 @@
+{
+  "fetched_at": "2026-05-14T16:25:15.282691",
+  "source": "UniProt REST API (https://rest.uniprot.org)",
+  "filters_applied": {
+    "reviewed_only": true,
+    "min_length": 50,
+    "max_per_material": 100
+  },
+  "materials": {
+    "soy": {
+      "korean_name": "대두",
+      "scientific_name": "Glycine max",
+      "products": [
+        "SOY-1",
+        "SOY-N+",
+        "SOY-L",
+        "SOY-P",
+        "SOY-B",
+        "SOY-BIO",
+        "SOY-BIO N50"
+      ],
+      "uniprot_query": "(organism_id:3847) AND (reviewed:true) AND (keyword:KW-0758 OR keyword:KW-0020 OR keyword:KW-0646)",
+      "note": "Glycinin, β-Conglycinin + Lipoxygenase, KTI, Lectin, Urease",
+      "n_proteins": 28,
+      "total_residues": 8765,
+      "proteins": [
+        {
+          "uniprot_id": "P11827",
+          "uniprot_name": "GLCAP_SOYBN",
+          "full_name": "Beta-conglycinin alpha' subunit",
+          "length": 621,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Glycoprotein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P11827_Beta-conglycinin_alpha_subunit.fasta",
+          "sequence": "MMRARFPLLLLGVVFLASVSVSFGIAYWEKQNPSHNKCLRSCNSEKDSYRNQACHARCNLLKVEEEEECEEGQIPRPRPQHPERERQQHGEKEEDEGEQPRPFPFPRPRQPHQEEEHEQKEEHEWHRKEEKHGGKGSEEEQDEREHPRPHQPHQKEEEKHEWQHKQEKHQGKESEEEEEDQDEDEEQDKESQESEGSESQREPRRHKNKNPFHFNSKRFQTLFKNQYGHVRVLQRFNKRSQQLQNLRDYRILEFNSKPNTLLLPHHADADYLIVILNGTAILTLVNNDDRDSYNLQSGDALRVPAGTTYYVVNPDNDENLRMITLAIPVNKPGRFESFFLSSTQAQQSYLQGFSKNILEASYDTKFEEINKVLFGREEGQQQGEERLQESVIVEISKKQIRELSKHAKSSSRKTISSEDKPFNLRSRDPIYSNKLGKLFEITPEKNPQLRDLDVFLSVVDMNEGALFLPHFNSKAIVVLVINEGEANIELVGIKEQQQRQQQEEQPLEVRKYRAELSEQDIFVIPAGYPVVVNATSDLNFFAFGINAENNQRNFLAGSKDNVISQIPSQVQELAFPGSAKDIENLIKSQSESYFVDAQPQQKEEGNKGRKGPLSSILRAFY"
+        },
+        {
+          "uniprot_id": "P0DO16",
+          "uniprot_name": "GLCA1_SOYBN",
+          "full_name": "Beta-conglycinin alpha subunit 1",
+          "length": 605,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Allergen",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Glycoprotein",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P0DO16_Beta-conglycinin_alpha_subunit_1.fasta",
+          "sequence": "MMRARFPLLLLGLVFLASVSVSFGIAYWEKENPKHNKCLQSCNSERDSYRNQACHARCNLLKVEKEECEEGEIPRPRPRPQHPEREPQQPGEKEEDEDEQPRPIPFPRPQPRQEEEHEQREEQEWPRKEEKRGEKGSEEEDEDEDEEQDERQFPFPRPPHQKEERKQEEDEDEEQQRESEESEDSELRRHKNKNPFLFGSNRFETLFKNQYGRIRVLQRFNQRSPQLQNLRDYRILEFNSKPNTLLLPNHADADYLIVILNGTAILSLVNNDDRDSYRLQSGDALRVPSGTTYYVVNPDNNENLRLITLAIPVNKPGRFESFFLSSTEAQQSYLQGFSRNILEASYDTKFEEINKVLFSREEGQQQGEQRLQESVIVEISKEQIRALSKRAKSSSRKTISSEDKPFNLRSRDPIYSNKLGKFFEITPEKNPQLRDLDIFLSIVDMNEGALLLPHFNSKAIVILVINEGDANIELVGLKEQQQEQQQEEQPLEVRKYRAELSEQDIFVIPAGYPVVVNATSNLNFFAIGINAENNQRNFLAGSQDNVISQIPSQVQELAFPGSAQAVEKLLKNQRESYFVDAQPKKKEEGNKGRKGPLSSILRAFY"
+        },
+        {
+          "uniprot_id": "P0DO15",
+          "uniprot_name": "GLCA2_SOYBN",
+          "full_name": "Beta-conglycinin alpha subunit 2",
+          "length": 605,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Allergen",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Glycoprotein",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P0DO15_Beta-conglycinin_alpha_subunit_2.fasta",
+          "sequence": "MMRARFPLLLLGLVFLASVSVSFGIAYWEKENPKHNKCLQSCNSERDSYRNQACHARCNLLKVEKEECEEGEIPRPRPRPQHPEREPQQPGEKEEDEDEQPRPIPFPRPQPRQEEEHEQREEQEWPRKEEKRGEKGSEEEDEDEDEEQDERQFPFPRPPHQKEERKQEEDEDEEQQRESEESEDSELRRHKNKNPFLFGSNRFETLFKNQYGRIRVLQRFNQRSPQLQNLRDYRILEFNSKPNTLLLPNHADADYLIVILNGTAILSLVNNDDRDSYRLQSGDALRVPSGTTYYVVNPDNNENLRLITLAIPVNKPGRFESFFLSSTEAQQSYLQGFSRNILEASYDTKFEEINKVLFSREEGQQQGEQRLQESVIVEISKEQIRALSKRAKSSSRKTISSEDKPFNLRSRDPIYSNKLGKFFEITPEKNPQLRDLDIFLSIVDMNEGALLLPHFNSKAIVILVINEGDANIELVGLKEQQQEQQQEEQPLEVRKYRAELSEQDIFVIPAGYPVVVNATSNLNFFAIGINAENNQRNFLAGSQDNVISQIPSQVQELAFPGSAQAVEKLLKNQRESYFVDAQPKKKEEGNKGRKGPLSSILRAFY"
+        },
+        {
+          "uniprot_id": "P02858",
+          "uniprot_name": "GLYG4_SOYBN",
+          "full_name": "Glycinin G4",
+          "length": 563,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Alternative splicing",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Endoplasmic reticulum"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P02858_Glycinin_G4.fasta",
+          "sequence": "MGKPFTLSLSSLCLLLLSSACFAISSSKLNECQLNNLNALEPDHRVESEGGLIQTWNSQHPELKCAGVTVSKLTLNRNGLHLPSYSPYPRMIIIAQGKGALGVAIPGCPETFEEPQEQSNRRGSRSQKQQLQDSHQKIRHFNEGDVLVIPPGVPYWTYNTGDEPVVAISLLDTSNFNNQLDQTPRVFYLAGNPDIEYPETMQQQQQQKSHGGRKQGQHQQEEEEEGGSVLSGFSKHFLAQSFNTNEDIAEKLQSPDDERKQIVTVEGGLSVISPKWQEQQDEDEDEDEDDEDEQIPSHPPRRPSHGKREQDEDEDEDEDKPRPSRPSQGKREQDQDQDEDEDEDEDQPRKSREWRSKKTQPRRPRQEEPRERGCETRNGVEENICTLKLHENIARPSRADFYNPKAGRISTLNSLTLPALRQFQLSAQYVVLYKNGIYSPHWNLNANSVIYVTRGQGKVRVVNCQGNAVFDGELRRGQLLVVPQNFVVAEQAGEQGFEYIVFKTHHNAVTSYLKDVFRAIPSEVLAHSYNLRQSQVSELKYEGNWGPLVNPESQQGSPRVKVA"
+        },
+        {
+          "uniprot_id": "P04347",
+          "uniprot_name": "GLYG5_SOYBN",
+          "full_name": "Glycinin G5",
+          "length": 516,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Alternative splicing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Glycoprotein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P04347_Glycinin_G5.fasta",
+          "sequence": "MGKPFFTLSLSSLCLLLLSSACFAITSSKFNECQLNNLNALEPDHRVESEGGLIETWNSQHPELQCAGVTVSKRTLNRNGSHLPSYLPYPQMIIVVQGKGAIGFAFPGCPETFEKPQQQSSRRGSRSQQQLQDSHQKIRHFNEGDVLVIPLGVPYWTYNTGDEPVVAISPLDTSNFNNQLDQNPRVFYLAGNPDIEHPETMQQQQQQKSHGGRKQGQHRQQEEEGGSVLSGFSKHFLAQSFNTNEDTAEKLRSPDDERKQIVTVEGGLSVISPKWQEQEDEDEDEDEEYGRTPSYPPRRPSHGKHEDDEDEDEEEDQPRPDHPPQRPSRPEQQEPRGRGCQTRNGVEENICTMKLHENIARPSRADFYNPKAGRISTLNSLTLPALRQFGLSAQYVVLYRNGIYSPDWNLNANSVTMTRGKGRVRVVNCQGNAVFDGELRRGQLLVVPQNPAVAEQGGEQGLEYVVFKTHHNAVSSYIKDVFRVIPSEVLSNSYNLGQSQVRQLKYQGNSGPLVNP"
+        },
+        {
+          "uniprot_id": "P04776",
+          "uniprot_name": "GLYG1_SOYBN",
+          "full_name": "Glycinin G1",
+          "length": 495,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Alternative splicing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P04776_Glycinin_G1.fasta",
+          "sequence": "MAKLVFSLCFLLFSGCCFAFSSREQPQQNECQIQKLNALKPDNRIESEGGLIETWNPNNKPFQCAGVALSRCTLNRNALRRPSYTNGPQEIYIQQGKGIFGMIYPGCPSTFEEPQQPQQRGQSSRPQDRHQKIYNFREGDLIAVPTGVAWWMYNNEDTPVVAVSIIDTNSLENQLDQMPRRFYLAGNQEQEFLKYQQEQGGHQSQKGKHQQEEENEGGSILSGFTLEFLEHAFSVDKQIAKNLQGENEGEDKGAIVTVKGGLSVIKPPTDEQQQRPQEEEEEEEDEKPQCKGKDKHCQRPRGSQSKSRRNGIDETICTMRLRHNIGQTSSPDIYNPQAGSVTTATSLDFPALSWLRLSAEFGSLRKNAMFVPHYNLNANSIIYALNGRALIQVVNCNGERVFDGELQEGRVLIVPQNFVVAARSQSDNFEYVSFKTNDTPMIGTLAGANSLLNALPEEVIQHTFNLKSQQARQIKNNNPFKFLVPPQESQKRAVA"
+        },
+        {
+          "uniprot_id": "P04405",
+          "uniprot_name": "GLYG2_SOYBN",
+          "full_name": "Glycinin G2",
+          "length": 485,
+          "annotation_score": 5.0,
+          "keywords": [
+            "Allergen",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Reference proteome",
+            "Seed storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P04405_Glycinin_G2.fasta",
+          "sequence": "MAKLVLSLCFLLFSGCFALREQAQQNECQIQKLNALKPDNRIESEGGFIETWNPNNKPFQCAGVALSRCTLNRNALRRPSYTNGPQEIYIQQGNGIFGMIFPGCPSTYQEPQESQQRGRSQRPQDRHQKVHRFREGDLIAVPTGVAWWMYNNEDTPVVAVSIIDTNSLENQLDQMPRRFYLAGNQEQEFLKYQQQQQGGSQSQKGKQQEEENEGSNILSGFAPEFLKEAFGVNMQIVRNLQGENEEEDSGAIVTVKGGLRVTAPAMRKPQQEEDDDDEEEQPQCVETDKGCQRQSKRSRNGIDETICTMRLRQNIGQNSSPDIYNPQAGSITTATSLDFPALWLLKLSAQYGSLRKNAMFVPHYTLNANSIIYALNGRALVQVVNCNGERVFDGELQEGGVLIVPQNFAVAAKSQSDNFEYVSFKTNDRPSIGNLAGANSLLNALPEEVIQHTFNLKSQQARQVKNNNPFSFLVPPQESQRRAVA"
+        },
+        {
+          "uniprot_id": "P11828",
+          "uniprot_name": "GLYG3_SOYBN",
+          "full_name": "Glycinin G3",
+          "length": 481,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Allergen",
+            "Alternative splicing",
+            "Disulfide bond",
+            "Endoplasmic reticulum",
+            "Reference proteome",
+            "Seed storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P11828_Glycinin_G3.fasta",
+          "sequence": "MAKLVLSLCFLLFSGCCFAFSFREQPQQNECQIQRLNALKPDNRIESEGGFIETWNPNNKPFQCAGVALSRCTLNRNALRRPSYTNAPQEIYIQQGSGIFGMIFPGCPSTFEEPQQKGQSSRPQDRHQKIYHFREGDLIAVPTGFAYWMYNNEDTPVVAVSLIDTNSFQNQLDQMPRRFYLAGNQEQEFLQYQPQKQQGGTQSQKGKRQQEEENEGGSILSGFAPEFLEHAFVVDRQIVRKLQGENEEEEKGAIVTVKGGLSVISPPTEEQQQRPEEEEKPDCDEKDKHCQSQSRNGIDETICTMRLRHNIGQTSSPDIFNPQAGSITTATSLDFPALSWLKLSAQFGSLRKNAMFVPHYNLNANSIIYALNGRALVQVVNCNGERVFDGELQEGQVLIVPQNFAVAARSQSDNFEYVSFKTNDRPSIGNLAGANSLLNALPEEVIQQTFNLRRQQARQVKNNNPFSFLVPPKESQRRVVA"
+        },
+        {
+          "uniprot_id": "P25974",
+          "uniprot_name": "GLCB1_SOYBN",
+          "full_name": "Beta-conglycinin beta subunit 1",
+          "length": 439,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Direct protein sequencing",
+            "Endoplasmic reticulum",
+            "Glycoprotein",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P25974_Beta-conglycinin_beta_subunit_1.fasta",
+          "sequence": "MMRVRFPLLVLLGTVFLASVCVSLKVREDENNPFYLRSSNSFQTLFENQNGRIRLLQRFNKRSPQLENLRDYRIVQFQSKPNTILLPHHADADFLLFVLSGRAILTLVNNDDRDSYNLHPGDAQRIPAGTTYYLVNPHDHQNLKIIKLAIPVNKPGRYDDFFLSSTQAQQSYLQGFSHNILETSFHSEFEEINRVLFGEEEEQRQQEGVIVELSKEQIRQLSRRAKSSSRKTISSEDEPFNLRSRNPIYSNNFGKFFEITPEKNPQLRDLDIFLSSVDINEGALLLPHFNSKAIVILVINEGDANIELVGIKEQQQKQKQEEEPLEVQRYRAELSEDDVFVIPAAYPFVVNATSNLNFLAFGINAENNQRNFLAGEKDNVVRQIERQVQELAFPGSAQDVERLLKKQRESYFVDAQPQQKEEGSKGRKGPFPSILGALY"
+        },
+        {
+          "uniprot_id": "F7J077",
+          "uniprot_name": "GLCB2_SOYBN",
+          "full_name": "Beta-conglycinin beta subunit 2",
+          "length": 439,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Direct protein sequencing",
+            "Endoplasmic reticulum",
+            "Glycoprotein",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\F7J077_Beta-conglycinin_beta_subunit_2.fasta",
+          "sequence": "MMRVRFPLLVLLGTVFLASVCVSLKVREDENNPFYLRSSNSFQTLFENQNGRIRLLQRFNKRSPQLENLRDYRIVQFQSKPNTILLPHHADADFLLFVLSGRAILTLVNNDDRDSYNLHPGDAQRIPAGTTYYLVNPHDHQNLKIIKLAIPVNKPGRYDDFFLSSTQAQQSYLQGFSHNILETSFHSEFEEINRVLLGEEEEQRQQEGVIVELSKEQIRQLSRRAKSSSRKTISSEDEPFNLRSRNPIYSNNFGKFFEITPEKNPQLRDLDIFLSSVDINEGALLLPHFNSKAIVILVINEGDANIELVGIKEQQQKQKQEEEPLEVQRYRAELSEDDVFVIPAAYPFVVNATSNLNFLAFGINAENNQRNFLAGEKDNVVRQIERQVQELAFPGSAQDVERLLKKQRESYFVDAQPQQKEEGSKGRKGPFPSILGALY"
+        },
+        {
+          "uniprot_id": "Q8RVH5",
+          "uniprot_name": "7SBG2_SOYBN",
+          "full_name": "Basic 7S globulin 2",
+          "length": 433,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\Q8RVH5_Basic_7S_globulin_2.fasta",
+          "sequence": "MASILHYFLALSLSFSFLFFLSDSVPIPQHHTNPTKPINLLVLPVQNDASTGLHWANLQKRTPLMQVPVLVDLNGNHLWVNCEQHYSSKTYQAPFCHSTQCSRANTHQCLSCPAASRPGCHKNTCGLMSTNPITQQTGLGELGQDVLAIHATQGSTQQLGPLVTVPQFLFSCAPSFLLQKGLPRNIQGVAGLGHAPISLPNQLASHFGLQHQFTTCLSRYPTSKGALIFGDAPNNMQQFHNQDIFHDLAFTPLTVTPQGEYNVRVSSIRINQHSVFPPNKISSTIVGSSGGTMISTSTPHMVLQQSLYQAFTQVFAQQLEKQAQVKSVAPFGLCFNSNKINAYPSVDLVMDKPNGPVWRISGEDLMVQAQPGVTCLGVMNGGMQPRAEVTLGTRQLEEKLMVFDLARSRVGFSTSSLHSHGVKCGDLFNFANA"
+        },
+        {
+          "uniprot_id": "P13917",
+          "uniprot_name": "7SB1_SOYBN",
+          "full_name": "Basic 7S globulin",
+          "length": 427,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P13917_Basic_7S_globulin.fasta",
+          "sequence": "MASILHYFLALSLSCSFLFFLSDSVTPTKPINLVVLPVQNDGSTGLHWANLQKRTPLMQVPVLVDLNGNHLWVNCEQQYSSKTYQAPFCHSTQCSRANTHQCLSCPAASRPGCHKNTCGLMSTNPITQQTGLGELGEDVLAIHATQGSTQQLGPLVTVPQFLFSCAPSFLVQKGLPRNTQGVAGLGHAPISLPNQLASHFGLQRQFTTCLSRYPTSKGAIIFGDAPNNMRQFQNQDIFHDLAFTPLTITLQGEYNVRVNSIRINQHSVFPLNKISSTIVGSTSGGTMISTSTPHMVLQQSVYQAFTQVFAQQLPKQAQVKSVAPFGLCFNSNKINAYPSVDLVMDKPNGPVWRISGEDLMVQAQPGVTCLGVMNGGMQPRAEITLGARQLEENLVVFDLARSRVGFSTSSLHSHGVKCADLFNFANA"
+        },
+        {
+          "uniprot_id": "P10742",
+          "uniprot_name": "S25K_SOYBN",
+          "full_name": "Stem 31 kDa glycoprotein",
+          "length": 291,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Glycoprotein",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P10742_Stem_31_kDa_glycoprotein.fasta",
+          "sequence": "KVLVFFVATILVAWQCHAYDMFPLRMNTGYGARTPEVKCASWRLAVEAHNIFGFETIPEECVEATKEYIHGEQYRSDSKTVNQQAYFYARDLEVHPKDTFVFSIDGTVLSNIPYYKKHGYGVEKFNSTLYDEWVNKGNAPALPETLKNYNKLVSLGFKIIFLSGRTLDKQAVTEANLKKAGYHTWEKLILKDPQDPSTPNAVSYKTAAREKLIRQGYNIVGIIGDQWSDLLGGHRGESRTFKLPNPCTTFSSSFTSQQSSLLPIYLYVIRCVQIGALASLYVVSAVCQQVM"
+        },
+        {
+          "uniprot_id": "P10743",
+          "uniprot_name": "VSPB_SOYBN",
+          "full_name": "Stem 31 kDa glycoprotein",
+          "length": 254,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Glycoprotein",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P10743_Stem_31_kDa_glycoprotein.fasta",
+          "sequence": "MKLFVFFVAAVVLVAWPCHGAGYQRFPLRMKTGYGERSSEVKCASFRLAVEAHNIRAFKTIPEECVEPTKDYINGEQFRSDSKTVNQQAFFYASEREVHHNDIFIFGIDNTVLSNIPYYEKHGYGVEEFNETLYDEWVNKGDAPALPETLKNYNKLLSLGFKIVFLSGRYLDKMAVTEANLKKAGFHTWEQLILKDPHLITPNALSYKSAMRENLLRQGYRIVGIIGDQWSDLLGDHRGESRTFKLPNPMYYIE"
+        },
+        {
+          "uniprot_id": "P15490",
+          "uniprot_name": "VSPA_SOYBN",
+          "full_name": "Stem 28 kDa glycoprotein",
+          "length": 254,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Glycoprotein",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P15490_Stem_28_kDa_glycoprotein.fasta",
+          "sequence": "MKMKVLVFFVATILVAWQCHAYDMFPLRMNTGYGARTPEVKCASWRLAVEAHNIFGFETIPEECVEATKEYIHGEQYRSDSKTVNQQAYFYARDLEVHPKDTFVFSIDGTVLSNIPYYKKHGYGVEKFNSTLYDEWVNKGNAPALPETLKNYNKLVSLGFKIIFLSGRTLDKQAVTEANLKKAGYHTWEKLILKDPQDPSTPNAVSYKTAAREKLIRQGYNIVGIIGDQWSDLLGGHRGESRTFKLPNPLYYIQ"
+        },
+        {
+          "uniprot_id": "P01070",
+          "uniprot_name": "ITRA_SOYBN",
+          "full_name": "Trypsin inhibitor A",
+          "length": 216,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P01070_Trypsin_inhibitor_A.fasta",
+          "sequence": "MKSTIFFLFLFCAFTTSYLPSAIADFVLDNEGNPLENGGTYYILSDITAFGGIRAAPTGNERCPLTVVQSRNELDKGIGTIISSPYRIRFIAEGHPLSLKFDSFAVIMLCVGIPTEWSVVEDLPEGPAVKIGENKDAMDGWFRLERVSDDEFNNYKLVFCPQQAEDDKCGDIGISIDHDDGTRRLVVSKNKPLVVQFQKLDKESLAKKNHGLSRSE"
+        },
+        {
+          "uniprot_id": "P25273",
+          "uniprot_name": "KTI2_SOYBN",
+          "full_name": "Kunitz-type trypsin inhibitor KTI2",
+          "length": 204,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P25273_Kunitz-type_trypsin_inhibitor_KTI2.fasta",
+          "sequence": "MKSTIFFALFLVCAFTISYLPSATAQFVLDTDDDPLQNGGTYYMLPVMRGKSGGIEGNSTGKEICPLTVVQSPNKHNKGIGLVFKSPLHALFIAERYPLSIKFDSFAVIPLCGVMPTKWAIVEREGLQAVTLAARDTVDGWFNIERVSREYNDYYKLVFCPQEAEDNKCEDIGIQIDNDGIRRLVLSKNKPLVVEFQKFRSSTA"
+        },
+        {
+          "uniprot_id": "P25272",
+          "uniprot_name": "KTI1_SOYBN",
+          "full_name": "Kunitz-type trypsin inhibitor KTI1",
+          "length": 203,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P25272_Kunitz-type_trypsin_inhibitor_KTI1.fasta",
+          "sequence": "MKSTIFFALFLVCAFTISYLPSATAQFVLDTDDDPLQNGGTYYMLPVMRGKGGGIEVDSTGKEICPLTVVQSPNELDKGIGLVFTSPLHALFIAERYPLSIKFGSFAVITLCAGMPTEWAIVEREGLQAVKLAARDTVDGWFNIERVSREYNDYKLVFCPQQAEDNKCEDIGIQIDDDGIRRLVLSKNKPLVVQFQKFRSSTA"
+        },
+        {
+          "uniprot_id": "P01071",
+          "uniprot_name": "ITRB_SOYBN",
+          "full_name": "Trypsin inhibitor B",
+          "length": 181,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P01071_Trypsin_inhibitor_B.fasta",
+          "sequence": "DFVLDNEGNPLSNGGTYYILSDITAFGGIRAAPTGNERCPLTVVQSRNELDKGIGTIISSPFRIRFIAEGNPLRLKFDSFAVIMLCVGIPTEWSVVEDLPEGPAVKIGENKDAVDGWFRIERVSDDEFNNYKLVFCTQQAEDDKCGDIGISIDHDDGTRRLVVSKNKPLVVQFQKVDKESL"
+        },
+        {
+          "uniprot_id": "P19594",
+          "uniprot_name": "2SS_SOYBN",
+          "full_name": "2S seed storage albumin protein",
+          "length": 158,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P19594_2S_seed_storage_albumin_protein.fasta",
+          "sequence": "MTKFTILLISLLFCIAHTCSASKWQHQQDSCRKQLQGVNLTPCEKHIMEKIQGRGDDDDDDDDDNHILRTMRGRINYIRRNEGKDEDEEEEGHMQKCCTEMSELRSPKCQCKALQKIMENQSEELEEKQKKKMEKELINLATMCRFGPMIQCDLSSDD"
+        },
+        {
+          "uniprot_id": "P26987",
+          "uniprot_name": "SAM22_SOYBN",
+          "full_name": "Stress-induced protein SAM22",
+          "length": 158,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Pathogenesis-related protein",
+            "Plant defense",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P26987_Stress-induced_protein_SAM22.fasta",
+          "sequence": "MGVFTFEDEINSPVAPATLYKALVTDADNVIPKALDSFKSVENVEGNGGPGTIKKITFLEDGETKFVLHKIESIDEANLGYSYSVVGGAALPDTAEKITFDSKLVAGPNGGSAGKLTVKYETKGDAEPNQDELKTGKAKADALFKAIEAYLLAHPDYN"
+        },
+        {
+          "uniprot_id": "O65810",
+          "uniprot_name": "PROF2_SOYBN",
+          "full_name": "Profilin-2",
+          "length": 131,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Actin-binding",
+            "Allergen",
+            "Cytoplasm",
+            "Cytoskeleton",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\O65810_Profilin-2.fasta",
+          "sequence": "MSWQAYVDDHLLCGIEGNHLTHAAIIGQDGSVWLQSTDFPQFKPEEITAIMNDFNEPGSLAPTGLYLGGTKYMVIQGEPGAVIRGKKGPGGVTVKKTGAALIIGIYDEPMTPGQCNMVVERLGDYLIDQGY"
+        },
+        {
+          "uniprot_id": "O65809",
+          "uniprot_name": "PROF1_SOYBN",
+          "full_name": "Profilin-1",
+          "length": 131,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Actin-binding",
+            "Allergen",
+            "Cytoplasm",
+            "Cytoskeleton",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\O65809_Profilin-1.fasta",
+          "sequence": "MSWQAYVDDHLLCDIEGNHLTHAAIIGQDGSVWAQSTDFPQFKPEEITAIMNDFNEPGSLAPTGLYLGGTKYMVIQGEPGAVIRGKKGPGGVTVKKTGAALIIGIYDEPMTPGQCNMVVERPGDYLIDQGY"
+        },
+        {
+          "uniprot_id": "Q39837",
+          "uniprot_name": "ALB1_SOYBN",
+          "full_name": "Albumin-1",
+          "length": 119,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Disulfide bond",
+            "Knottin",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\soy\\Q39837_Albumin-1.fasta",
+          "sequence": "MAVFLLATSTIMFPTKIEAADCNGACSPFEVPPCRSRDCRCVPIGLFVGFCIHPTGLSSVAKMIDEHPNLCQSDDECMKKGSGNFCARYPNNYIDYGWCFDSDSEALKGFLAMPRATTK"
+        },
+        {
+          "uniprot_id": "P01055",
+          "uniprot_name": "IBB1_SOYBN",
+          "full_name": "Bowman-Birk type proteinase inhibitor",
+          "length": 110,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P01055_Bowman-Birk_type_proteinase_inhibitor.fasta",
+          "sequence": "MVVLKVCLVLLFLVGGTTSANLRLSKLGLLMKSDHQHSNDDESSKPCCDQCACTKSNPPQCRCSDMRLNSCHSACKSCICALSYPAQCFCVDITDFCYEPCKPSEDDKEN"
+        },
+        {
+          "uniprot_id": "P01064",
+          "uniprot_name": "IBBD2_SOYBN",
+          "full_name": "Bowman-Birk type proteinase inhibitor D-II",
+          "length": 83,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P01064_Bowman-Birk_type_proteinase_inhibitor_D-II.fasta",
+          "sequence": "MCILSFLKSDQSSSYDDDEYSKPCCDLCMCTRSMPPQCSCEDIRLNSCHSDCKSCMCTRSQPGQCRCLDTNDFCYKPCKSRDD"
+        },
+        {
+          "uniprot_id": "P01063",
+          "uniprot_name": "IBBC2_SOYBN",
+          "full_name": "Bowman-Birk type proteinase inhibitor C-II",
+          "length": 83,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P01063_Bowman-Birk_type_proteinase_inhibitor_C-II.fasta",
+          "sequence": "MELNLFKSDHSSSDDESSKPCCDLCMCTASMPPQCHCADIRLNSCHSACDRCACTRSMPGQCRCLDTTDFCYKPCKSSDEDDD"
+        },
+        {
+          "uniprot_id": "P24337",
+          "uniprot_name": "HPSE_SOYBN",
+          "full_name": "Hydrophobic seed protein",
+          "length": 80,
+          "annotation_score": 2.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\soy\\P24337_Hydrophobic_seed_protein.fasta",
+          "sequence": "ALITRPSCPDLSICLNILGGSLGTVDDCCALIGGLGDIEAIVCLCIQLRALGILNLNRNLQLILNSCGRSYPSNATCPRT"
+        }
+      ]
+    },
+    "rice": {
+      "korean_name": "쌀 (japonica)",
+      "scientific_name": "Oryza sativa subsp. japonica",
+      "products": [
+        "RICE-1",
+        "RICE-BIO"
+      ],
+      "uniprot_query": "(organism_id:39947) AND (reviewed:true) AND (keyword:KW-0758 OR keyword:KW-0020 OR keyword:KW-0646)",
+      "note": "Glutelin, Prolamin + BBI, α-amylase inhibitor, Cysteine inhibitors",
+      "n_proteins": 51,
+      "total_residues": 15323,
+      "proteins": [
+        {
+          "uniprot_id": "Q0DEV5",
+          "uniprot_name": "SSG1_ORYSJ",
+          "full_name": "Granule-bound starch synthase 1, chloroplastic/amyloplastic",
+          "length": 609,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Amyloplast",
+            "Chloroplast",
+            "Direct protein sequencing",
+            "Disulfide bond"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0DEV5_Granule-bound_starch_synthase_1_chloroplastic_amyloplastic.fasta",
+          "sequence": "MSALTTSQLATSATGFGIADRSAPSSLLRHGFQGLKPRSPAGGDATSLSVTTSARATPKQQRSVQRGSRRFPSVVVYATGAGMNVVFVGAEMAPWSKTGGLGDVLGGLPPAMAANGHRVMVISPRYDQYKDAWDTSVVAEIKVADRYERVRFFHCYKRGVDRVFIDHPSFLEKVWGKTGEKIYGPDTGVDYKDNQMRFSLLCQAALEAPRILNLNNNPYFKGTYGEDVVFVCNDWHTGPLASYLKNNYQPNGIYRNAKVAFCIHNISYQGRFAFEDYPELNLSERFRSSFDFIDGYDTPVEGRKINWMKAGILEADRVLTVSPYYAEELISGIARGCELDNIMRLTGITGIVNGMDVSEWDPSKDKYITAKYDATTAIEAKALNKEALQAEAGLPVDRKIPLIAFIGRLEEQKGPDVMAAAIPELMQEDVQIVLLGTGKKKFEKLLKSMEEKYPGKVRAVVKFNAPLAHLIMAGADVLAVPSRFEPCGLIQLQGMRYGTPCACASTGGLVDTVIEGKTGFHMGRLSVDCKVVEPSDVKKVAATLKRAIKVVGTPAYEEMVRNCMNQDLSWKGPAKNWENVLLGLGVAGSAPGIEGDEIAPLAKENVAAP"
+        },
+        {
+          "uniprot_id": "Q75GX9",
+          "uniprot_name": "GLB63_ORYSJ",
+          "full_name": "63 kDa globulin-like protein",
+          "length": 562,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Alternative splicing",
+            "Glycoprotein",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q75GX9_63_kDa_globulin-like_protein.fasta",
+          "sequence": "MATRARATILLLLAAVLFAAAAAASGEDRRRETSLRRCLQRCEQDRPPYERARCVQECKDQQQQQQERRREHGGHDDDRRDRDRRGEGSSEEEDEGRERGSRRRPYVFGRRSFRQVVRSDQGSVRLLPPFHQASSLLRGIKNYRVAVLEANPRSFVMPTHTDAHCICYVAQGEGVVAIIENGEKWSYAIRQGDVFVAPAGTINYLANTDGRRKLIVTKILHTISVPGQIQFFFAPGGRNPESFLSSFSKGVQRAAFKISEEKLEKLLGKQDKGVIIRASEEQVRELRRHASEGGHGPHWPLPPFGESSRGPFNILEQRPRFANRHGRLYEADARSFHDLAEHDIRVAVVNITAGSMNAPFYNTRSVKVAYVLDGEGEAEIVCPHLSRGGRGGESEERRRERGKGKWREEEEEEEEQQKGQEEEEEEQVGQGYETIRARLSRGTVFVVPSGHPIVVTSSRDSTLQIVCFDVHANNNERMYLAGMNSVLKKLDPQAKELAFAASAREVDELLNAQQESAFLAGPEKSGRRGEESEDEDRRRRRSHRGRGDEAVETLLRMAAAAV"
+        },
+        {
+          "uniprot_id": "Q6ERU3",
+          "uniprot_name": "GLUB5_ORYSJ",
+          "full_name": "Glutelin type-B 5",
+          "length": 500,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q6ERU3_Glutelin_type-B_5.fasta",
+          "sequence": "MATIAFSRLSIYFCVLLLCHGSMAQLFGPNVNPWHNPRQGGFRECRFDRLQAFEPLRRVRSEAGVTEYFDEKNEQFQCTGTFVIRRVIEPQGLLVPRYSNTPGMVYIIQGRGSMGLTFPGCPATYQQQFQQFLPEGQSQSQKFRDEHQKIHQFRQGDIVALPAGVAHWFYNEGDAPVVALYVFDLNNNANQLEPRQKEFLLAGNNNREQQMYGRSIEQHSGQNIFSGFNNELLSEALGVNALVAKRLQGQNDQRGEIIRVKNGLKLLRPAFAQQQEQAQQQEQAQAQYQVQYSEEQQPSTRCNGLDENFCTIKARLNIENPSHADTYNPRAGRITRLNSQKFPILNLVQLSATRVNLYQNAILSPFWNVNAHSLVYIVQGHARVQVVSNLGKTVFNGVLRPGQLLIIPQHYVVLKKAEHEGCQYISFKTNANSMVSHLAGKNSIFRAMPVDVIANAYRISREQARSLKNNRGEELGAFTPRYQQQTYLGFSNESENEASE"
+        },
+        {
+          "uniprot_id": "P14614",
+          "uniprot_name": "GLUB4_ORYSJ",
+          "full_name": "Glutelin type-B 4",
+          "length": 500,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P14614_Glutelin_type-B_4.fasta",
+          "sequence": "MATIAFSRLSIYFCVLLLCHGSMAQLFGPNVNPWHNPRQGGFRECRFDRLQAFEPLRRVRSEAGVTEYFDEKNEQFQCTGTFVIRRVIEPQGLLVPRYSNTPGMVYIIQGRGSMGLTFPGCPATYQQQFQQFLPEGQSQSQKFRDEHQKIHQFRQGDIVALPAGVAHWFYNEGDAPVVALYVFDLNNNANQLEPRQKEFLLAGNNNREQQMYGRSIEQHSGQNIFSGFNNELLSEALGVNALVAKRLQGQNDQRGEIIRVKNGLKLLRPAFAQQQEQAQQQEQAQAQYQVQYSEEQQPSTRCNGLDENFCTIKARLNIENPSHADTYNPRAGRITRLNSQKFPILNLVQLSATRVNLYQNAILSPFWNVNAHSLVYIVQGHARVQVVSNLGKTVFNGVLRPGQLLIIPQHYVVLKKAEHEGCQYISFKTNANSMVSHLAGKNSIFRAMPVDVIANAYRISREQARSLKNNRGEELGAFTPRYQQQTYPGFSNESENEALE"
+        },
+        {
+          "uniprot_id": "P07730",
+          "uniprot_name": "GLUA2_ORYSJ",
+          "full_name": "Glutelin type-A 2",
+          "length": 499,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P07730_Glutelin_type-A_2.fasta",
+          "sequence": "MASINRPIVFFTVCLFLLCDGSLAQQLLGQSTSQWQSSRRGSPRGCRFDRLQAFEPIRSVRSQAGTTEFFDVSNELFQCTGVSVVRRVIEPRGLLLPHYTNGASLVYIIQGRGITGPTFPGCPETYQQQFQQSGQAQLTESQSQSHKFKDEHQKIHRFRQGDVIALPAGVAHWCYNDGEVPVVAIYVTDINNGANQLDPRQRDFLLAGNKRNPQAYRREVEEWSQNIFSGFSTELLSEAFGISNQVARQLQCQNDQRGEIVRVERGLSLLQPYASLQEQEQGQMQSREHYQEGGYQQSQYGSGCPNGLDETFCTMRVRQNIDNPNRADTYNPRAGRVTNLNSQNFPILNLVQMSAVKVNLYQNALLSPFWNINAHSIVYITQGRAQVQVVNNNGKTVFNGELRRGQLLIVPQHYVVVKKAQREGCAYIAFKTNPNSMVSHIAGKSSIFRALPTDVLANAYRISREEAQRLKHNRGDEFGAFTPLQYKSYQDVYNVAESS"
+        },
+        {
+          "uniprot_id": "P14323",
+          "uniprot_name": "GLUB1_ORYSJ",
+          "full_name": "Glutelin type-B 1",
+          "length": 499,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P14323_Glutelin_type-B_1.fasta",
+          "sequence": "MASSVFSRFSIYFCVLLLCHGSMAQLFNPSTNPWHSPRQGSFRECRFDRLQAFEPLRKVRSEAGVTEYFDEKNELFQCTGTFVIRRVIQPQGLLVPRYTNIPGVVYIIQGRGSMGLTFPGCPATYQQQFQQFSSQGQSQSQKFRDEHQKIHQFRQGDIVALPAGVAHWFYNDGDAPIVAVYVYDVNNNANQLEPRQKEFLLAGNNNRAQQQQVYGSSIEQHSGQNIFSGFGVEMLSEALGINAVAAKRLQSQNDQRGEIIHVKNGLQLLKPTLTQQQEQAQAQDQYQQVQYSERQQTSSRWNGLEENFCTIKVRVNIENPSRADSYNPRAGRITSVNSQKFPILNLIQMSATRVNLYQNAILSPFWNVNAHSLVYMIQGRSRVQVVSNFGKTVFDGVLRPGQLLIIPQHYAVLKKAEREGCQYIAIKTNANAFVSHLAGKNSVFRALPVDVVANAYRISREQARSLKNNRGEEHGAFTPRFQQQYYPGLSNESESETSE"
+        },
+        {
+          "uniprot_id": "P07728",
+          "uniprot_name": "GLUA1_ORYSJ",
+          "full_name": "Glutelin type-A 1",
+          "length": 499,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P07728_Glutelin_type-A_1.fasta",
+          "sequence": "MASINRPIVFFTVCLFLLCNGSLAQQLLGQSTSQWQSSRRGSPRECRFDRLQAFEPIRSVRSQAGTTEFFDVSNEQFQCTGVSVVRRVIEPRGLLLPHYTNGASLVYIIQGRGITGPTFPGCPESYQQQFQQSGQAQLTESQSQSQKFKDEHQKIHRFRQGDVIALPAGVAHWCYNDGEVPVVAIYVTDLNNGANQLDPRQRDFLLAGNKRNPQAYRREVEERSQNIFSGFSTELLSEALGVSSQVARQLQCQNDQRGEIVRVEHGLSLLQPYASLQEQEQGQVQSRERYQEGQYQQSQYGSGCSNGLDETFCTLRVRQNIDNPNRADTYNPRAGRVTNLNTQNFPILSLVQMSAVKVNLYQNALLSPFWNINAHSVVYITQGRARVQVVNNNGKTVFNGELRRGQLLIIPQHYAVVKKAQREGCAYIAFKTNPNSMVSHIAGKSSIFRALPNDVLANAYRISREEAQRLKHNRGDEFGAFTPIQYKSYQDVYNAAESS"
+        },
+        {
+          "uniprot_id": "Q84LM2",
+          "uniprot_name": "VPE1_ORYSJ",
+          "full_name": "Vacuolar-processing enzyme beta-isozyme 1",
+          "length": 497,
+          "annotation_score": 5.0,
+          "keywords": [
+            "Disulfide bond",
+            "Glycoprotein",
+            "Hydrolase",
+            "Protease",
+            "Reference proteome",
+            "Seed storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q84LM2_Vacuolar-processing_enzyme_beta-isozyme_1.fasta",
+          "sequence": "MAARCWVWGFVVALLAVAAAADGEEEEGKWEPLIRMPTEEGDDAEAAAPAPAPAAADYGGTRWAVLVAGSSGYGNYRHQADVCHAYQILQKGGVKEENIVVFMYDDIAHNILNPRPGTIINHPKGGDVYAGVPKDYTGHQVTTENFFAVLLGNKTAVTGGSGKVIDSKPEDHIFIYYSDHGGPGVLGMPNLPYLYAGDFIKVLQKKHASNSYSKMVIYVEACESGSIFEGLMPENLNIYVTTASNAVENSWGTYCPGEEPSPPPEYITCLGDMYSVAWMEDSETHNLKKETIEDQYELVKKRTSNANKLNEGSHVMEYGDKTFKDEKLFLYQGFNPANGNITNELIWPVPKATVNQRDADLLFMWKRYEQLNGVSEDKLRALREIEDTIAHRKHLDSSIDFIGKLVFGFENGPLALEAARSSGQPLVDNWDCLKKMVRIFESQCGSLTQYGMKYMRAFANICNNGVSEAKMMEASINACGRYNSARWSPMTEGGHSA"
+        },
+        {
+          "uniprot_id": "Q09151",
+          "uniprot_name": "GLUA3_ORYSJ",
+          "full_name": "Glutelin type-A 3",
+          "length": 496,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q09151_Glutelin_type-A_3.fasta",
+          "sequence": "MATIKFPIVFSVVCLFLLCNGSLAQLLSQSTSQWQSSRRGSPRECRFDRLQAFEPIRTVRSQAGTTEFFDVSNELFQCTGVFVVRRVIEPRGLLLPHYSNGATLVYVIQGRGITGPTFPGCPETYQQQFQQSEQDQQLEGQSQSHKFRDEHQKIHRFQQGDVVALPAGVAHWCYNDGDAPIVAIYVTDIYNSANQLDPRHRDFFLAGNNKIGQQLYRYEARDNSKNVFGGFSVELLSEALGISSGVARQLQCQNDQRGEIVRVEHGLSLLQPYASLQEQQQEQVQSRDYGQTQYQQKQLQGSCSNGLDETFCTMRVRQNIDNPNLADTYNPRAGRITYLNGQKFPILNLVQMSAVKVNLYQNALLSPFWNINAHSVVYITQGRARVQVVNNNGKTVFDGELRRGQLLIIPQHHVVIKKAQREGCSYIALKTNPDSMVSHMAGKNSIFRALPDDVVANAYRISREEARRLKHNRGDELGVFTPSHAYKSYQDISVSA"
+        },
+        {
+          "uniprot_id": "Q02897",
+          "uniprot_name": "GLUB2_ORYSJ",
+          "full_name": "Glutelin type-B 2",
+          "length": 495,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q02897_Glutelin_type-B_2.fasta",
+          "sequence": "MATTIFSRFSIYFCAMLLCQGSMAQLFNPSTNPWHSPRQGSFRECRFDRLQAFEPLRKVRSEAGVTEYFDEKNELFQCTGTFVIRRVIQPQGLLVPRYSNTPGLVYIIQGRGSMGLTFPGCPATYQQQFQQFSSQGQSQSQKFRDEHQKIHQFRQGDVVALPAGVAHWFYNDGDASVVAIYVYDINNSANQLEPRQKEFLLAGNNNRVQQVYGSSIEQHSSQNIFNGFGTELLSEALGINTVAAKRLQSQNDQRGEIVHVKNGLQLLKPTLTQQQEQAQAQYQEVQYSEQQQTSSRWNGLEENFCTIKARVNIENPSRADSYNPRAGRISSVNSQKFPILNLIQMSATRVNLYQNAILSPFWNVNAHSLVYMIQGQSRVQVVSNFGKTVFDGVLRPGQLLIIPQHYAVLKKAEREGCQYIAIKTNANAFVSHLAGKNSVFRALPVDVVANAYRISREQARSIKNNRGEEHGAFTPRFQQQYYPGFSNESESETSE"
+        },
+        {
+          "uniprot_id": "Q6K508",
+          "uniprot_name": "GLUD1_ORYSJ",
+          "full_name": "Glutelin type-D 1",
+          "length": 484,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q6K508_Glutelin_type-D_1.fasta",
+          "sequence": "MATTTSLLSSCLCALLLAPLFSQGVDAWESRQGASRQCRFDRLQAFEPLRKVRSEAGDTEYFDERNEQFRCAGVFVIRRVIEPQGLVVPRYSNTPALAYIIQGKGYVGLTFPGCPATHQQQFQLFEQRQSDQAHKFRDEHQKIHEFRQGDVVALPASVAHWFYNGGDTPAVVVYVYDIKSFANQLEPRQKEFLLAGNNQRGQQIFEHSIFQHSGQNIFSGFNTEVLSEALGINTEASKRLQSQNDQRGDIIRVKHGLQLLKPTLTQRQEEHRQYQQVQYREGQYNGLDENFCTIKARVNIENPSRADYYNPRAGRITLLNNQKFPILNLIGMGAARVNLYQNALLSPFWNINAHSVVYIIQGSVRVQVANNQGRSVFNGVLHQGQLLIIPQNHAVIKKAEHNGCQYVAIKTISDPTVSWVAGKNSILRALPVDVIANAYRISRDEARRLKNNRADEIGPFTPRFPQKSQRGYQFLTEGLSLIGM"
+        },
+        {
+          "uniprot_id": "Q852L2",
+          "uniprot_name": "CUCIN_ORYSJ",
+          "full_name": "Cupincin",
+          "length": 470,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Allergen",
+            "Glycoprotein",
+            "Hydrolase",
+            "Metal-binding",
+            "Metalloprotease",
+            "Protease"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q852L2_Cupincin.fasta",
+          "sequence": "MAKKKTSSSMARSQLAALLISLCFLSLASNAVGWSRRGEREEEDERRRHGGEGGRPYHLGEESFRHWTRTRHGRFSVLERFPDEQVVGAAVGGYRVAVLEAAPRAFLQPSHYDADEVFYVKEGEGVIVLLREGRRESFCVREGDAMVIPAGAIVYSANTHSSKWFRVVMLLNPVSTPGHFEEYFPVGGDRPESFFSAFSDDVLQAAFNTRREELEKVFERQREGGEITTAPEEQIRELSKSCSRGGGGGSGSEWEIKPSSLTGKSPYFSNNHGKLFELTGDECRHLKKLDLQIGLANITRGSMIAPNYNTRATKLAVVLQGSGYFEMACPHVSGGGSSERREREREHGRRREEEQGEEEHGERGEKARRYHKVRAQVREESVIVIPASHPATIVASEGESLAVVCFFVGANHDEKVFLAGRNSPLRQLDDPAKKLVFGGSAAREADRVLAAQPEQILLRGPHGRGSVSDM"
+        },
+        {
+          "uniprot_id": "Q53MD3",
+          "uniprot_name": "SPZ5_ORYSJ",
+          "full_name": "Putative serpin-Z5",
+          "length": 445,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53MD3_Putative_serpin-Z5.fasta",
+          "sequence": "MAPPPPAAPPCPGLTELALRVARRIQAGGAPDGNLVFSPLSVYAALALVAAGAGGDTLAELLGVLGAGSRDELAGLAGRLAGRALADRSRAGGPRVSFVSGVWYDKTRTLSPSFRDAAVQSFMAETRAADFREKPGEAVNQINAWARKATNKLIDTVIDGGLPADTDVVVANAVYFKGKWKDPFTKALTKTGKFHRLDGAAVDASFMQRGTYYDTGDYIACHDGFKVLRLPYDDERRRSPASPPPPPSTPRFSLCVFLPDALDGLWDLLDEIASTPGFLQAKLPTRHASVGELKLPKFKLTFSGDIAGVLRGLGLDATFSDGEADFSKMVEDDGGRRPLSMRSLVHKAVIEVNEEGTEAAASAINMVCGMSMTPEPRPVPVDFVADHPFAFFVIEETTGAVVFAGHVLDPSSTAGALDDDDDDDEFVVMGCLRYLLDRCMAFVGV"
+        },
+        {
+          "uniprot_id": "Q53KS8",
+          "uniprot_name": "SPZ2A_ORYSJ",
+          "full_name": "Serpin-Z2A",
+          "length": 424,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53KS8_Serpin-Z2A.fasta",
+          "sequence": "MEDNAGDCGGMTAFALRLAKRLADVGVSSNKNLVFSPASLYAALALVAAGARGTTLDELLALLGAASLDDLEESVRRAVEVGLADESASGGPRVSDACGVWHDETLELKPAYRAAAAGTYKAVTRAANFQRQPKRSRKKINKWVSKATNKLIPEILPDGSVHVDTALVLVNAIYFKGKWSNPFPRSSTTTGKFHRLDGSSVDVPFMSSREDQYIGFHDGFTVLKLPYHHRTMKNHGDGGDTITNSSITRAILEHYGGENVGLSMYIFLPDERDGLPALVDKMAASSSSSSFLRDHRPTRRREVGDLRVPRFKVSFYSQINGVLQGMGVTAAFDAGEADLSGMAEGVDQRGGGLVVEEVFHRAVVEVNEEGTEAAASTACTIRLLSMSYPEDFVADHPFAFFVVEETSGAVLFAGHVLDPTSSSE"
+        },
+        {
+          "uniprot_id": "Q5NBM0",
+          "uniprot_name": "SPZ12_ORYSJ",
+          "full_name": "Putative serpin-Z12",
+          "length": 423,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q5NBM0_Putative_serpin-Z12.fasta",
+          "sequence": "MAALAAGEPFSGRATGGDGGVRSDVMAPPAMAEEAKVSCLPLAREVGRRAAAAGGGQGRNFIVSPLSFHAALALVADGARGETQRELLGFLGSPSLAELHRSPTTRLVARLRHLPNTSFACGVWVDRGRALTPEFADAAASRYAAVAEPADFATQPEQARERVNAFVSDATEGLIRDVLPPNSVDSSTVVVLANAVHFKGTWSLPFHPSATFHAPFHLLDGGAVRAPFMTTEIPFERHVAAFPGFTALKLPYKNVGGGGGGDGVPRAAFYMLLLLPDGDGALKLADLYDMAVTTPEFIKKHTPAAEAPVRRLMVPKFKFSFKFEAKSDMRKLGVTRAFAGGDFSGMVTGGDGLFIAEVYHQATIEVDELGTVAAASTAVVMMQKGSSLPPVDFVADRPFLFAVVEELTGAVLFLGHVVNPLAE"
+        },
+        {
+          "uniprot_id": "Q53P09",
+          "uniprot_name": "SPZ8_ORYSJ",
+          "full_name": "Putative serpin-Z8",
+          "length": 422,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53P09_Putative_serpin-Z8.fasta",
+          "sequence": "MDDGEAARRHRHRAISGGLTALAVRLADRLGAASPGRNLAFSPLSVHAALSLAAAGAAGGTLDEILAVLGAASRDDLAAFVGRTAETALADRGPESLGPRVVFAPGVWCDAARPFKPAYRAAVAAEYNAEATVVDFKNKVEEARKQINAWARRATGKLITDVLPPRSVGPETAVVLGNAIYFKGKWDRPFNESDTERKPFYRHDGAAAAAAVADVPYMSSRSYQRVAVHDGFKVLKLRYRSPRLLRDKRKRGGGGDVGGEFTRYAMAIFLPDARDGLRGLVERMASRPGFLHEHMPAAWPVPVGEFRVPKFKVSCGGSVVGALEQLGLRLPFSPELADLSDMVEDDGSGWPLFVGDIQHKAVIEVNEEGTVAAAATMTRMLPSGVPPPPVDFVAEHPFAYFIVEEMSSAVVFAGHIVDPSME"
+        },
+        {
+          "uniprot_id": "Q53MD1",
+          "uniprot_name": "SPZ6C_ORYSJ",
+          "full_name": "Putative serpin-Z6C",
+          "length": 415,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53MD1_Putative_serpin-Z6C.fasta",
+          "sequence": "MESCARRCAVSGLTALSMRLTKQLSAAAASKAGAAGNLVFSPLSIYSVLSVVTAGARGRTLTELLGALGAESREKLAANAGEMARALPAPGGGAAQPGGGPRVAHACGVWHERTRTVRPAFRDAAAASFNAAALAVDFLNNPEEARKEINSWVAAATENLIDTILPPGSVSTDTGLVVTSAIYFNGQWWTPFCKEITEKRAFHRLDGGDVEADFMRSGEDQYIAVHDGFKVLKMPYAACVSARTTTTPRYSMYVFLPDERDGLWSLEDRMAAGGEGFLREHTPERRVEVGEFRIPRFKLSFDDSVVGALQRLGVRDVFKPFVADLADVLEAENSGDDPPLFVSDVKHKAVIEVNEEGTEAAAATAVCLTFASAAPSSRRPARVDFVADHPFAFLVLEESSGAVLFAGHVVDPTDE"
+        },
+        {
+          "uniprot_id": "Q94DW6",
+          "uniprot_name": "SPZ1_ORYSJ",
+          "full_name": "Serpin-Z1",
+          "length": 411,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q94DW6_Serpin-Z1.fasta",
+          "sequence": "MELAEAVRDETAMAMRLLGHLARAPRGGGGDKNLAVSPLSLHAALALLGAGARGETLDQIIAFLGPAGGPAHAALASHVALCSLADDSGPGDDRGGPKVRFANGVWVDAALRLKAAYARVVADKYRAEARPVSFRDKLEEARREINEWFESATAGRIKDFLPKDAVDRATPAVLGNALYFKGDWESKFDARSTSDDVFYLPDGGHVSAPFMSSGKWQYIACRAGYKVLRLPYARGGRGRGRDTGRLFSMYIYLPDERHGLPDMLRKLCSDPAALIESSAALTEKVPVGAFMVPRFTLSYKTNAAETLRQLGLRLPFEYPGADLSEMVESSPEAEKIVVSAVYHESFVEVNEEGTEAAAATAVVMTLGCAAPSAPVHVVDFVADHPFMFLIKEDLTGVVVFAGQVTNPSSST"
+        },
+        {
+          "uniprot_id": "Q10GX0",
+          "uniprot_name": "SPZXB_ORYSJ",
+          "full_name": "Serpin-ZXB",
+          "length": 405,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q10GX0_Serpin-ZXB.fasta",
+          "sequence": "MDATATDLRVSIAHQTRFAFRLAAALSSPRAHPAAGGAAGAGGSNVAFSPLSLHVALSLVAAGAGGATRDQLVSLLGVPGRGTAEGLHAFAEQVVQLVLADSSPAGGPRVAFADGVFIDSSLSLMKSFKDVAVGKYKAETHSVDFQTKAAEVASQVNSWVDRVTSGLIKEILPPGSVDHTTRLVLGNALYFKGAWTEKFDASKTKDGEFRLLDGKSVLAPFMSTSKKQYLSSYDSLKVLKLPYQKGRDLRQFSMYILLPEAQDGLWSLAAKLNSEPEFLEKRIPTRQVTVGKFKLPKFKISFGFEASDLLKILGLQLPFSSKADLTGMVGSPERHNLFVSSLFHKSFVQVDEEGTEAAAASAAVVSFRSAPVTVDFVADHPFLFLIREDMTGVVLFIGHVVNPLL"
+        },
+        {
+          "uniprot_id": "Q53KS9",
+          "uniprot_name": "SPZ2B_ORYSJ",
+          "full_name": "Serpin-Z2B",
+          "length": 404,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53KS9_Serpin-Z2B.fasta",
+          "sequence": "MEDDAGNCGGLTAFALRLAKRLADDGDNSNRNVVFSPVSLYAALALVASGARGTTLDELVALLGAASLDDLEESVRRAVEVGLADESESGGPRVSYACGVWHDERLALKPAYRAADFQRQPKSSRKKINKWVSKATNKLIREILPDGSVHGGTALVLVNAIYFKGKWSNPFPRERTTTGKFHRLDGSSVDAPFMSSREDQYIGFYDGFKVLKLPYHRTMKNHGDGGDITPAILKHYGENVGLSMYIFLPDARDGLPALVDKMAVASSGTASSSFLRDHRPGRRRIKVGDLRVPRFKVSFYSEMNEVLKGMGIGAAFDVGKVDLSGMIDGELVVVEKVMHRAVVEVNEEGTEAAAATACTMKFLCLTLTSPVDFVADHPFAFFVVEEKSDAVLFAGHVLDPTSLE"
+        },
+        {
+          "uniprot_id": "Q53Q32",
+          "uniprot_name": "SPZ6B_ORYSJ",
+          "full_name": "Serpin-Z6B",
+          "length": 398,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53Q32_Serpin-Z6B.fasta",
+          "sequence": "MALRLAERLSLEEDSVGGGNLVFSPLSIYSALTVVTAGARGTTLAELLAALGAPSSRDALAEDAGEIVRALPGGSGTATGGPRVAHACGLWHDRRRNVKPAFRDAAAASFQATTRAVDFLANPEEARNEINSWVAAATENLIDTILPPGSVSTDTRLVVASAIYFNATWQTPFRKQDTKKDKFHILGGGGDVDADFMRSGDDQYVAAYDGFKVLKMPYNTRASRTHTQPQYSLCVFLPDKRNGLWTLADRMEAGGGEVFLREHMPEKRVKVGEFRIPRFKLSFDGSIKTALQGVGVRAVFDPAAADLSDVLEEGNSGDPPLFVSDVLHGAAIEVNEEGTEVAAATVVIMKGRARRPSPAPAPVDFVADHPFAFFVVEESSGAVLFAGHVVDPTNPSQL"
+        },
+        {
+          "uniprot_id": "Q75H81",
+          "uniprot_name": "SPZXA_ORYSJ",
+          "full_name": "Serpin-ZXA",
+          "length": 396,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q75H81_Serpin-ZXA.fasta",
+          "sequence": "MAADLRVSIAHQTSFALRLAAALSSPAHPAGGAGRNVAFSPLSLHVALSLVAAGAGGATRDQLASALGGPGSAEGLHAFAEQLVQLVLADASGAGGPRVAFADGVFVDASLSLKKTFGDVAVGKYKAETHSVDFQTKAAEVASQVNSWVEKVTSGLIKEILPPGSVDHTTRLVLGNALYFKGAWTEKFDASKTKDGEFHLLDGKSVQAPFMSTSKKQYILSYDNLKVLKLPYQQGGDKRQFSMYILLPEAQDGLWSLAEKLNSEPEFLEKHIPTRQVTVGQFKLPKFKISFGFEASDLLKSLGLHLPFSSEADLTEMVDSPEGKNLFVSSVFHKSFVEVNEEGTEAAAATAAVITLRSAPIAEDFVADHPFLFLIQEDMTGVVLFVGHVVNPLLAA"
+        },
+        {
+          "uniprot_id": "Q53Q31",
+          "uniprot_name": "SPZ6A_ORYSJ",
+          "full_name": "Putative serpin-Z6A",
+          "length": 393,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q53Q31_Putative_serpin-Z6A.fasta",
+          "sequence": "MGISLRLAEQFSAEEDGGGGGGNLVFSPLSIYSALSVVTAGARGTTLTELLAALGAPSRDALAKNAAEIARALAGGTATGGPRVAHACGLWHERTRSLKLAFRDAAAASFNAATRAVDFLANPEEARKEINSWVAAATENLIDTILPPGSVSTDTGLVVTSAIYFNGTWQTPFRKQDTKKDKFHLLDGHGTVDADFMRTGEDQYIAAHDGFKVLKMPYAHDHAAPQPSPRYYSMYILLPDERDGLSSLEDRMAAAGGGGGGEGFLSEHMPVRRVEVGEFRIPRFKLSFSRSVVRALRGVGVNAVFDRAELPDMIEGEPLRVSDVLHKAVIEVNEEGTEAAAATAVLMEGAARYAPPPPPREDFVADHPFAFFVVEESSGAVLFAGHVVDPTKS"
+        },
+        {
+          "uniprot_id": "Q948T6",
+          "uniprot_name": "LGUL_ORYSJ",
+          "full_name": "Lactoylglutathione lyase",
+          "length": 291,
+          "annotation_score": 5.0,
+          "keywords": [
+            "Allergen",
+            "Direct protein sequencing",
+            "Lyase",
+            "Metal-binding",
+            "Nickel",
+            "Phosphoprotein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q948T6_Lactoylglutathione_lyase.fasta",
+          "sequence": "MASGSEAEKSPEVVLEWPKKDKKRLLHAVYRVGDLDRTIKCYTECFGMKLLRKRDVPEEKYTNAFLGFGPEDTNFALELTYNYGVDKYDIGAGFGHFAIATEDVYKLAEKIKSSCCCKITREPGPVKGGSTVIAFAQDPDGYMFELIQRGPTPEPLCQVMLRVGDLDRSIKFYEKALGMKLLRKKDVPDYKYTIAMLGYADEDKTTVIELTYNYGVTEYTKGNAYAQVAIGTEDVYKSAEAVELVTKELGGKILRQPGPLPGLNTKIASFLDPDGWKVVLVDNADFLKELQ"
+        },
+        {
+          "uniprot_id": "Q40638",
+          "uniprot_name": "EXPB1_ORYSJ",
+          "full_name": "Expansin-B1",
+          "length": 267,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Allergen",
+            "Cell wall",
+            "Cell wall biogenesis/degradation",
+            "Disulfide bond",
+            "Glycoprotein",
+            "Membrane"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q40638_Expansin-B1.fasta",
+          "sequence": "MASSSLLLACVVVAAMVSAVSCGPPKVPPGPNITTSYGDKWLEAKATWYGAPKGAGPKDNGGACGYKDVDKAPFLGMNSCGNDPIFKDGKGCGSCFEIKCSKPEACSDKPALIHVTDMNDEPIAAYHFDLSGLAFGAMAKDGKDEELRKAGIIDTQFRRVKCKYPADTKITFHIEKASNPNYLALLVKYVAGDGDVVEVEIKEKGSEEWKALKESWGAIWRIDTPKPLKGPFSVRVTTEGGEKIIAEDAIPDGWKADSVYKSNVQAK"
+        },
+        {
+          "uniprot_id": "Q0JR25",
+          "uniprot_name": "IBBR_ORYSJ",
+          "full_name": "Bowman-Birk type bran trypsin inhibitor",
+          "length": 254,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Repeat"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0JR25_Bowman-Birk_type_bran_trypsin_inhibitor.fasta",
+          "sequence": "MSNTTMATSTILLFLLAGLAAAHGDGDTTIRLPSDGAKASRPRAAKPWDCCDNIEISRLMIYPPLYRCNDEVKQCAAACKECVEAPGGDFNGGAFVCSDWFSTVDPGPKCTAALDGLSMERPWKCCDNIKRLPTKPDPPQWRCNDELEPSQCTAACKSCREAPGPFPGKLICEDIYWGADPGPFCTPRPWGDCCDKAFCNKMNPPTCRCMDEVKECADACKDCQRVESSEPPRYVCKDRFTGHPGPVCKPRAEN"
+        },
+        {
+          "uniprot_id": "Q0JNR2",
+          "uniprot_name": "CYT12_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 12",
+          "length": 250,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Repeat",
+            "Secreted",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0JNR2_Cysteine_proteinase_inhibitor_12.fasta",
+          "sequence": "MRVAATTRPASSSAAAPLPLFLLLAVAAAAAALFLVGSASLAMAGHVLGGAHDAPSAANSVETDALARFAVDEHNKRENALLEFVRVVEAKEQVVAGTLHHLTLEALEAGRKKVYEAKVWVKPWLDFKELQEFRNTGDATTFTNADLGAKKGGHEPGWRDVPVHDPVVKDAADHAVKSIQQRSNSLFPYELLEIVRAKAEVVEDFAKFDILMKLKRGNKEEKFKAEVHKNLEGAFVLNQMQQEHDESSSQ"
+        },
+        {
+          "uniprot_id": "P29421",
+          "uniprot_name": "IAAS_ORYSJ",
+          "full_name": "Alpha-amylase/subtilisin inhibitor",
+          "length": 200,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P29421_Alpha-amylase_subtilisin_inhibitor.fasta",
+          "sequence": "MVSLRLPLILLSLLAISFSCSAAPPPVYDTEGHELSADGSYYVLPASPGHGGGLTMAPRVLPCPLLVAQETDERRKGFPVRFTPWGGAAAPEDRTIRVSTDVRIRFNAATICVQSTEWHVGDEPLTGARRVVTGPLIGPSPSGRENAFRVEKYGGGYKLVSCRDSCQDLGVSRDGARAWLGASQPPHVVVFKKARPSPPE"
+        },
+        {
+          "uniprot_id": "P29835",
+          "uniprot_name": "GL19_ORYSJ",
+          "full_name": "19 kDa globulin",
+          "length": 186,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Direct protein sequencing",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P29835_19_kDa_globulin.fasta",
+          "sequence": "MASKVVFFAAALMAAMVAISGAQLSESEMRFRDRQCQREVQDSPLDACRQVLDRQLTGRERFQPMFRRPGALGLRMQCCQQLQDVSRECRCAAIRRMVRSYEESMPMPLEQGWSSSSSEYYGGEGSSSEQGYYGEGSSEEGYYGEQQQQPGMTRVRLTRARQYAAQLPSMCRVEPQQCSIFAAGQY"
+        },
+        {
+          "uniprot_id": "Q6I570",
+          "uniprot_name": "CYT3_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 3",
+          "length": 184,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q6I570_Cysteine_proteinase_inhibitor_3.fasta",
+          "sequence": "MLRRRGFCCCSGAPAAAAAALLLLAVAAAAPRAAGFHLGGDESVLVRGMLAAIRREQAEAEDAARFAVAEYNKNQGAELEFARIVKAKRQVVTGTLHDLMLEVVDSGKKSLYSAKVWVKPWLDFKAVVEFRHVGDSQSQSATAADDNAGQDTADPTVASRNDLHNTENNKVSVVLSTFSQTYSV"
+        },
+        {
+          "uniprot_id": "Q01882",
+          "uniprot_name": "RAG2_ORYSJ",
+          "full_name": "Seed allergenic protein RAG2",
+          "length": 166,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Disulfide bond",
+            "Glycoprotein",
+            "Reference proteome",
+            "Secreted",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q01882_Seed_allergenic_protein_RAG2.fasta",
+          "sequence": "MASNKVVFSALLLIIVSVLAATATMADHHKDQVVYSLGERCQPGMGYPMYSLPRCRAVVKRQCVGHGAPGGAVDEQLRQDCCRQLAAVDDSWCRCSALNHMVGGIYRELGATDVGHPMAEVFPGCRRGDLERAAASLPAFCNVDIPNGTGGVCYWLGYPRTPRTGH"
+        },
+        {
+          "uniprot_id": "Q01883",
+          "uniprot_name": "RAG1_ORYSJ",
+          "full_name": "Seed allergenic protein RAG1",
+          "length": 163,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Disulfide bond",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q01883_Seed_allergenic_protein_RAG1.fasta",
+          "sequence": "MASNKVVFSVLLLVVLSVLAAAMATMADHHQVYSPGEQCRPGISYPTYSLPQCRTLVRRQCVGRGAASAADEQVWQDCCRQLAAVDDGWCRCGALDHMLSGIYRELGATEAGHPMAEVFPGCRRGDLERAAASLPAFCNVDIPNGPGGVCYWLGYPRTPRTGH"
+        },
+        {
+          "uniprot_id": "Q01881",
+          "uniprot_name": "RA05_ORYSJ",
+          "full_name": "Seed allergenic protein RA5",
+          "length": 160,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Disulfide bond",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q01881_Seed_allergenic_protein_RA5.fasta",
+          "sequence": "MASNKVVFSVLLLAVVSVLAATATMAEYHHQDQVVYTPAPLCQPGMGYPMYPLPRCRALVKRQCVGRGTAAAAEQVRRDCCRQLAAVDDSWCRCEAISHMLGGIYRELGAPDVGHPMSEVFRGCRRGDLERAAASLPAFCNVDIPNGGGGVCYWLARSGY"
+        },
+        {
+          "uniprot_id": "Q7X8H9",
+          "uniprot_name": "AI172_ORYSJ",
+          "full_name": "17kDa alpha-amylase/trypsin inhibitor 2",
+          "length": 159,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Disulfide bond",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q7X8H9_17kDa_alpha-amylase_trypsin_inhibitor_2.fasta",
+          "sequence": "MALASDKFVLSAIVLAVLTVAAAAAGYGGYGDVGEYCRVGKAVSRNPVPSCRNYIARWCAVAGGRLDSGKQPPRQLLEPCCRELAAVPMQCRCDALSVLVRGVVTEEGDRVAGMISQHAAPGCDAATIAGMASALTDYGRCNLQHTGFFGCPMFGGGMD"
+        },
+        {
+          "uniprot_id": "Q5N806",
+          "uniprot_name": "CYT4_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 4",
+          "length": 158,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q5N806_Cysteine_proteinase_inhibitor_4.fasta",
+          "sequence": "MAARCPVGVASVLLLIVLVTVASAASGARSGGGGGGGIRELRGGGAGRRVGGRTEVRDVEGDREVQELGRFSVEEHNRRRRSRDCGDVRLEFGRVVAAQRQVVSGLKYYLRVAAAEEGAAGQNGGEPRVFDAVVVVKPWLESRTLLTFAPAADSPNES"
+        },
+        {
+          "uniprot_id": "Q7X7E6",
+          "uniprot_name": "AI171_ORYSJ",
+          "full_name": "17kDa alpha-amylase/trypsin inhibitor 1",
+          "length": 158,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Disulfide bond",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q7X7E6_17kDa_alpha-amylase_trypsin_inhibitor_1.fasta",
+          "sequence": "MASASDKLVLSAIVLAVLAAVVAAASGYGDVGEYCRVGKAVSRNPVPSCRNYIARWCAAAGGRMDSRKQPPREFLEPCCRELAAVPMQCRCDALSVLVRGVVTEEGDRVSGMISQHAAPGCDAATIAGMASALTDYGRCNLQHTAGSFACLMFGGGMD"
+        },
+        {
+          "uniprot_id": "Q8H4L8",
+          "uniprot_name": "RA16_ORYSJ",
+          "full_name": "Alpha-amylase/trypsin inhibitor RA16",
+          "length": 157,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Allergen",
+            "Disulfide bond",
+            "Reference proteome",
+            "Secreted",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q8H4L8_Alpha-amylase_trypsin_inhibitor_RA16.fasta",
+          "sequence": "MASNKVVISALLVVVVSVLAATTTMADHHQEQVVYTPGQLCQPGIGYPTYPLPRCRAFVKRQCVAPGTVDEQVRRGCCRQLAAIDSSWCRCDALNHMLRIIYRESGAADAGHPMAEVFRGCRRGDIERAAASLPAFCNVDIPNGVGGVCYWLPGTGY"
+        },
+        {
+          "uniprot_id": "P20698",
+          "uniprot_name": "PRO28_ORYSJ",
+          "full_name": "Prolamin PPROL 17D",
+          "length": 156,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Pyrrolidone carboxylic acid",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P20698_Prolamin_PPROL_17D.fasta",
+          "sequence": "MKIIFFFALLAIAACSASAQFDAVTQVYRQYQLQPHLMLQQQMLSPCGEFVRQQCSTVATPFFQSPVFQLRNCQVMQQQCCQQLRMIAQQSHCQAISSVQAIVQQLRLQQFASVYFDQSQAQAQAMLALNMPSICGIYPSYNTAPCSIPTVGGIWY"
+        },
+        {
+          "uniprot_id": "P17048",
+          "uniprot_name": "PRO25_ORYSJ",
+          "full_name": "13 kDa prolamin C",
+          "length": 156,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P17048_13_kDa_prolamin_C.fasta",
+          "sequence": "MKIIFVFALLAIVACNASARFDPLSQSYRQYQLQSHLLLQQQVLSPCSEFVRQQYSIVATPFWQPATFQLINNQVMQQQCCQQLRLVAQQSHYQAISIVQAIVQQLQLQQFSGVYFDQTQAQAQTLLTFNLPSICGIYPNYYSAPRSIATVGGVWY"
+        },
+        {
+          "uniprot_id": "P20907",
+          "uniprot_name": "CYT2_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 2",
+          "length": 151,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P20907_Cysteine_proteinase_inhibitor_2.fasta",
+          "sequence": "MRASSLFAESVFTTSAAAGRRRCPRLAAVPVTLFFSTGRGSPAMAEEAQQPRGVKVGGIHDAPAGRENDLTTVELARFAVAEHNSKANAMLELERVVKVRQQVVGGFMHYLTVEVKEPGGANKLYEAKVWERAWENFKQLQDFKPLDDATA"
+        },
+        {
+          "uniprot_id": "Q42465",
+          "uniprot_name": "PRO20_ORYSJ",
+          "full_name": "Prolamin PPROL 14P",
+          "length": 151,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Pyrrolidone carboxylic acid",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q42465_Prolamin_PPROL_14P.fasta",
+          "sequence": "MKIIFVFALLAIAACSATAQFDVLGQNIRQYQVQSPLLLQQQVLSPYNEFVRQQYSIAASTFLQSAAFQLRNNQVLQQLRLVAQQSHYQDINVVQAIAHQLHLQQFGNLYIDRNLAQAQALLAFNLPSTYGIYPWSYSAPDSITTLGGVLY"
+        },
+        {
+          "uniprot_id": "P0C579",
+          "uniprot_name": "CYT10_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 10",
+          "length": 151,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P0C579_Cysteine_proteinase_inhibitor_10.fasta",
+          "sequence": "MATSPMLFLVSLLLVLVAAATGDEASPSNAAAPAAPVLVGGRTEIRDVGSNKAVQSLGRFAVAEHNRRLRHGGSGGPADPVPVKLAFARVVEAQKQVVSGVAYYLKVAASARDPRGGAAAGGDRVFDAVVVVKAWLKSKELVSFTPASSTK"
+        },
+        {
+          "uniprot_id": "Q0DJ45",
+          "uniprot_name": "PRO7_ORYSJ",
+          "full_name": "Prolamin PPROL 14E",
+          "length": 150,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Pyrrolidone carboxylic acid",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0DJ45_Prolamin_PPROL_14E.fasta",
+          "sequence": "MKIIFVFALLAIAACSASAQFDVLGQSYRQYQLQSPVLLQQQVLSPYNEFVRQQYGIAASPFLQSAAFQLRNNQVWQQLALVAQQSHYQDINIVQAIAQQLQLQQFGDLYFDRNLAQAQALLAFNVPSRYGIYPRYYGAPSTITTLGGVL"
+        },
+        {
+          "uniprot_id": "Q0JGM8",
+          "uniprot_name": "CYT5_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 5",
+          "length": 148,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0JGM8_Cysteine_proteinase_inhibitor_5.fasta",
+          "sequence": "MASKLYYAVAPLVLVLLLLAPLSSARLAAAAAADDDGQWPAGGGRGRKVGGRTDVEDVEGNREVQELGLFCVVEHNRRGGSATRGRGLVFSRVVAAQTQVVSGIKYYLRIAAQEADDELVFDAVVVVKAWVPSREMVSFVPAAELPGY"
+        },
+        {
+          "uniprot_id": "P09229",
+          "uniprot_name": "CYT1_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 1",
+          "length": 140,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Alternative splicing",
+            "Direct protein sequencing",
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\rice\\P09229_Cysteine_proteinase_inhibitor_1.fasta",
+          "sequence": "MRKYRVAGLVAALLVLHSLATPSAQAEAHRAGGEGEEKMSSDGGPVLGGVEPVGNENDLHLVDLARFAVTEHNKKANSLLEFEKLVSVKQQVVAGTLYYFTIEVKEGDAKKLYEAKVWEKPWMDFKELQEFKPVDASANA"
+        },
+        {
+          "uniprot_id": "Q0DN94",
+          "uniprot_name": "PROA_ORYSJ",
+          "full_name": "10 kDa prolamin",
+          "length": 134,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q0DN94_10_kDa_prolamin.fasta",
+          "sequence": "MAAYTSKIFALFALIALSASATTAITTMQYFPPTLAMGTMDPCRQYMMQTLGMGSSTAMFMSQPMALLQQQCCMQLQGMMPQCHCGTSCQMMQSMQQVICAGLGQQQMMKMAMQMPYMCNMAPVNFQLSSCGCC"
+        },
+        {
+          "uniprot_id": "Q10J94",
+          "uniprot_name": "CYT8_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 8",
+          "length": 123,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q10J94_Cysteine_proteinase_inhibitor_8.fasta",
+          "sequence": "MARIPLLLALLLAVSAAAAAQVGGNRGHGPLVGGWSPITDVGDPHIQELGGWAVERHASLSSDGLRFRRVTSGEQQVVSGMNYRLVVSASDPAGATASYVAVVYEQSWTNTRQLTSFKPAAAH"
+        },
+        {
+          "uniprot_id": "Q6K309",
+          "uniprot_name": "CYT11_ORYSJ",
+          "full_name": "Putative cysteine proteinase inhibitor 11",
+          "length": 120,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q6K309_Putative_cysteine_proteinase_inhibitor_11.fasta",
+          "sequence": "MARHPGLLLILLAAVAAVATTSRAQWVGGWNVIEDVAGNNQIQRVGAWAVGKHNQLGTNDRLQFVRVVAAEEQVVQGSNYLVVIDAASSRKKTRELYVAVVADLVGATTYQLSSFKLATK"
+        },
+        {
+          "uniprot_id": "Q10Q47",
+          "uniprot_name": "CYT7_ORYSJ",
+          "full_name": "Putative cysteine proteinase inhibitor 7",
+          "length": 117,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q10Q47_Putative_cysteine_proteinase_inhibitor_7.fasta",
+          "sequence": "MTMRTSSLLLAAVAVVAIVAGATAATVGSWEPVDINDPHVQELGRWAVAEEDRGVAAGGLTFERVTDGEKQVVAGVNYRLTLEASSSGAKDGRYEAVVYEQDPRSNARKLVSFEPIH"
+        },
+        {
+          "uniprot_id": "Q10Q48",
+          "uniprot_name": "CYT9_ORYSJ",
+          "full_name": "Putative cysteine proteinase inhibitor 9",
+          "length": 114,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q10Q48_Putative_cysteine_proteinase_inhibitor_9.fasta",
+          "sequence": "MRTSSLVLFAAVAVFGAACTAAAGDESWKTIDANDRHVQDVALWAVAETDWASATGGLTLNTVDGAEKRFEAGVNYYRLTLEASSRVVAKYLRFQAVVYEEGDEHKLVSFVPIH"
+        },
+        {
+          "uniprot_id": "Q10Q46",
+          "uniprot_name": "CYT6_ORYSJ",
+          "full_name": "Cysteine proteinase inhibitor 6",
+          "length": 113,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Plant defense",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Signal",
+            "Thiol protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\rice\\Q10Q46_Cysteine_proteinase_inhibitor_6.fasta",
+          "sequence": "MAMTTRTLLLAAVCAAAALPRGWSPIKNIDDPHIQELGRWAITENNRVSPSDELTFHRVTGGEQQVVSGMNYRLEIEAASGGGDVTGSYGAVVFEQEWSNTRKLISFDKNHNF"
+        }
+      ]
+    },
+    "wheat": {
+      "korean_name": "밀 (Vital Wheat Gluten)",
+      "scientific_name": "Triticum aestivum",
+      "products": [
+        "WHEAT-1",
+        "WHEAT-BIO"
+      ],
+      "uniprot_query": "(organism_id:4565) AND (reviewed:true) AND (keyword:KW-0758 OR keyword:KW-0020 OR keyword:KW-0646 OR protein_name:gliadin OR protein_name:glutenin)",
+      "note": "Gliadin, Glutenin + ATI (CM2/CM3/CM16), β-amylase, Serpin",
+      "n_proteins": 62,
+      "total_residues": 17428,
+      "proteins": [
+        {
+          "uniprot_id": "P10388",
+          "uniprot_name": "GLT5_WHEAT",
+          "full_name": "Glutenin, high molecular weight subunit DX5",
+          "length": 848,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P10388_Glutenin_high_molecular_weight_subunit_DX5.fasta",
+          "sequence": "MAKRLVLFVAVVVALVALTVAEGEASEQLQCERELQELQERELKACQQVMDQQLRDISPECHPVVVSPVAGQYEQQIVVPPKGGSFYPGETTPPQQLQQRIFWGIPALLKRYYPSVTCPQQVSYYPGQASPQRPGQGQQPGQGQQGYYPTSPQQPGQWQQPEQGQPRYYPTSPQQSGQLQQPAQGQQPGQGQQGQQPGQGQPGYYPTSSQLQPGQLQQPAQGQQGQQPGQAQQGQQPGQGQQPGQGQQGQQPGQGQQPGQGQQGQQLGQGQQGYYPTSLQQSGQGQPGYYPTSLQQLGQGQSGYYPTSPQQPGQGQQPGQLQQPAQGQQPGQGQQGQQPGQGQQGQQPGQGQQPGQGQPGYYPTSPQQSGQGQPGYYPTSSQQPTQSQQPGQGQQGQQVGQGQQAQQPGQGQQPGQGQPGYYPTSPQQSGQGQPGYYLTSPQQSGQGQQPGQLQQSAQGQKGQQPGQGQQPGQGQQGQQPGQGQQGQQPGQGQPGYYPTSPQQSGQGQQPGQWQQPGQGQPGYYPTSPLQPGQGQPGYDPTSPQQPGQGQQPGQLQQPAQGQQGQQLAQGQQGQQPAQVQQGQRPAQGQQGQQPGQGQQGQQLGQGQQGQQPGQGQQGQQPAQGQQGQQPGQGQQGQQPGQGQQGQQPGQGQQPGQGQPWYYPTSPQESGQGQQPGQWQQPGQGQPGYYLTSPLQLGQGQQGYYPTSLQQPGQGQQPGQWQQSGQGQHWYYPTSPQLSGQGQRPGQWLQPGQGQQGYYPTSPQQPGQGQQLGQWLQPGQGQQGYYPTSLQQTGQGQQSGQGQQGYYSSYHVSVEHQAASLKVAKAQQLAAQLPAMCRLEGGDALSASQ"
+        },
+        {
+          "uniprot_id": "P08489",
+          "uniprot_name": "GLT4_WHEAT",
+          "full_name": "Glutenin, high molecular weight subunit PW212",
+          "length": 838,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P08489_Glutenin_high_molecular_weight_subunit_PW212.fasta",
+          "sequence": "MAKRLVLFVAVVVALVALTVAEGEASEQLQCERELQELQERELKACQQVMDQQLRDISPECHPVVVSPVAGQYEQQIVVPKGGSFYPGETTPPQQLQQRIFWGIPALLKRYYPSVTSPQQVSYYPGQASPQRPGQGQQPGQGQQSGQGQQGYYPTSPQQPGQWQQPEQGQPGYYPTSPQQPGQLQQPAQGQQPGQGQQGRQPGQGQPGYYPTSSQLQPGQLQQPAQGQQGQQPGQGQQGQQPGQGQQPGQGQQGQQPGQGQQPGQGQQGQQLGQGQQGYYPTSLQQSGQGQPGYYPTSLQQLGQGQSGYYPTSPQQPGQGQQPGQLQQPAQGQQPEQGQQGQQPGQGQQGQQPGQGQQPGQGQPGYYPTSPQQSGQGQPGYYPTSSQQPTQSQQPGQGQQGQQVGQGQQAQQPGQGQQPGQGQPGYYPTSPLQSGQGQPGYYLTSPQQSGQGQQPGQLQQSAQGQKGQQPGQGQQPGQGQQGQQPGQGQQGQQPGQGQPGYYPTSPQQSGQGQQPGQWQQPGQGQPGYYPTSPLQPGQGQPGYDPTSPQQPGQGQQPGQLQQPAQGQQGQQLAQGQQGQQPAQVQQGQQPAQGQQGQQLGQGQQGQQPGQGQQPAQGQQGQQPGQGQQGQQPGQGQQPGQGQPWYYPTSPQESGQGQQPGQWQQPGQWQQPGQGQPGYYLTSPLQLGQGQQGYYPTSLQQPGQGQQPGQWQQSGQGQHGYYPTSPQLSGQGQRPGQWLQPGQGQQGYYPTSPQQSGQGQQLGQWLQPGQGQQGYYPTSLQQTGQGQQSGQGQQGYYSSYHVSVEHQAASLKVAKAQQLAAQLPAMCRLEGGDALSASQ"
+        },
+        {
+          "uniprot_id": "P08488",
+          "uniprot_name": "GLT3_WHEAT",
+          "full_name": "Glutenin, high molecular weight subunit 12",
+          "length": 660,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P08488_Glutenin_high_molecular_weight_subunit_12.fasta",
+          "sequence": "MAKRLVLFAAVVIALVALTTAEGEASRQLQCERELQESSLEACRQVVDQQLAGRLPWSTGLQMRCCQQLRDVSAKCRSVAVSQVARQYEQTVVPPKGGSFYPGETTPLQQLQQGIFWGTSSQTVQGYYPSVTSPRQGSYYPGQASPQQPGQGQQPGKWQEPGQGQQWYYPTSLQQPGQGQQIGKGKQGYYPTSLQQPGQGQQIGQGQQGYYPTSPQHTGQRQQPVQGQQIGQGQQPEQGQQPGQWQQGYYPTSPQQLGQGQQPGQWQQSGQGQQGHYPTSLQQPGQGQQGHYLASQQQPAQGQQGHYPASQQQPGQGQQGHYPASQQQPGQGQQGHYPASQQEPGQGQQGQIPASQQQPGQGQQGHYPASLQQPGQQGHYPTSLQQLGQGQQIGQPGQKQQPGQGQQTGQGQQPEQEQQPGQGQQGYYPTSLQQPGQGQQQGQGQQGYYPTSLQQPGQGQQGHYPASLQQPGQGQGQPGQRQQPGQGQHPEQGQQPGQGQQGYYPTSPQQPGQGQQLGQGQQGYYPTSPQQPGQGQQPGQGQQGHCPMSPQQTGQAQQLGQGQQIGQVQQPGQGQQGYYPTSLQQPGQGQQSGQGQQSGQGHQPGQGQQSGQEKQGYDSPYHVSAEQQAASPMVAKAQQPATQLPTVCRMEGGDALSASQ"
+        },
+        {
+          "uniprot_id": "P10387",
+          "uniprot_name": "GLT0_WHEAT",
+          "full_name": "Glutenin, high molecular weight subunit DY10",
+          "length": 648,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P10387_Glutenin_high_molecular_weight_subunit_DY10.fasta",
+          "sequence": "MAKRLVLFAAVVIALVALTTAEGEASRQLQCERELQESSLEACRQVVDQQLAGRLPWSTGLQMRCCQQLRDVSAKCRSVAVSQVARQYEQTVVPPKGGSFYPGETTPLQQLQQGIFWGTSSQTVQGYYPGVTSPRQGSYYPGQASPQQPGQGQQPGKWQEPGQGQQWYYPTSLQQPGQGQQIGKGQQGYYPTSLQQPGQGQQGYYPTSLQHTGQRQQPVQGQQPEQGQQPGQWQQGYYPTSPQQLGQGQQPRQWQQSGQGQQGHYPTSLQQPGQGQQGHYLASQQQPGQGQQGHYPASQQQPGQGQQGHYPASQQQPGQGQQGHYPASQQEPGQGQQGQIPASQQQPGQGQQGHYPASLQQPGQGQQGHYPTSLQQLGQGQQTGQPGQKQQPGQGQQTGQGQQPEQEQQPGQGQQGYYPTSLQQPGQGQQQGQGQQGYYPTSLQQPGQGQQGHYPASLQQPGQGQPGQRQQPGQGQHPEQGKQPGQGQQGYYPTSPQQPGQGQQLGQGQQGYYPTSPQQPGQGQQPGQGQQGHCPTSPQQSGQAQQPGQGQQIGQVQQPGQGQQGYYPTSVQQPGQGQQSGQGQQSGQGHQPGQGQQSGQEQQGYDSPYHVSAEQQAASPMVAKAQQPATQLPTVCRMEGGDALSASQ"
+        },
+        {
+          "uniprot_id": "P93594",
+          "uniprot_name": "AMYB_WHEAT",
+          "full_name": "Beta-amylase Tri a 17",
+          "length": 503,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Carbohydrate metabolism",
+            "Glycosidase",
+            "Hydrolase",
+            "Polysaccharide degradation"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P93594_Beta-amylase_Tri_a_17.fasta",
+          "sequence": "MAGNMLANYVQVYVMLPLDVVSVDNKFEKGDEIRAQLKKLTEAGVDGVMIDVWWGLVEGKGPKAYDWSAYKQVFDLVHEAGLKLQAIMSFHQCGGNVGDVVNIPIPQWVRDVGATDPDIFYTNRGGTRNIEYLTLGVDDQPLFHGRTAVQMYADYMASFRENMKKFLDAGTIVDIEVGLGPAGEMRYPSYPQSQGWVFPGIGEFICYDKYLEADFKAAAAKAGHPEWELPDDAGEYNDTPEKTQFFKDNGTYLTEKGKFFLSWYSNKLIKHGDKILDEANKVFLGCRVQLAIKISGIHWWYRVPNHAAELTAGYYNLDDRDGYRTIARMLTRHHASMNFTCAEMRDSEQSEEAKSAPEELVQQVLSAGWREGLHVACENALGRYDATAYNTILRNARPKGINKNGPPEHKLFGFTYLRLSNELLEGQNYATFQTFVEKMHANLGHDPSVDPVAPLERSKPEMPIEMILKAAQPKLEPFPFDKNTDLPVKDHTDVGDEVLVAPV"
+        },
+        {
+          "uniprot_id": "P08819",
+          "uniprot_name": "CBP2_WHEAT",
+          "full_name": "Serine carboxypeptidase 2",
+          "length": 444,
+          "annotation_score": 5.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Carboxypeptidase",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Glycoprotein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P08819_Serine_carboxypeptidase_2.fasta",
+          "sequence": "VEPSGHAADRIARLPGQPAVDFDMYSGYITVDEGAGRSLFYLLQEAPEDAQPAPLVLWLNGGPGCSSVAYGASEELGAFRVKPRGAGLVLNEYRWNKVANVLFLDSPAGVGFSYTNTSSDIYTSGDNRTAHDSYAFLAKWFERFPHYKYRDFYIAGESYAGHYVPELSQLVHRSKNPVINLKGFMVGNGLIDDYHDYVGTFEFWWNHGIVSDDTYRRLKEACLHDSFIHPSPACDAATDVATAEQGNIDMYSLYTPVCNITSSSSSSSSSLSQQRRSRGRYPWLTGSYDPCTERYSTAYYNRRDVQMALHANVTGAMNYTWATCSDTINTHWHDAPRSMLPIYRELIAAGLRIWVFSGDTDAVVPLTATRYSIGALGLPTTTSWYPWYDDQEVGGWSQVYKGLTLVSVRGAGHEVPLHRPRQALVLFQYFLQGKPMPGQTKNAT"
+        },
+        {
+          "uniprot_id": "P93693",
+          "uniprot_name": "SPZ1B_WHEAT",
+          "full_name": "Serpin-Z1B",
+          "length": 399,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P93693_Serpin-Z1B.fasta",
+          "sequence": "MATTLATDVRLSIAHQTRFALRLASTISSNPKSAASNAAFSPVSLHSALSLLAAGAGSATRDQLVATLGTGEVEGGHALAEQVVQFVLADASSAGGPRVAFANGVFVDASLLLKPSFQELAVCKYKAETQSVDFQTKAAEVTTQVNSWVEKVTSGRIKNILPSGSVDNTTKLVLANALYFKGAWTDQFDSYGTKNDYFYLLDGSSVQTPFMSSMDDDQYISSSDGLKVLKLPYKQGGDNRQFSMYILLPEAPGGLSSLAEKLSAEPDFLERHIPRQRVAIRQFKLPKFKISFGMEASDLLKCLGLQLPFSDEADFSEMVDSPMPQGLRVSSVFHQAFVEVNEQGTEAAASTAIKMVPQQARPPSVMDFIADHPFLFLLREDISGVVLFMGHVVNPLLSS"
+        },
+        {
+          "uniprot_id": "Q9ST58",
+          "uniprot_name": "SPZ1C_WHEAT",
+          "full_name": "Serpin-Z1C",
+          "length": 398,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q9ST58_Serpin-Z1C.fasta",
+          "sequence": "MATTLATDVRLSIAHQTRFALRLASTISSNPKSAASNAVFSPVSLHVALSLLAAGAGSATRDQLVATLGTGEVEGLHALAEQVVQFVLADASSAGGPHVAFANGVFVDASLPLKPSFQELAVCKYKADTQSVDFQTKAAEVATQVNSWVEKVTSGRIKDILPSGSVDNTTKLVLANALYFKGAWTDQFDSSGTKNDYFYLPDGSSVQTPFMSSMDDQYLSSSDGLKVLKLPYKQGGDKRQFSMYILLPEAPGGLSNLAEKLSAEPDFLERHIPRQRVALRQFKLPKFKISFETEASDLLKCLGLQLPFSNEADFSEMVDSPMAHGLRVSSVFHQAFVEVNEQGTEAAASTAIKMALLQARPPSVMDFIADHPFLFLLREDISGVVLFMGHVVNPLLSS"
+        },
+        {
+          "uniprot_id": "Q41593",
+          "uniprot_name": "SPZ1A_WHEAT",
+          "full_name": "Serpin-Z1A",
+          "length": 398,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q41593_Serpin-Z1A.fasta",
+          "sequence": "MATTLATDVRLSIAHQTRFALRLASTISSNPKSAASNAAFSPVSLYSALSLLAAGAGSATRDQLVATLGTGKVEGLHALAEQVVQFVLADASSTGGSACRFANGVFVDASLLLKPSFQEIAVCKYKAETQSVDFQTKAAEVTTQVNSWVEKVTSGRIKDILPPGSIDNTTKLVLANALYFKGAWTEQFDSYGTKNDYFYLLDGSSVQTPFMSSMDDQYLLSSDGLKVLKLPYKQGGDNRQFFMYILLPEAPGGLSSLAEKLSAEPDFLERHIPRQRVALRQFKLPKFKISFGIEASDLLKCLGLQLPFGDEADFSEMVDSLMPQGLRVSSVFHQAFVEVNEQGTEAAASTAIKMVLQQARPPSVMDFIADHPFLFLVREDISGVVLFMGHVVNPLLSS"
+        },
+        {
+          "uniprot_id": "Q9ST57",
+          "uniprot_name": "SPZ2A_WHEAT",
+          "full_name": "Serpin-Z2A",
+          "length": 398,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q9ST57_Serpin-Z2A.fasta",
+          "sequence": "MATTLATDVRLSIAHQTRFGFRLASTISSNPESTANNVAFSPVSLHVALSLITAGAGGATRDQLVATLGEGEAERLHALAEQVVQFVLADASYADSPRVTFANGVFVDASLPLKPSFQELAVCKYKAEAQSVDFQTKAAEVTAQVNSWVEKVTTGLIKDILPAGSISNTTRLVLGNALYFKGAWTDQFDSRVTKSDYFYLLDGSSIQTPFMYSSEEQYISSSDGLKVLKLPYKQGGDKRQFSMYILLPEAPSGIWSLAEKLSAEPELLERHIPRQKVALRQFKLPKFKISFGIEASDLLKHLGLQLPFSDEADLSEMVDSPMPQGLRISSVFHKTFVEVNETGTEAAAATIAKAVLLSASPPSDMDFIADHPFLFLIREDTSGVVLFIGHVVNPLRSL"
+        },
+        {
+          "uniprot_id": "P93692",
+          "uniprot_name": "SPZ2B_WHEAT",
+          "full_name": "Serpin-Z2B",
+          "length": 398,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P93692_Serpin-Z2B.fasta",
+          "sequence": "MATTLATDVRLSIAHQTRFAFRLASAISSNPESTVNNAAFSPVSLHVALSLITAGAGGATRNQLAATLGEGEVEGLHALAEQVVQFVLADASNIGGPRVAFANGVFVDASLQLKPSFQELAVCKYKAEAQSVDFQTKAAEVTAQVNSWVEKVTTGLIKDILPAGSIDNTTRLVLGNALYFKGAWTDQFDPRATQSDDFYLLDGSSIQTPFMYSSEEQYISSSDGLKVLKLPYKQGGDKRQFSMYILLPEALSGLWSLAEKLSAEPEFLEQHIPRQKVALRQFKLPKFKISLGIEASDLLKGLGLLLPFGAEADLSEMVDSPMAQNLYISSIFHKAFVEVNETGTEAAATTIAKVVLRQAPPPSVLDFIVDHPFLFLIREDTSGVVLFIGHVVNPLLSS"
+        },
+        {
+          "uniprot_id": "P10385",
+          "uniprot_name": "GLTA_WHEAT",
+          "full_name": "Glutenin, low molecular weight subunit",
+          "length": 356,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P10385_Glutenin_low_molecular_weight_subunit.fasta",
+          "sequence": "MKTFLVFALLALAAASAVAQISQQQQAPPFSQQQQPPFSQQQQPPFSQQQQSPFSQQQQQPPFAQQQQPPFSQQPPISQQQQPPFSQQQQPQFSQQQQPPYSQQQQPPYSQQQQPPFSQQQQPPFSQQQQQPPFTQQQQQQQQQQPFTQQQQPPFSQQPPISQQQQPPFLQQQRPPFSRQQQIPVIHPSVLQQLNPCKVFLQQQCIPVAMQRCLARSQMLQQSICHVMQQQCCQQLRQIPEQSRHESIRAIIYSIILQQQQQQQQQQQQQQGQSIIQYQQQQPQQLGQCVSQPLQQLQQQLGQQPQQQQLAHQIAQLEVMTSIALRTLPTMCNVNVPLYETTTSVPLGVGIGVGVY"
+        },
+        {
+          "uniprot_id": "P08453",
+          "uniprot_name": "GDB2_WHEAT",
+          "full_name": "Gamma-gliadin",
+          "length": 327,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P08453_Gamma-gliadin.fasta",
+          "sequence": "MKTLLILTILAMAITIGTANIQVDPSGQVQWLQQQLVPQLQQPLSQQPQQTFPQPQQTFPHQPQQQVPQPQQPQQPFLQPQQPFPQQPQQPFPQTQQPQQPFPQQPQQPFPQTQQPQQPFPQQPQQPFPQTQQPQQPFPQLQQPQQPFPQPQQQLPQPQQPQQSFPQQQRPFIQPSLQQQLNPCKNILLQQSKPASLVSSLWSIIWPQSDCQVMRQQCCQQLAQIPQQLQCAAIHSVVHSIIMQQQQQQQQQQGIDIFLPLSQHEQVGQGSLVQGQGIIQPQQPAQLEAIRSLVLQTLPSMCNVYVPPECSIMRAPFASIVAGIGGQ"
+        },
+        {
+          "uniprot_id": "P04725",
+          "uniprot_name": "GDA5_WHEAT",
+          "full_name": "Alpha/beta-gliadin A-V",
+          "length": 319,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04725_Alpha_beta-gliadin_A-V.fasta",
+          "sequence": "MKTFLILALLAIVATTATTAVRVPVPQLQPQNPSQQQPQEQVPLVQQQQFPGQQQQFPPQQPYPQPQPFPSQQPYLQLQPFPQPQPFPPQLPYPQPQSFPPQQPYPQQQPQYLQPQQPISQQQAQQQQQQQQQQQQQQQILQQILQQQLIPCRDVVLQQHNIAHASSQVLQQSTYQLLQQLCCQQLLQIPEQSQCQAIHNVAHAIIMHQQQQQQQEQKQQLQQQQQQQQQLQQQQQQQQQQPSSQVSFQQPQQQYPSSQVSFQPSQLNPQAQGSVQPQQLPQFAEIRNLALQTLPAMCNVYIPPHCSTTIAPFGISGTN"
+        },
+        {
+          "uniprot_id": "P04727",
+          "uniprot_name": "GDA7_WHEAT",
+          "full_name": "Alpha/beta-gliadin PW8142",
+          "length": 313,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04727_Alpha_beta-gliadin_PW8142.fasta",
+          "sequence": "MKTFLILALVATTATTAVRVPVPQLQPKNPSQQQPQEQVPLVQQQQFPGQQQQFPPQQPYPQPQPFPSQQPYLQLQPFPQPQPFLPQLPYPQPQSFPPQQPYPQQRPKYLQPQQPISQQQAQQQQQQQQQQQQQQQQQILQQILQQQLIPCRDVVLQQHNIAHASSQVLQQSTYQLLQQLCCQQLLQIPEQSRCQAIHNVVHAIIMHQQEQQQQLQQQQQQQLQQQQQQQQQQQQPSSQVSFQQPQQQYPSSQGSFQPSQQNPQAQGSVQPQQLPQFAEIRNLALQTLPAMCNVYIPPHCSTTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "P18573",
+          "uniprot_name": "GDA9_WHEAT",
+          "full_name": "Alpha/beta-gliadin MM1",
+          "length": 307,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P18573_Alpha_beta-gliadin_MM1.fasta",
+          "sequence": "MKTFLILALLAIVATTARIAVRVPVPQLQPQNPSQQQPQEQVPLVQQQQFPGQQQPFPPQQPYPQPQPFPSQQPYLQLQPFPQPQLPYPQPQLPYPQPQLPYPQPQPFRPQQPYPQSQPQYSQPQQPISQQQQQQQQQQQQKQQQQQQQQILQQILQQQLIPCRDVVLQQHSIAYGSSQVLQQSTYQLVQQLCCQQLWQIPEQSRCQAIHNVVHAIILHQQQQQQQQQQQQPLSQVSFQQPQQQYPSGQGSFQPSQQNPQAQGSVQPQQLPQFEEIRNLALETLPAMCNVYIPPYCTIAPVGIFGTN"
+        },
+        {
+          "uniprot_id": "P10386",
+          "uniprot_name": "GLTB_WHEAT",
+          "full_name": "Glutenin, low molecular weight subunit 1D1",
+          "length": 307,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P10386_Glutenin_low_molecular_weight_subunit_1D1.fasta",
+          "sequence": "MKTFLVFALLAVAATSAIAQMETRCIPGLERPWQQQPLPPQQTFPQQPLFSQQQQQQLFPQQPSFSQQQPPFWQQQPPFSQQQPILPQQPPFSQQQQLVLPQQPPFSQQQQPVLPPQQSPFPQQQQQHQQLVQQQIPVVQPSILQQLNPCKVFLQQQCSPVAMPQRLARSQMLQQSSCHVMQQQCCQQLPQIPQQSRYEAIRAIIYSIILQEQQQVQGSIQSQQQQPQQLGQCVSQPQQQSQQQLGQQPQQQQLAQGTFLQPHQIAQLEVMTSIALRILPTMCSVNVPLYRTTTSVPFGVGTGVGAY"
+        },
+        {
+          "uniprot_id": "P04729",
+          "uniprot_name": "GDB1_WHEAT",
+          "full_name": "Gamma-gliadin B-I",
+          "length": 304,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04729_Gamma-gliadin_B-I.fasta",
+          "sequence": "MKTFLVFALIAVVATSAIAQMETSCISGLERPWQQQPLPPQQSFSQQPPFSQQQQQPLPQQPSFSQQQPPFSQQQPILSQQPPFSQQQQPVLPQQSPFSQQQQLVLPPQQQQQQLVQQQIPIVQPSVLQQLNPCKVFLQQQCSPVAMPQRLARSQMWQQSSCHVMQQQCCQQLQQIPEQSRYEAIRAIIYSIILQEQQQGFVQPQQQQPQQSGQGVSQSQQQSQQQLGQCSFQQPQQQLGQQPQQQQQQQVLQGTFLQPHQIAHLEAVTSIALRTLPTMCSVNVPLYSATTSVPFGVGTGVGAY"
+        },
+        {
+          "uniprot_id": "P21292",
+          "uniprot_name": "GDBX_WHEAT",
+          "full_name": "Gamma-gliadin",
+          "length": 302,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P21292_Gamma-gliadin.fasta",
+          "sequence": "MKTLLILTILAMATTIATANMQVDPSGQVQWPQQQPFPQPQQPFCQQPQRTIPQPHQTFHHQPQQTFPQPQQTYPHQPQQQFPQTQQPQQPFPQPQQTFPQQPQLPFPQQPQQPFPQPQQPQQPFPQSQQPQQPFPQPQQQFPQPQQPQQSFPQQQQPAIQSFLQQQMNPCKNFLLQQCNHVSLVSSLVSIILPRSDCQVMQQQCCQQLAQIPQQLQCAAIHSVAHSIIMQQEQQQGVPILRPLFQLAQGLGIIQPQQPAQLEGIRSLVLKTLPTMCNVYVPPDCSTINVPYANIDAGIGGQ"
+        },
+        {
+          "uniprot_id": "P04724",
+          "uniprot_name": "GDA4_WHEAT",
+          "full_name": "Alpha/beta-gliadin A-IV",
+          "length": 297,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04724_Alpha_beta-gliadin_A-IV.fasta",
+          "sequence": "MKTFLILALRAIVATTATIAVRVPVPQLQPQNPSQQQPQKQVPLVQQQQFPGQQQPFPPQQPYPQQQPFPSQQPYMQLQPFPQPQLPYPQPQLPYPQPQPFRPQQSYPQPQPQYSQPQQPISQQQQQQQQQQQQQQQILQQILQQQLIPCRDVVLQQHSIAHGSSQVLQQSTYQLVQQFCCQQLWQIPEQSRCQAIHNVVHAIILHQQQQQQQQQQQQQQQPLSQVCFQQSQQQYPSGQGSFQPSQQNPQAQGSVQPQQLPQFEEIRNLALETLPAMCNVYIPPYCTIAPVGIFGTN"
+        },
+        {
+          "uniprot_id": "P04726",
+          "uniprot_name": "GDA6_WHEAT",
+          "full_name": "Alpha/beta-gliadin PW1215",
+          "length": 296,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04726_Alpha_beta-gliadin_PW1215.fasta",
+          "sequence": "MKTFLILALLAIVATTATTAVRVPVPQPQPQNPSQPQPQGQVPLVQQQQFPGQQQQFPPQQPYPQPQPFPSQQPYLQLQPFPQPQPFPPQLPYPQPPPFSPQQPYPQPQPQYPQPQQPISQQQAQQQQQQQQQQQQQQQQQQILQQILQQQLIPCRDVVLQQHNIAHARSQVLQQSTYQPLQQLCCQQLWQIPEQSRCQAIHNVVHAIILHQQQRQQQPSSQVSLQQPQQQYPSGQGFFQPSQQNPQAQGSVQPQQLPQFEEIRNLALQTLPRMCNVYIPPYCSTTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "P16315",
+          "uniprot_name": "GLTC_WHEAT",
+          "full_name": "Glutenin, low molecular weight subunit PTDUCD1",
+          "length": 295,
+          "annotation_score": 2.0,
+          "keywords": [
+            "3D-structure",
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P16315_Glutenin_low_molecular_weight_subunit_PTDUCD1.fasta",
+          "sequence": "MKTFLVFALLAVVATSTIAQMETSCIPGLERPWQEQPLPPQHTLFPQQQPFPQQQQPPFSQQQPSFLQQQPILPQLPFSQQQQPVLPQQSPFSQQQLVLPPQQQYQQVLQQQIPIVQPSVLQQLNPCKVFLQQQCNPVAMPQRLARSQMLQQSSCHVMQQQCCQQLPQIPEQSRYDVIRAITYSIILQEQQQGFVQAQQQQPQQLGQGVSQSQQQSQQQLGQCSFQQPQQQLGQQPQQQQVLQGTFLQPHQIAHLEVMTSIALRTLPTMCSVNVPLYSSTTSVPFSVGTGVGAYL"
+        },
+        {
+          "uniprot_id": "P04722",
+          "uniprot_name": "GDA2_WHEAT",
+          "full_name": "Alpha/beta-gliadin A-II",
+          "length": 291,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04722_Alpha_beta-gliadin_A-II.fasta",
+          "sequence": "MKTFPILALLAIVATTATTAVRVPVPQLQLQNPSQQQPQEQVPLVQEQQFQGQQQPFPPQQPYPQPQPFPSQQPYLQLQPFPQPQLPYPQPQPFRPQQPYPQPQPQYSQPQQPISQQQQQQQQQQQQQQQILQQILQQQLIPCRDVVLQQHNIAHGSSQVLQESTYQLVQQLCCQQLWQIPEQSRCQAIHNVVHAIILHQQHHHHQQQQQQQQQQPLSQVSFQQPQQQYPSGQGFFQPSQQNPQAQGSFQPQQLPQFEEIRNLALQTLPAMCNVYIPPYCTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "P06659",
+          "uniprot_name": "GDBB_WHEAT",
+          "full_name": "Gamma-gliadin B",
+          "length": 291,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P06659_Gamma-gliadin_B.fasta",
+          "sequence": "MKTLLILTILAMAITIATANMQADPSGQVQWPQQQPFLQPHQPFSQQPQQIFPQPQQTFPHQPQQQFPQPQQPQQQFLQPRQPFPQQPQQPYPQQPQQPFPQTQQPQQPFPQSKQPQQPFPQPQQPQQSFPQQQPSLIQQSLQQQLNPCKNFLLQQCKPVSLVSSLWSIILPPSDCQVMRQQCCQQLAQIPQQLQCAAIHSVVHSIIMQQEQQEQLQGVQILVPLSQQQQVGQGILVQGQGIIQPQQPAQLEVIRSLVLQTLPTMCNVYVPPYCSTIRAPFASIVASIGGQ"
+        },
+        {
+          "uniprot_id": "P02863",
+          "uniprot_name": "GDA0_WHEAT",
+          "full_name": "Alpha/beta-gliadin",
+          "length": 286,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P02863_Alpha_beta-gliadin.fasta",
+          "sequence": "MKTFLILVLLAIVATTATTAVRFPVPQLQPQNPSQQQPQEQVPLVQQQQFLGQQQPFPPQQPYPQPQPFPSQLPYLQLQPFPQPQLPYSQPQPFRPQQPYPQPQPQYSQPQQPISQQQQQQQQQQQQQQQQQQILQQILQQQLIPCMDVVLQQHNIAHGRSQVLQQSTYQLLQELCCQHLWQIPEQSQCQAIHNVVHAIILHQQQKQQQQPSSQVSFQQPLQQYPLGQGSFRPSQQNPQAQGSVQPQQLPQFEEIRNLALQTLPAMCNVYIPPYCTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "Q2A783",
+          "uniprot_name": "AVLB1_WHEAT",
+          "full_name": "Avenin-like b1",
+          "length": 285,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q2A783_Avenin-like_b1.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLETTCSQGFGQYQQQQQPGQRQLLEQMKPCVAFLQQQCRPLRMPFLQTQVEQLSSCQIVQHQCCQQLAQIPERIRCHAIHSVVEAIMQQQSQQQWQERQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQMGQQQQQQQLQEQLTPCATFLQHQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQHESIRMSLQALRSMCNIYIPVQCPAPTAYNIPMVATCTSGAC"
+        },
+        {
+          "uniprot_id": "P0CZ05",
+          "uniprot_name": "AVLB2_WHEAT",
+          "full_name": "Avenin-like b2",
+          "length": 285,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ05_Avenin-like_b2.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQMGQQPQQQQLQEQLTPCATFLQHQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQHESIRMSLQALRSMCNIYIPVQCPAPTAYNIPMVATCTSGAC"
+        },
+        {
+          "uniprot_id": "A5A4L4",
+          "uniprot_name": "AVLB6_WHEAT",
+          "full_name": "Avenin-like b6",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\A5A4L4_Avenin-like_b6.fasta",
+          "sequence": "MKVFILALLALAATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "A5A4L5",
+          "uniprot_name": "AVLB4_WHEAT",
+          "full_name": "Avenin-like b4",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\A5A4L5_Avenin-like_b4.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLETTCSQGFRQYQQQQQPGQRQLLEQMRPCVAFLQQQCRPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPEQIRCHAIHNVVEAIMQQQSQQQRQERQQQAQHKSMRMLLENLSLMCNIYVPIQCQQQQQLGQQQQQQLQEQLTPCATFLQHQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTAYNIPMVATYTGGAC"
+        },
+        {
+          "uniprot_id": "A7XUQ5",
+          "uniprot_name": "AVLB5_WHEAT",
+          "full_name": "Avenin-like b5",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\A7XUQ5_Avenin-like_b5.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLETTCSQGFRQYQQQQQPGQRQLLEQMRPCVAFLQQQCRPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPEQIRCHAIHNVVEAIMQQQSQQQRQERQQQAQHKSMRMLLETLYLMCNIYVPIQCQQQQQLGQQQQQQLQEQLTPCATFLQHQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTAYNIPMVATYTGGAC"
+        },
+        {
+          "uniprot_id": "D0EWS4",
+          "uniprot_name": "AVLB7_WHEAT",
+          "full_name": "Avenin-like b7",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\D0EWS4_Avenin-like_b7.fasta",
+          "sequence": "MKVFILALLALAATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCAAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "B8YG97",
+          "uniprot_name": "AVLBB_WHEAT",
+          "full_name": "Avenin-like b11",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\B8YG97_Avenin-like_b11.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLDTTCSQGFRQYQQQQQPGQRQLLEQMRPCVAFLQQQCRPLRMPFLQTQVEQLSSCQIDQYQCCQQLAQIPEQIRCHAIHNVVEAIMQQQSQQHRQERQQQAQHKSMRMLLETLYLMCNIYVPIQCQQQQQLGQQQQQQLQEQLTPCATFLQHQCSPVTVPFPQIRVDQPTSCQNVQHQCCRQLSQIPEQYRCQAIHNVAEAIRHQQPQQQCQGMYQPQQPAKLESIRMSLQALRSMCRIYIPVQCPAPTAYNIPMVATYTGGAC"
+        },
+        {
+          "uniprot_id": "D6QZM5",
+          "uniprot_name": "AVLB8_WHEAT",
+          "full_name": "Avenin-like b8",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\D6QZM5_Avenin-like_b8.fasta",
+          "sequence": "MKVFILALLALAATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCGPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "D6QZM8",
+          "uniprot_name": "AVLBA_WHEAT",
+          "full_name": "Avenin-like b10",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\D6QZM8_Avenin-like_b10.fasta",
+          "sequence": "MKVFILALLALAATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMRSIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "P0CZ06",
+          "uniprot_name": "AVLB3_WHEAT",
+          "full_name": "Avenin-like b3",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ06_Avenin-like_b3.fasta",
+          "sequence": "MKVFILALLALTATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQHQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCNIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "D6QZM4",
+          "uniprot_name": "AVLB9_WHEAT",
+          "full_name": "Avenin-like b9",
+          "length": 284,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\D6QZM4_Avenin-like_b9.fasta",
+          "sequence": "MKVFILALLALAATTAIAQLETTCSQGFGQSQQQQQPGQRQLLEQMKPCVAFLQQKCSPLRMPFLQTQVEQLSSCQIVQYQCCQQLAQIPERTRCHAIHIVVEAIIQQQSQQQWQEPQQQAQHKSMRMLLENLSLMCNIYVPVQCQQQQQLGQQQQQQLQEQLTPCTTFLQQQCSPVTVPFPQIPVDQPTSCQNVQYQCCRQLSQIPEQFRCQAIHNVAEAIRQQQPQQQWQGMYQPQQPAQLESIRMSLQALRSMCSIYIPVQCPAPTTYNIPLVATYTGGAC"
+        },
+        {
+          "uniprot_id": "P04723",
+          "uniprot_name": "GDA3_WHEAT",
+          "full_name": "Alpha/beta-gliadin A-III",
+          "length": 282,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04723_Alpha_beta-gliadin_A-III.fasta",
+          "sequence": "MKTFLILALLAIVATTATSAVRVPVPQLQPQNPSQQQPQEQVPLMQQQQQFPGQQEQFPPQQPYPHQQPFPSQQPYPQPQPFPPQLPYPQTQPFPPQQPYPQPQPQYPQPQQPISQQQAQQQQQQQQTLQQILQQQLIPCRDVVLQQHNIAHASSQVLQQSSYQQLQQLCCQQLFQIPEQSRCQAIHNVVHAIILHHHQQQQQQPSSQVSYQQPQEQYPSGQVSFQSSQQNPQAQGSVQPQQLPQFQEIRNLALQTLPAMCNVYIPPYCSTTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "P04721",
+          "uniprot_name": "GDA1_WHEAT",
+          "full_name": "Alpha/beta-gliadin A-I",
+          "length": 262,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04721_Alpha_beta-gliadin_A-I.fasta",
+          "sequence": "MKTFLILALLAIVATTATTAVRVPVPQLQPQNPSQQQPQEQVPLVQQQQFLGQQQPFPPQQPYPQPQPFPSQQPYLQLQPFLQPQLPYSQPQPFRPQQPYPQPQPQYSQPQQPISQQQQQQQQQQQQQQQQQQQIIQQILQQQLIPCMDVVLQQHNIVHGKSQVLQQSTYQLLQELCCQHLWQIPEQSQCQAIHNVVHAIILHQQQKQQQQPSSQVSFQQPLQQYPLGQGSFRPSQQNPQAQGSVQPQQLPQFEEIRNLARK"
+        },
+        {
+          "uniprot_id": "P08079",
+          "uniprot_name": "GDB0_WHEAT",
+          "full_name": "Gamma-gliadin",
+          "length": 251,
+          "annotation_score": 2.0,
+          "keywords": [
+            "3D-structure",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P08079_Gamma-gliadin.fasta",
+          "sequence": "MKTLLILTILAMAITIGTANMQVDPSSQVQWPQQQPVPQPHQPFSQQPQQTFPQPQQTFPHQPQQQFPQPQQPQQQFLQPQQPFPQQPQQPYPQQPQQPFPQTQQPQQLFPQSQQPQQQFSQPQQQFPQPQQPQQSFPQQQPPFIQPSLQQQVNPCKNFLLQQCKPVSLVSSLWSMIWPQSDCQVMRQQCCQQLAQIPQQLQCAAIHTIIHSIIMQQEQQEQQQGMHILLPLYQQQQVGQGTLVQGQGIIQ"
+        },
+        {
+          "uniprot_id": "P04730",
+          "uniprot_name": "GDB3_WHEAT",
+          "full_name": "Gamma-gliadin",
+          "length": 244,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04730_Gamma-gliadin.fasta",
+          "sequence": "PQQPFPLQPQQSFLWQSQQPFLQQPQQPSPQPQQVVQIISPATPTTIPSAGKPTSAPFPQQQQQHQQLAQQQIPVVQPSILQQLNPCKVFLQQQCSPVAMPQRLARSQMLQQSSCHVMQQQCCQQLPQIPQQSRYQAIRAIIYSIILQEQQQVQGSIQSQQQQPQQLGQCVSQPQQQSQQQLGQQPQQQQLAQGTFLQPHQIAQLEVMTSIALRILPTMCSVNVPLYRTTTSVPFGVGTGVGAY"
+        },
+        {
+          "uniprot_id": "P04728",
+          "uniprot_name": "GDA8_WHEAT",
+          "full_name": "Alpha/beta-gliadin PTO-A10",
+          "length": 186,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Allergen",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P04728_Alpha_beta-gliadin_PTO-A10.fasta",
+          "sequence": "PQPQPQYSQPQQPISQQQQQQQQQQQQQQQEQQILQQILQQQLIPCMDVVLQQHNIAHGRSQVLQQSTYQLLQELCCQHLWQIPEQSQCQAIHNVVHAIILHQQQQKQQQQPSSQFSFQQPLQQYPLGQGSFRPSQQNPQAQGSVQPQQLPQFEIRNLALQTLPAMCNVYIPPYCTIAPFGIFGTN"
+        },
+        {
+          "uniprot_id": "P0CZ10",
+          "uniprot_name": "AVLA6_WHEAT",
+          "full_name": "Avenin-like a6",
+          "length": 181,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ10_Avenin-like_a6.fasta",
+          "sequence": "MKNLFILALLAFTATSAVAQLYTTCSQGYGQCQQQPQPQPQPQPQPQMNTCSAFLQQCSQTAYVQSQMWQASGCQLMRQQCCQPLAQISEQARCQAVCSVAQIIMRQQQGQRFGQPQQQQGQSFSQPQQQVPVEIMGMVLQTLPSMCSVNIPQYCTTTPCSTIAPAIYNIPMTATCAGGAC"
+        },
+        {
+          "uniprot_id": "P16347",
+          "uniprot_name": "IAAS_WHEAT",
+          "full_name": "Endogenous alpha-amylase/subtilisin inhibitor",
+          "length": 180,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P16347_Endogenous_alpha-amylase_subtilisin_inhibitor.fasta",
+          "sequence": "DPPPVHDTDGNELRADANYYVLPANRAHGGGLTMAPGHGRRCPLFVSQEADGQRDGLPVRIAPHGGAPSDKIIRLSTDVRISFRAYTTCVQSTEWHIDSELVSGRRHVITGPVRDPSPSGRENAFRIEKYSGAEVHEYKLMACGDSCQDLGVFRDLKGGAWFLGATEPYHVVVFKKAPPA"
+        },
+        {
+          "uniprot_id": "P0CZ07",
+          "uniprot_name": "AVLA2_WHEAT",
+          "full_name": "Avenin-like a2",
+          "length": 179,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ07_Avenin-like_a2.fasta",
+          "sequence": "MKTMFLLALLAFTATSAVAQLYTTCSQGYGQCQQQPQPQPQPQPQMNTCAAFLQQCIQTPYVQSQMWQASGCQLMRQQCCQPLAQISEQARCQAVCSVSQIIMRQQQGQRFGQPQQQQGQSFGQPQQQVPVEIMRMVLQTLPSMCSVNIPQYCTTTPCSTITPAIYSIPMTATCAGGAC"
+        },
+        {
+          "uniprot_id": "P0CZ11",
+          "uniprot_name": "AVLA7_WHEAT",
+          "full_name": "Avenin-like a7",
+          "length": 175,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ11_Avenin-like_a7.fasta",
+          "sequence": "MKTMFILALLAFTATSAVAQLYTTCSQGYGQCQQQPQPQPQMNTCSAFLQQCIQTPYVQSQMWQASSCQLMRQQCCQPLAQISEQARCQAVCSVSQIIMRQQQGQRFGQPQQQQGQSFSQPQQQVPVEIMRMVLQTLPSMCSVNIPQYCTTTPCSTITPAIYSIPMTATCAGGAC"
+        },
+        {
+          "uniprot_id": "P0CZ08",
+          "uniprot_name": "AVLA3_WHEAT",
+          "full_name": "Avenin-like a3",
+          "length": 175,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ08_Avenin-like_a3.fasta",
+          "sequence": "MKTMFLLALLAFTATSAVAQLYTTCSQGYGQCQQQPQPQPQMNTCAAFLQQCIQTPYVQSQMWQASGCQLMRQQCCQPLAQISEQARCQAVCSVSQIIMRQQQGQRFGQPQQQQGQSFGQPQQQVPVEIMRMVLQTLPSMCSVNIPQYCTTTPCSTITPAIYSIPMTATCAGGAC"
+        },
+        {
+          "uniprot_id": "P0CZ09",
+          "uniprot_name": "AVLA5_WHEAT",
+          "full_name": "Avenin-like a5",
+          "length": 173,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P0CZ09_Avenin-like_a5.fasta",
+          "sequence": "MKTMLILALIALAATSVVAQLDTTCSQGYGQCQQQPQQQVNTCSALLQQCSPTPYVQSQMWQASGCQLMRQQCCQPLAQISEQARCHAVCGVAQVIMRQQQGQSFGQPQQQQGQSFSQPQQQVPIEIRRMVLQTLPSMCNVNIPQYCTTTPCSTITQTPYNVPMATTCVGGTC"
+        },
+        {
+          "uniprot_id": "D2KFH1",
+          "uniprot_name": "AVLA4_WHEAT",
+          "full_name": "Avenin-like a4",
+          "length": 172,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\D2KFH1_Avenin-like_a4.fasta",
+          "sequence": "MKTMFILALIALAATSVVAQLDTTCSQGYGQCQQQPQQQVNTCSALLQQCSPTPYVQSQMWQASGCQLMRQQCCQPLAQISEQARCQAVCSVAQVIMRQQQGQSFGQPQQQVQSFSQPQHQVPIEITRMVLQTLPSMCNVNIPQYCTTTPCRTITQTPYNIPMSATCVGGTC"
+        },
+        {
+          "uniprot_id": "P17314",
+          "uniprot_name": "IAAC3_WHEAT",
+          "full_name": "Alpha-amylase/trypsin inhibitor CM3",
+          "length": 168,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P17314_Alpha-amylase_trypsin_inhibitor_CM3.fasta",
+          "sequence": "MACKSSCSLLLLAAVLLSVLAAASASGSCVPGVAFRTNLLPHCRDYVLQQTCGTFTPGSKLPEWMTSASIYSPGKPYLAKLYCCQELAEISQQCRCEALRYFIALPVPSQPVDPRSGNVGESGLIDLPGCPREMQWDFVRLLVAPGQCNLATIHNVRYCPAVEQPLWI"
+        },
+        {
+          "uniprot_id": "Q2A784",
+          "uniprot_name": "AVLA1_WHEAT",
+          "full_name": "Avenin-like a1",
+          "length": 168,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q2A784_Avenin-like_a1.fasta",
+          "sequence": "MKTMFLLALLAFTATSAVAQLYTTCSQGYGQCQQQPQPQPQPQPQMNTCAAFLQQCSQTPHVQTQMWQASGCQLVRQQCCQPLAQISEQARCQAVCSVAQIIMRQQQGQSFGQPQQQVPVEIMRMVLQTLPLMCRVNIPQYCTTTPCSTITPAIYSIPMTATCAGGAC"
+        },
+        {
+          "uniprot_id": "P16851",
+          "uniprot_name": "IAAC2_WHEAT",
+          "full_name": "Alpha-amylase/trypsin inhibitor CM2",
+          "length": 145,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P16851_Alpha-amylase_trypsin_inhibitor_CM2.fasta",
+          "sequence": "MASKSSITHLLLAAVLVSVFAAAAATGPYCYPGMGLPSNPLEGCREYVAQQTCGVGIVGSPVSTEPGNTPRDRCCKELYDASQHCRCEAVRYFIGRTSDPNSGVLKDLPGCPREPQRDFAKVLVTPGHCNVMTVHNTPYCLGLDI"
+        },
+        {
+          "uniprot_id": "P16850",
+          "uniprot_name": "IAAC1_WHEAT",
+          "full_name": "Alpha-amylase/trypsin inhibitor CM1",
+          "length": 145,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P16850_Alpha-amylase_trypsin_inhibitor_CM1.fasta",
+          "sequence": "MASKSSISPLLLATVLVSVFAAATATGPYCYAGMGLPINPLEGCREYVAQQTCGISISGSAVSTEPGNTPRDRCCKELYDASQHCRCEAVRYFIGRRSDPNSSVLKDLPGCPREPQRDFAKVLVTSGHCNVMTVHNAPYCLGLDI"
+        },
+        {
+          "uniprot_id": "P16159",
+          "uniprot_name": "IAC16_WHEAT",
+          "full_name": "Alpha-amylase/trypsin inhibitor CM16",
+          "length": 143,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P16159_Alpha-amylase_trypsin_inhibitor_CM16.fasta",
+          "sequence": "MASKSNCVLLLAAVLVSIFAAVAAIGNEDCTPWMSTLITPLPSCRDYVEQQACRIETPGSPYLAKQQCCGELANIPQQCRCQALRYFMGPKSRPDQSGLMELPGCPREVQMDFVRILVTPGYCNLTTVHNTPYCLAMEESQWS"
+        },
+        {
+          "uniprot_id": "P01085",
+          "uniprot_name": "IAA1_WHEAT",
+          "full_name": "Alpha-amylase inhibitor 0.19",
+          "length": 124,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Alpha-amylase inhibitor",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Reference proteome"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P01085_Alpha-amylase_inhibitor_0.19.fasta",
+          "sequence": "SGPWMCYPGQAFQVPALPACRPLLRLQCNGSQVPEAVLRDCCQQLAHISEWCRCGALYSMLDSMYKEHGAQEGQAGTGAFPRCRREVVKLTAASITAVCRLPIVVDASGDGAYVCKDVAAYPDA"
+        },
+        {
+          "uniprot_id": "Q43691",
+          "uniprot_name": "IACX2_WHEAT",
+          "full_name": "Trypsin/alpha-amylase inhibitor CMX2",
+          "length": 121,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q43691_Trypsin_alpha-amylase_inhibitor_CMX2.fasta",
+          "sequence": "MAFKHQLILSTAILLAVLAAASASFREQCVPGREITYESLNARREYAVRQTCGYYLSAERQKRRCCDELSKVPELCWCEVLRILMDRRVTKEGVVKDSLLQDMSRCKKLTREFIAGIVGRE"
+        },
+        {
+          "uniprot_id": "Q43723",
+          "uniprot_name": "IACX1_WHEAT",
+          "full_name": "Trypsin/alpha-amylase inhibitor CMX1/CMX3",
+          "length": 121,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\Q43723_Trypsin_alpha-amylase_inhibitor_CMX1_CMX3.fasta",
+          "sequence": "MAFKHQLILSTAILLAVLAAASASFREQCVPGREITYESLNARREYAVRQTCGYYLSAERQKRRCCDELSKVPELCWCEVLRILMDRRVTKEGVVKGSLLQDMSRCKKLTREFIAGIVGRE"
+        },
+        {
+          "uniprot_id": "P83207",
+          "uniprot_name": "ICIW2_WHEAT",
+          "full_name": "Chymotrypsin inhibitor WCI",
+          "length": 119,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P83207_Chymotrypsin_inhibitor_WCI.fasta",
+          "sequence": "TSIYTCYEGVGLPVDPLQGCHYYVTSQTCGFVPLLPIEVMKDRCCRELAAISSNCRCEGLRVFIDRAFPPSQSQGGGPPQPPLAPRCPTEVKRDFARTLALPGQCNLPTIHGGPYCVFP"
+        },
+        {
+          "uniprot_id": "P02861",
+          "uniprot_name": "GLT1_WHEAT",
+          "full_name": "Glutenin, high molecular weight subunit PC256",
+          "length": 101,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Reference proteome",
+            "Repeat",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P02861_Glutenin_high_molecular_weight_subunit_PC256.fasta",
+          "sequence": "EKLGQGQQPRQWLQPRQGQQGYYPTSPQQSGQGQQLGQGQQGYYPTSPQQSGQGQQGYDSPYHVSAEHQAASLKVAKAQQLAAQLPAMCRLEGGDALLASQ"
+        },
+        {
+          "uniprot_id": "P82977",
+          "uniprot_name": "ICIW_WHEAT",
+          "full_name": "Subtilisin-chymotrypsin inhibitor WSCI",
+          "length": 84,
+          "annotation_score": 4.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Secreted",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P82977_Subtilisin-chymotrypsin_inhibitor_WSCI.fasta",
+          "sequence": "MSSVVKKPLGGNTDTGDHHNQKTEWPELVGKSVEEAKKVILQDKSEAQIVVLPVGTIVTMEYRIDRVRLFVDSLDKIAQVPRVG"
+        },
+        {
+          "uniprot_id": "P81713",
+          "uniprot_name": "IBB3_WHEAT",
+          "full_name": "Bowman-Birk type trypsin inhibitor",
+          "length": 71,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P81713_Bowman-Birk_type_trypsin_inhibitor.fasta",
+          "sequence": "EEAMPSAWPCCDECGTCTRMIPPRCTCMDVSPSGCHPACKNCVQTTLGGRDVFWCMLRIENFCKRRCTPAR"
+        },
+        {
+          "uniprot_id": "P09863",
+          "uniprot_name": "IBB1_WHEAT",
+          "full_name": "Bowman-Birk type proteinase inhibitor I-2B",
+          "length": 56,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P09863_Bowman-Birk_type_proteinase_inhibitor_I-2B.fasta",
+          "sequence": "AAKKRPWKCCDQAVCTRSIPPICRCMDQVFECPSTCKACGPSVGDPSRRVCQDQYV"
+        },
+        {
+          "uniprot_id": "P09864",
+          "uniprot_name": "IBB2_WHEAT",
+          "full_name": "Bowman-Birk type proteinase inhibitor II-4",
+          "length": 53,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Reference proteome",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\wheat\\P09864_Bowman-Birk_type_proteinase_inhibitor_II-4.fasta",
+          "sequence": "ATRPWKCCDRAICTKSFPPMCRCMDMVEQCAATCKKCGPATSDSSRRVCEDXY"
+        }
+      ]
+    },
+    "pea": {
+      "korean_name": "완두",
+      "scientific_name": "Pisum sativum",
+      "products": [
+        "PEA-1",
+        "PEA-BIO"
+      ],
+      "uniprot_query": "(organism_id:3888) AND (reviewed:true) AND (keyword:KW-0758 OR keyword:KW-0020 OR keyword:KW-0646)",
+      "note": "Legumin, Vicilin + Kunitz inhibitor, Lipid-transfer protein",
+      "n_proteins": 24,
+      "total_residues": 6300,
+      "proteins": [
+        {
+          "uniprot_id": "P13915",
+          "uniprot_name": "CVCA_PEA",
+          "full_name": "Convicilin",
+          "length": 571,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P13915_Convicilin.fasta",
+          "sequence": "MATTVKSRFPLLLFLGIIFLASVCVTYANYDEGSETRVPGQRERGRQEGEKEEKRHGEWRPSYEKEEHEEEKQKYRYQREKKEQKEVQPGRERWEREEDEEQVEEEWRGSQRREDPEERARLRHREERTKRDRRHQREGEEEERSSESQEHRNPFLFKSNKFLTLFENENGHIRRLQRFDKRSDLFENLQNYRLVEYRAKPHTIFLPQHIDADLILVVLNGKAILTVLSPNDRNSYNLERGDTIKIPAGTTSYLVNQDDEEDLRVVDFVIPVNRPGKFEAFGLSENKNQYLRGFSKNILEASLNTKYETIEKVLLEEQEKKPQQLRDRKRTQQGEERDAIIKVSREQIEELRKLAKSSSKKSLPSEFEPFNLRSHKPEYSNKFGKLFEITPEKKYPQLQDLDILVSCVEINKGALMLPHYNSRAIVVLLVNEGKGNLELLGLKNEQQEREDRKERNNEVQRYEARLSPGDVVIIPAGHPVAISASSNLNLLGFGINAKNNQRNFLSGSDDNVISQIENPVKELTFPGSSQEVNRLIKNQKQSHFASAEPEQKEEESQRKRSPLSSVLDSFY"
+        },
+        {
+          "uniprot_id": "P15838",
+          "uniprot_name": "LEGA2_PEA",
+          "full_name": "Legumin A2",
+          "length": 520,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P15838_Legumin_A2.fasta",
+          "sequence": "MATKLLALSLSFCFLLLGGCFALREQPEQNECQLERLNALEPDNRIESEGGLIETWNPNNKQFRCAGVALSRATLQHNALRRPYYSNAPQEIFIQQGNGYFGMVFPGCPETFEEPQESEQGEGRRYRDRHQKVNRFREGDIIAVPTGIVFWMYNDQDTPVIAVSLTDIRSSNNQLDQMPRRFYLAGNHEQEFLRYQHQQGGKQEQENEGNNIFSGFKRDFLEDAFNVNRHIVDRLQGRNEDEEKGAIVKVKGGLSIISPPEKQARHQRGSRQEEDEDEDEERQPRHQRGSRQEEEEDEDEERQPRHQRRRGEEEEEDKKERRGSQKGKSRRQGDNGLEETVCTAKLRLNIGPSSSPDIYNPEAGRIKTVTSLDLPVLRWLKLSAEHGSLHKNAMFVPHYNLNANSIIYALKGRARLQVVNCNGNTVFDGELEAGRALTVPQNYAVAAKSLSDRFSYVAFKTNDRAGIARLAGTSSVINNLPLDVVAATFNLQRNEARQLKSNNPFKFLVPARQSENRASA"
+        },
+        {
+          "uniprot_id": "P02857",
+          "uniprot_name": "LEGA_PEA",
+          "full_name": "Legumin A",
+          "length": 517,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Disulfide bond",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P02857_Legumin_A.fasta",
+          "sequence": "MAKLLALSLSFCFLLLGGCFALREQPQQNECQLERLDALEPDNRIESEGGLIETWNPNNKQFRCAGVALSRATLQRNALRRPYYSNAPQEIFIQQGNGYFGMVFPGCPETFEEPQESEQGEGRRYRDRHQKVNRFREGDIIAVPTGIVFWMYNDQDTPVIAVSLTDIRSSNNQLDQMPRRFYLAGNHEQEFLQYQHQQGGKQEQENEGNNIFSGFKRDYLEDAFNVNRHIVDRLQGRNEDEEKGAIVKVKGGLSIISPPEKQARHQRGSRQEEDEDEEKQPRHQRGSRQEEEEDEDEERQPRHQRRRGEEEEEDKKERGGSQKGKSRRQGDNGLEETVCTAKLRLNIGPSSSPDIYNPEAGRIKTVTSLDLPVLRWLKLSAEHGSLHKNAMFVPHYNLNANSIIYALKGRARLQVVNCNGNTVFDGELEAGRALTVPQNYAVAAKSLSDRFSYVAFKTNDRAGIARLAGTSSVINNLPLDVVAATFNLQRNEARQLKSNNPFKFLVPARESENRASA"
+        },
+        {
+          "uniprot_id": "P05692",
+          "uniprot_name": "LEGJ_PEA",
+          "full_name": "Legumin J",
+          "length": 503,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P05692_Legumin_J.fasta",
+          "sequence": "MSKPFLSLLSLSLLLFASACLATSSEFDRLNQCQLDSINALEPDHRVESEAGLTETWNPNHPELKCAGVSLIRRTIDPNGLHLPSFSPSPQLIFIIQGKGVLGLSFPGCPETYEEPRSSQSRQESRQQQGDSHQKVRRFRKGDIIAIPSGIPYWTYNHGDEPLVAISLLDTSNIANQLDSTPRVFYLGGNPETEFPETQEEQQGRHRQKHSYPVGRRSGHHQQEEESEEQNEGNSVLSGFSSEFLAQTFNTEEDTAKRLRSPRDERSQIVRVEGGLRIIKPKGKEEEEKEQSHSHSHREEKEEEEEEEEDEEEKQRSEERKNGLEETICSAKIRENIADAARADLYNPRAGRISTANSLTLPVLRYLRLSAEYVRLYRNGIYAPHWNINANSLLYVIRGEGRVRIVNCQGNTVFDNKVRKGQLVVVPQNFVVAEQAGEEEGLEYVVFKTNDRAAVSHVQQVFRATPSEVLANAFGLRQRQVTELKLSGNRGPLVHPRSQSQSH"
+        },
+        {
+          "uniprot_id": "P13918",
+          "uniprot_name": "VCLC_PEA",
+          "full_name": "Vicilin",
+          "length": 459,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P13918_Vicilin.fasta",
+          "sequence": "MAATTMKASFPLLMLMGISFLASVCVSSRSDPQNPFIFKSNKFQTLFENENGHIRLLQKFDQRSKIFENLQNYRLLEYKSKPHTIFLPQHTDADYILVVLSGKAILTVLKPDDRNSFNLERGDTIKLPAGTIAYLVNRDDNEELRVLDLAIPVNRPGQLQSFLLSGNQNQQNYLSGFSKNILEASFNTDYEEIEKVLLEEHEKETQHRRSLKDKRQQSQEENVIVKLSRGQIEELSKNAKSTSKKSVSSESEPFNLRSRGPIYSNEFGKFFEITPEKNPQLQDLDIFVNSVEIKEGSLLLPHYNSRAIVIVTVNEGKGDFELVGQRNENQQEQRKEDDEEEEQGEEEINKQVQNYKAKLSSGDVFVIPAGHPVAVKASSNLDLLGFGINAENNQRNFLAGDEDNVISQIQRPVKELAFPGSAQEVDRILENQKQSHFADAQPQQRERGSRETRDRLSSV"
+        },
+        {
+          "uniprot_id": "P02854",
+          "uniprot_name": "VCLB_PEA",
+          "full_name": "Provicilin",
+          "length": 410,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Glycoprotein",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P02854_Provicilin.fasta",
+          "sequence": "MLLAIAFLASVCVSSRSDQENPFIFKSNRFQTLYENENGHIRLLQKFDKRSKIFENLQNYRLLEYKSKPHTLFLPQYTDADFILVVLSGKATLTVLKSNDRNSFNLERGDAIKLPAGSIAYFANRDDNEEPRVLDLAIPVNKPGQLQSFLLSGTQNQKSSLSGFSKNILEAAFNTNYEEIEKVLLEQQEQEPQHRRSLKDRRQEINEENVIVKVSRDQIEELSKNAKSSSKKSVSSESGPFNLRSRNPIYSNKFGKFFEITPEKNQQLQDLDIFVNSVDIKVGSLLLPNYNSRAIVIVTVTEGKGDFELVGQRNENQGKENDKEEEQEEETSKQVQLYRAKLSPGDVFVIPAGHPVAINASSDLNLIGLGINAENNERNFLAGEEDNVISQVERPVKELAFPGSSHEVDR"
+        },
+        {
+          "uniprot_id": "P13919",
+          "uniprot_name": "CVCB_PEA",
+          "full_name": "Convicilin",
+          "length": 386,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P13919_Convicilin.fasta",
+          "sequence": "MATTIKSRFPLLLLLGIIFLASVVSVTYANYDEGSEPRVPAQRERGRQEGEKEEKRHGEWRPSYEKEEDEEEGQRERGRQEGEKEEKRHGEWGPSYEKQEDEEEKQKYRYQREKEDEEEKQKYQYQREKKEQKEVQPGRERWEREEDEEQVDEEWRGSQRREDPEERARLRHREERTKRDRRHQREGEEEERSSESQERRNPFLFKSNKFLTLFENENGHIRLLQRFDKRSDLFENLQNYRLVEYRAKPHTIFLPQHIDADLILVVLSGKAILTVLSPNDRNSYNLERGDTIKLPAGTTSYLVNQDDEEDLRLVDLVIPVNGPGKFEAFDLAKNKNQYLRGFSKNILEASYNTRYETIEKVLLEEQEKDRKRRQQGEETDAIVKVS"
+        },
+        {
+          "uniprot_id": "P05693",
+          "uniprot_name": "LEGK_PEA",
+          "full_name": "Legumin K",
+          "length": 350,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P05693_Legumin_K.fasta",
+          "sequence": "IPYWTYNHGDEPLVAISLLDTSNIANQLDSTPRVFYLGGNPETEFPETQEEQQGRHRQKHSYPVGRRSGHHQQEEESEEQNEGNSVLSGVSSEFLAQTFNTEEDTAKRLRSPRDERSQIVRVEGGLRIINPKGKEEEEEKEQSHSHSHREEEEEEEEDEEKQRSEERKNGLEETICSAKIRENIADAAGADLYNPRAGRIRTANSLTLPVLRYLRLSAEYVRLYRNGIYAPHWNINANSLLYVIRGEGRVRIVNFQGDAVFDNKVRKGQLVVVPQNFVVAEQAGEEEGLEYVVFKTNDRAAVSHVQQVLRATPAEVLANAFGLRQRQVTELKLSGNRGPLVHPQSQSQSH"
+        },
+        {
+          "uniprot_id": "P14594",
+          "uniprot_name": "LEGB_PEA",
+          "full_name": "Legumin B",
+          "length": 338,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P14594_Legumin_B.fasta",
+          "sequence": "GNSVLSGFNVEFLAHSLNTKEDTAKRLRSPQDERGQIVKVEDGLHIISPELQEEEEQSHSQRKEEEEEEQEQRHRKHSKKEDEDEDEEEEEEREQRHRKHSEKEEEDEDEPRSYETRRKWKKHTAEKKRESHGQGEEEEELEKEEEEEEEIQRQHSKGRKNGLEETICSAKIRENIARPSRGDLYNSGAGRISTVNSLTLPILRNLRLSAEYVLLYRNGIYAPHWNINANSLLYVIRGEGRVRIVNSEGNKVFDDKVSLGQLVVVPQNFVVAQQAGNEEGFEYVVFKTNDRAAVSHVNQVFRATPGEVLANAFGLRHSQVAQIKSNGNRGPLVQPQSQ"
+        },
+        {
+          "uniprot_id": "P02855",
+          "uniprot_name": "VCLA_PEA",
+          "full_name": "Provicilin",
+          "length": 275,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Seed storage protein",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P02855_Provicilin.fasta",
+          "sequence": "DNAEIEKILLEEHEKETHHRRGLRDKRQQSQEKNVIVKVSKKQIEELSKNAKSSSKKSVSSRSEPFNLKSSDPIYSNQYGKFFEITPKKNPQLQDLDIFVNYVEIKEGSLWLPHYNSRAIVIVTVNEGKGDFELVGQRNENQQGLREEDDEEEEQREEETKNQVQSYKAKLTPGDVFVIPAGHPVAVRASSNLNLLGFGINAENNQRNFLAGEEDNVISQIQKQVKDLTFPGSAQEVDRLLENQKQSYFANAQPQQRETRSQEIKEHLYSILGAF"
+        },
+        {
+          "uniprot_id": "P08688",
+          "uniprot_name": "ALB2_PEA",
+          "full_name": "Albumin-2",
+          "length": 231,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Calcium",
+            "Cytoplasm",
+            "Metal-binding",
+            "Repeat",
+            "Seed storage protein",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P08688_Albumin-2.fasta",
+          "sequence": "MTKTGYINAAFRSSQNNEAYLFINDKYVLLDYAPGTSNDKVLYGPTPVRDGFKSLNQTVFGSYGVDCSFDTDNDEAFIFYEKFCALIDYAPHSNKDKIILGPKKIADMFPFFEGTVFENGIDAAYRSTRGKEVYLFKGDQYARIDYETNSMVNKEIKSIRNGFPCFRNTIFESGTDAAFASHKTNEVYFFKGDYYARVTVTPGATDDQIMDGVRKTLDYWPSLRGIIPLEN"
+        },
+        {
+          "uniprot_id": "Q41015",
+          "uniprot_name": "PIP21_PEA",
+          "full_name": "Kunitz-type trypsin inhibitor-like 1 protein",
+          "length": 217,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Glycoprotein",
+            "Protease inhibitor",
+            "Secreted",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\pea\\Q41015_Kunitz-type_trypsin_inhibitor-like_1_protein.fasta",
+          "sequence": "MKPLSPLTLSFFLFVFITNLSLAFSNEDVEQVLDFNGNPIFPGVQYFILPAIRGPAGGGVRLGRTGDLTCPVTVLQDRQEVKNGLPVKFVIPEISPGIIFTGTPIEIEYTKKPNCAKSSKWLVFVDNVIQKACVGIGGPENYPGVQTLSGLFKIEKHESGFGYKLGFCVKGSPTCLDVGRFDNDEDGRRLNLTEHESFQVVFIQAEANDAEFIKSVV"
+        },
+        {
+          "uniprot_id": "O82711",
+          "uniprot_name": "PIP22_PEA",
+          "full_name": "Kunitz-type trypsin inhibitor-like 2 protein",
+          "length": 217,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Glycoprotein",
+            "Protease inhibitor",
+            "Secreted",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\pea\\O82711_Kunitz-type_trypsin_inhibitor-like_2_protein.fasta",
+          "sequence": "MKPLSPLTLSFLLFVFITTLSLAFSNEDVEQVLDVNGKPIFPGGQYYILPAIRGPPGGGVRLGRTGDLTCPVTVLQDRREVKNGLPVKFVIPGISPGIIFTGTPIEIEYTKKPNCAKSSKWLVFVDNVIQKACVGIGGPENYPGIQTLSGLFKIEKHESGFGYKLGFCIKGSPTCLDVGRFDNDEAGRRLNLTEHESFQVVFVEAEANDAEFIKSVV"
+        },
+        {
+          "uniprot_id": "P62928",
+          "uniprot_name": "ALB1C_PEA",
+          "full_name": "Albumin-1 C",
+          "length": 130,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62928_Albumin-1_C.fasta",
+          "sequence": "MASVKLASLIVLFATLGMFLTKNVGAISCNGVCSPFDIPPCGSPLCRCIPAGLVIGNCRNPYGVFLRTNDEHPNLCESDADCRKKGSGTFCGHYPNPDIEYGWCFASKSEAEDVFSKITPKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P62929",
+          "uniprot_name": "ALB1D_PEA",
+          "full_name": "Albumin-1 D",
+          "length": 130,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62929_Albumin-1_D.fasta",
+          "sequence": "MASVKLASLIVLFATLGMFLTKNVGAASCNGVCSPFEMPPCGTSACRCIPVGLFIGYCRNPSGVFLKANDEHPNLCESDADCRKKGSGNFCGHYPNPDIEYGWCFASKSEAEDFFSKITPKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P62931",
+          "uniprot_name": "ALB1F_PEA",
+          "full_name": "Albumin-1 F",
+          "length": 130,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62931_Albumin-1_F.fasta",
+          "sequence": "MASVKLASLIVLFATLGMFLTKNVGAASCNGVCSPFEMPPCGTSACRCIPVGLVIGYCRNPSGVFLRTNDEHPNLCESDADCRKKGSGKFCGHYPNPGIEYGWCFASKSEAEDFFSKITQKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P62926",
+          "uniprot_name": "ALB1A_PEA",
+          "full_name": "Albumin-1 A",
+          "length": 130,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Toxin"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62926_Albumin-1_A.fasta",
+          "sequence": "MASVKLASLIVLFATLGMFLTKNVGAASCNGVCSPFEMPPCGTSACRCIPVGLVVGYCRNPSGVFLRTNDEHPNLCESDADCRKKGSGNFCGHYPNPDIEYGWCFASKSEAEDFFSKITPKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P62930",
+          "uniprot_name": "ALB1E_PEA",
+          "full_name": "Albumin-1 E",
+          "length": 130,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Toxin"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62930_Albumin-1_E.fasta",
+          "sequence": "MASVKLASLIVLFATLGMFLTKNVGAASCNGVCSPFEMPPCGSSACRCIPVGLLIGYCRNPSGVFLKGNDEHPNLCESDADCKKKGSGNFCGHYPNPDIEYGWCFASKSEAEDVFSKITPKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P62927",
+          "uniprot_name": "ALB1B_PEA",
+          "full_name": "Albumin-1 B",
+          "length": 130,
+          "annotation_score": 2.0,
+          "keywords": [
+            "Disulfide bond",
+            "Knottin",
+            "Seed storage protein",
+            "Signal",
+            "Storage protein",
+            "Toxin"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P62927_Albumin-1_B.fasta",
+          "sequence": "MASVKLASLMVLFATLGMFLTKNVGAASCNGVCSPFEMPPCGSSACRCIPVGLVVGYCRHPSGVFLRTNDEHPNLCESDADCRKKGSGNFCGHYPNPDIEYGWCFASKSEAEDFFSKITQKDLLKSVSTA"
+        },
+        {
+          "uniprot_id": "P02856",
+          "uniprot_name": "VCL1_PEA",
+          "full_name": "Vicilin, 14 kDa component",
+          "length": 124,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Glycoprotein",
+            "Seed storage protein",
+            "Storage protein",
+            "Vacuole"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P02856_Vicilin_14_kDa_component.fasta",
+          "sequence": "DRRQELSNENVLVKVSRRQLEELSKNAKSSSRRSVSSESGPFNLRSEDPLYSNNSGKFFELTPEKNQQLQDLDLFVNSVDLKEGSLLLPNYNSRALLVLVLVVNEGKGDFELVGQRNENQGKEN"
+        },
+        {
+          "uniprot_id": "A0A161AT60",
+          "uniprot_name": "NLTP1_PEA",
+          "full_name": "Non-specific lipid-transfer protein 1",
+          "length": 120,
+          "annotation_score": 4.0,
+          "keywords": [
+            "3D-structure",
+            "Allergen",
+            "Antibiotic",
+            "Antimicrobial",
+            "Direct protein sequencing",
+            "Disulfide bond"
+          ],
+          "fasta_file": "raw_proteins\\pea\\A0A161AT60_Non-specific_lipid-transfer_protein_1.fasta",
+          "sequence": "MARSMKLACVALVICMVVIAPMAEAALSCGTVSADMAPCVTYLQAPNNASPPPPCCAGVKKLLAAATTTPDRQAACNCLKSAAGSIPKLNTNNAAALPGKCGVSIPYKISTSTNCNTVRF"
+        },
+        {
+          "uniprot_id": "Q41066",
+          "uniprot_name": "IBB2_PEA",
+          "full_name": "Seed trypsin/chymotrypsin inhibitor TI5-72",
+          "length": 114,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\pea\\Q41066_Seed_trypsin_chymotrypsin_inhibitor_TI5-72.fasta",
+          "sequence": "MELMNKKVMMKLALMVFLLSFAANVVNARFDSTSFITQVLSNGDDVKSACCDTCLCTKSDPPTCRCVDVGETCHSACDSCICALSYPPQCQCFDTHKFCYKACHNSEVEEVIKN"
+        },
+        {
+          "uniprot_id": "Q41065",
+          "uniprot_name": "IBBA_PEA",
+          "full_name": "Seed trypsin/chymotrypsin inhibitor IVA",
+          "length": 96,
+          "annotation_score": 3.0,
+          "keywords": [
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Serine protease inhibitor",
+            "Signal"
+          ],
+          "fasta_file": "raw_proteins\\pea\\Q41065_Seed_trypsin_chymotrypsin_inhibitor_IVA.fasta",
+          "sequence": "LSFAANVVNARFDSTSFITQVLSNGDDVKSACCDTCLCTKSNPPTCRCVDVRETCHSACDSCICAYSNPPKCQCFDTHKFCYKACHNSEVEEVIKN"
+        },
+        {
+          "uniprot_id": "P56679",
+          "uniprot_name": "IBBB_PEA",
+          "full_name": "Seed trypsin/chymotrypsin inhibitor IVB",
+          "length": 72,
+          "annotation_score": 3.0,
+          "keywords": [
+            "3D-structure",
+            "Direct protein sequencing",
+            "Disulfide bond",
+            "Protease inhibitor",
+            "Serine protease inhibitor"
+          ],
+          "fasta_file": "raw_proteins\\pea\\P56679_Seed_trypsin_chymotrypsin_inhibitor_IVB.fasta",
+          "sequence": "GDDVKSACCDTCLCTKSNPPTCRCVDVGETCHSACLSCICAYSNPPKCQCFDTQKFCYKACHNSELEEVIKN"
+        }
+      ]
+    }
+  }
+}
