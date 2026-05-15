@@ -14,6 +14,7 @@ import pandas as pd
 import numpy as np
 from data_loader import CompositionLoader
 from bioactive_predictor import BioactivePredictor, ActivityScorer
+from utils import seq_with_tooltip
 from visualizer_2d import BioactivityVisualizer
 from plm_embedder import PLMEmbedder
 from fitness_predictor import FitnessPredictor
@@ -388,18 +389,26 @@ def main():
 
                     # ---- Motif detail per sequence ----
                     st.markdown("### 서열별 모티프 상세")
+                    st.caption("💡 서열에 마우스를 올리면 3-letter 표기가 표시됩니다")
                     for hs in result['hit_sequences'][:10]:
                         with st.expander(
                             f"`{hs['sequence']}` — {hs['motifs_found']} motifs, "
                             f"fitness {hs['esm2_fitness']:.4f}"
                         ):
+                            # 서열 자체에 호버 툴팁 표시
+                            st.markdown(
+                                f"**서열**: {seq_with_tooltip(hs['sequence'])}",
+                                unsafe_allow_html=True
+                            )
                             for m in hs.get('motifs_detail', []):
                                 ic50 = m.get('IC50', '')
                                 ic50_str = f" | IC50: {ic50}" if ic50 else ""
                                 acts = m.get('all_activities', [m['activity']])
-                                st.write(
-                                    f"- **{m['motif']}** @ pos {m['position']} — "
-                                    f"{', '.join(acts[:3])}{ic50_str}"
+                                st.markdown(
+                                    f"- {seq_with_tooltip(m['motif'])} "
+                                    f"@ pos {m['position']} — "
+                                    f"{', '.join(acts[:3])}{ic50_str}",
+                                    unsafe_allow_html=True
                                 )
 
                     # ---- AI 분석 연계 ----

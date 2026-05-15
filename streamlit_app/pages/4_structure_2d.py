@@ -12,6 +12,7 @@ import streamlit as st
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator
 from visualizer_2d import PeptideDiagram, CompositionVisualizer
+from utils import seq_with_tooltip, seq_to_3letter
 
 st.set_page_config(page_title="2D Structure", page_icon="🎨", layout="wide")
 
@@ -206,7 +207,12 @@ def main():
 
     if sequence:
         st.markdown("---")
-        st.markdown(f"### Visualizing: **{sequence}** (Length: {len(sequence)} AA)")
+        st.markdown(
+            f"### Visualizing: **{seq_with_tooltip(sequence)}** "
+            f"(Length: {len(sequence)} AA)",
+            unsafe_allow_html=True
+        )
+        st.caption(f"3-letter: `{seq_to_3letter(sequence)}`")
 
         # Tabs for different visualizations
         tab1, tab2, tab3 = st.tabs([

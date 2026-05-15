@@ -13,6 +13,7 @@ import streamlit.components.v1 as components
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator
 from structure_builder import StructureBuilder
+from utils import seq_with_tooltip, seq_to_3letter
 
 st.set_page_config(page_title="3D Structure", page_icon="🔬", layout="wide")
 
@@ -230,7 +231,12 @@ def main():
 
     if sequence:
         st.markdown("---")
-        st.markdown(f"### Sequence: **{sequence}** (Length: {len(sequence)} AA)")
+        st.markdown(
+            f"### Sequence: **{seq_with_tooltip(sequence)}** "
+            f"(Length: {len(sequence)} AA)",
+            unsafe_allow_html=True
+        )
+        st.caption(f"3-letter: `{seq_to_3letter(sequence)}`")
 
         # Validation
         if len(sequence) > 30:

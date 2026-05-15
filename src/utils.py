@@ -50,6 +50,82 @@ def get_aa_properties(aa_code: str) -> Optional[Dict]:
     return AMINO_ACIDS.get(aa_code.upper())
 
 
+# ─── 1-letter ↔ 3-letter AA 변환 ─────────────────────
+AA_1_TO_3 = {
+    'A': 'Ala', 'R': 'Arg', 'N': 'Asn', 'D': 'Asp', 'C': 'Cys',
+    'E': 'Glu', 'Q': 'Gln', 'G': 'Gly', 'H': 'His', 'I': 'Ile',
+    'L': 'Leu', 'K': 'Lys', 'M': 'Met', 'F': 'Phe', 'P': 'Pro',
+    'S': 'Ser', 'T': 'Thr', 'W': 'Trp', 'Y': 'Tyr', 'V': 'Val',
+}
+
+AA_3_TO_1 = {v: k for k, v in AA_1_TO_3.items()}
+
+
+def aa_to_3letter(aa: str) -> str:
+    """단일 아미노산 1-letter → 3-letter"""
+    return AA_1_TO_3.get(aa.upper(), aa)
+
+
+def seq_to_3letter(sequence: str, separator: str = '-') -> str:
+    """
+    서열 1-letter → 3-letter 변환
+
+    Args:
+        sequence: 1-letter 서열 (예: "EEEFD")
+        separator: 잔기 구분자 (기본 "-")
+
+    Returns:
+        3-letter 서열 (예: "Glu-Glu-Glu-Phe-Asp")
+    """
+    if not sequence:
+        return ""
+    return separator.join(AA_1_TO_3.get(aa.upper(), aa) for aa in sequence)
+
+
+def seq_with_tooltip(sequence: str, show_dotted: bool = True) -> str:
+    """
+    호버 시 3-letter를 보여주는 HTML span 반환
+
+    Args:
+        sequence: 1-letter 서열
+        show_dotted: 점선 밑줄로 호버 가능함을 시각적으로 표시
+
+    Returns:
+        HTML span 문자열 (st.markdown(..., unsafe_allow_html=True)와 함께 사용)
+    """
+    if not sequence:
+        return ""
+    three_letter = seq_to_3letter(sequence)
+    style = (
+        'border-bottom: 1px dotted #888; cursor: help;'
+        if show_dotted else 'cursor: help;'
+    )
+    # HTML escape: 서열엔 특수문자 없지만 안전을 위해
+    return (f'<span title="{three_letter}" style="{style}">'
+            f'{sequence}</span>')
+
+
+def mutation_with_tooltip(mutation: str) -> str:
+    """
+    변이 표기 호버 툴팁 (예: "A5G" → 호버 시 "Ala5Gly")
+
+    Args:
+        mutation: 변이 표기 (예: "A5G", "L10V")
+
+    Returns:
+        HTML span 문자열
+    """
+    import re
+    m = re.match(r'^([A-Z])(\d+)([A-Z])$', mutation.strip().upper())
+    if not m:
+        return mutation
+    wt, pos, mt = m.groups()
+    three = f"{AA_1_TO_3.get(wt, wt)}{pos}{AA_1_TO_3.get(mt, mt)}"
+    return (f'<span title="{three}" '
+            f'style="border-bottom: 1px dotted #888; cursor: help;">'
+            f'{mutation}</span>')
+
+
 def calculate_sequence_mw(sequence: str) -> float:
     """
     펩타이드 서열의 분자량 계산

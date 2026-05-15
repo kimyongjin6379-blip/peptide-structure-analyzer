@@ -14,7 +14,7 @@ import numpy as np
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator, AbundancePredictor
 from visualizer_2d import PeptideDiagram
-from utils import calculate_sequence_mw, save_fasta
+from utils import calculate_sequence_mw, save_fasta, seq_with_tooltip, seq_to_3letter
 from plm_embedder import PLMEmbedder
 
 st.set_page_config(page_title="Sequence Prediction", page_icon="🧬", layout="wide")
@@ -354,6 +354,14 @@ def main():
                 st.markdown("#### Top Sequence Visualization")
                 top_seq = sequences_with_mw[0]['sequence']
 
+                # 1-letter + 3-letter 호버 표시
+                st.markdown(
+                    f"**Top 서열**: {seq_with_tooltip(top_seq)} "
+                    f"<span style='color:#666; font-size:0.85em;'>"
+                    f"(마우스 호버 시 3-letter 표시)</span>",
+                    unsafe_allow_html=True
+                )
+
                 fig = PeptideDiagram.plot_sequence_diagram(
                     top_seq,
                     title=f"Top Sequence: {top_seq}"
@@ -378,7 +386,11 @@ def main():
                     for i, (seq, score) in enumerate(seqs, 1):
                         mw = calculate_sequence_mw(seq)
                         score_str = f"{score:.6f}" if score > 0.0001 else f"{score:.2e}"
-                        st.write(f"{i}. **{seq}** (score: {score_str}, MW: {mw:.1f} Da)")
+                        st.markdown(
+                            f"{i}. **{seq_with_tooltip(seq)}** "
+                            f"(score: {score_str}, MW: {mw:.1f} Da)",
+                            unsafe_allow_html=True
+                        )
 
         with tab3:
             st.markdown("### Detailed Analysis")

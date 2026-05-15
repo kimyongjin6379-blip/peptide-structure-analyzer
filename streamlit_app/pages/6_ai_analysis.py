@@ -20,6 +20,14 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 
+# Tooltip helpers (1-letter ↔ 3-letter)
+try:
+    from utils import seq_with_tooltip, seq_to_3letter, mutation_with_tooltip
+except ImportError:
+    def seq_with_tooltip(s, **kw): return s
+    def seq_to_3letter(s, **kw): return s
+    def mutation_with_tooltip(m): return m
+
 st.set_page_config(page_title="AI Analysis", page_icon="🤖", layout="wide")
 
 
@@ -148,7 +156,14 @@ def main():
         st.markdown("---")
         st.markdown("### 📨 전송된 서열")
         if transferred_seq:
-            st.success(f"**단일 서열**: `{transferred_seq[:60]}{'...' if len(transferred_seq) > 60 else ''}`")
+            display_seq = (transferred_seq[:60] +
+                          ('...' if len(transferred_seq) > 60 else ''))
+            st.markdown(
+                f"**단일 서열**: {seq_with_tooltip(display_seq)}  \n"
+                f"<span style='color:#666; font-size:0.85em;'>"
+                f"3-letter: {seq_to_3letter(display_seq)}</span>",
+                unsafe_allow_html=True
+            )
         if transferred_batch:
             st.info(f"**배치 서열**: {len(transferred_batch)}개 ({transfer_source})")
 
@@ -324,6 +339,16 @@ def main():
 
                     df = pd.DataFrame(rows)
                     st.dataframe(df, use_container_width=True)
+
+                    # 변이 3-letter 표기 (테이블은 HTML 안 되니 별도 표시)
+                    if rows:
+                        mut_html = " · ".join(
+                            mutation_with_tooltip(r['Mutation']) for r in rows
+                        )
+                        st.markdown(
+                            f"**변이 호버 (3-letter)**: {mut_html}",
+                            unsafe_allow_html=True
+                        )
 
                     # 스코어 시각화
                     valid = [r for r in rows if r["Score"] != "N/A"]
