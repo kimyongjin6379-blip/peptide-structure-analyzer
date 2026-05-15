@@ -153,9 +153,24 @@ def main():
                         n_top_proteins=20,
                         n_markov_sequences=profile_n_seq
                     )
-                    # ESM-2 평가 부담 방지: 상위 N개로 제한 (점수 내림차순)
-                    max_for_esm = max(profile_n_seq, 1000)
-                    combined_top = hybrid_data['combined_sequences'][:max_for_esm]
+
+                    # 계층화 샘플링: 다양성 유지하면서 cap (profile_n_seq)
+                    # - BOTH는 무조건 모두 포함 (드물고 가장 신뢰도 높음)
+                    # - 나머지를 In Silico 60% / Markov 40%로 분배
+                    all_combined = hybrid_data['combined_sequences']
+                    both_list = [c for c in all_combined if c['source'] == 'both']
+                    is_list = [c for c in all_combined if c['source'] == 'in_silico']
+                    mk_list = [c for c in all_combined if c['source'] == 'markov']
+
+                    combined_top = list(both_list)
+                    remaining = max(0, profile_n_seq - len(combined_top))
+                    n_is = int(remaining * 0.6)
+                    n_mk = remaining - n_is
+                    combined_top.extend(is_list[:n_is])
+                    combined_top.extend(mk_list[:n_mk])
+                    # 점수 내림차순 재정렬
+                    combined_top.sort(key=lambda x: x['score'], reverse=True)
+
                     sequences = [(c['sequence'], c['score']) for c in combined_top]
 
                     # 소스별 카운트 (필터링 후)
@@ -164,8 +179,8 @@ def main():
                         src_counts[c['source']] = src_counts.get(c['source'], 0) + 1
 
                     st.info(
-                        f"📊 Hybrid 생성 결과: 총 {len(hybrid_data['combined_sequences'])}개 "
-                        f"중 ESM-2 평가 대상 {len(sequences)}개  \n"
+                        f"📊 Hybrid 생성 결과: 총 {len(all_combined)}개 "
+                        f"중 ESM-2 평가 대상 **{len(sequences)}개** (계층화 샘플링)  \n"
                         f"(🔬 BOTH {src_counts['both']} | "
                         f"🧪 In Silico {src_counts['in_silico']} | "
                         f"📊 Markov {src_counts['markov']})"
