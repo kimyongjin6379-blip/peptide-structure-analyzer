@@ -95,6 +95,9 @@ def main():
     use_in_silico_only = mode.startswith("🧪")
     use_in_silico = use_hybrid or use_in_silico_only
 
+    # sample_options는 Compare Samples 탭에서 항상 필요 → 미리 로드
+    sample_options = loader.get_sample_options()
+
     if use_in_silico and digester_available:
         # 제품 선택 (효소 공정 자료가 있는 제품들)
         products = digester.enzyme_processor.list_products()
@@ -107,7 +110,6 @@ def main():
             )
     else:
         # 기존 샘플 선택 (TAA 조성 데이터)
-        sample_options = loader.get_sample_options()
         with col_mode2:
             selected_display = st.selectbox("Select Sample:",
                                             list(sample_options.keys()),
