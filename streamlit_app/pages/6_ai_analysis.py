@@ -22,11 +22,13 @@ import plotly.express as px
 
 # Tooltip helpers (1-letter ↔ 3-letter)
 try:
-    from utils import seq_with_tooltip, seq_to_3letter, mutation_with_tooltip
+    from utils import (seq_with_tooltip, seq_to_3letter,
+                       mutation_with_tooltip, inject_aa_tooltip_css)
 except ImportError:
     def seq_with_tooltip(s, **kw): return s
     def seq_to_3letter(s, **kw): return s
     def mutation_with_tooltip(m): return m
+    def inject_aa_tooltip_css(st_module): pass
 
 st.set_page_config(page_title="AI Analysis", page_icon="🤖", layout="wide")
 
@@ -90,6 +92,7 @@ def get_deep_generator():
 
 # ---- 메인 ----
 def main():
+    inject_aa_tooltip_css(st)  # 3-letter 호버 툴팁 CSS
     st.markdown("# 🤖 AI 심층 분석")
     st.markdown("ESM-2 Protein Language Model과 딥러닝 기반 고급 분석 도구")
 

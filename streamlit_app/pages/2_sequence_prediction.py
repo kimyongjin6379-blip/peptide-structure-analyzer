@@ -14,7 +14,8 @@ import numpy as np
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator, AbundancePredictor
 from visualizer_2d import PeptideDiagram
-from utils import calculate_sequence_mw, save_fasta, seq_with_tooltip, seq_to_3letter
+from utils import (calculate_sequence_mw, save_fasta,
+                   seq_with_tooltip, seq_to_3letter, inject_aa_tooltip_css)
 from plm_embedder import PLMEmbedder
 
 st.set_page_config(page_title="Sequence Prediction", page_icon="🧬", layout="wide")
@@ -45,6 +46,7 @@ def load_digester():
 
 
 def main():
+    inject_aa_tooltip_css(st)  # 3-letter 호버 툴팁 CSS
     st.title("🧬 Peptide Sequence Prediction")
     st.markdown("Generate probable peptide sequences from peptone samples")
     st.markdown("---")

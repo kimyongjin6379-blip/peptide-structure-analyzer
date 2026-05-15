@@ -12,7 +12,7 @@ import streamlit as st
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator
 from visualizer_2d import PeptideDiagram, CompositionVisualizer
-from utils import seq_with_tooltip, seq_to_3letter
+from utils import seq_with_tooltip, seq_to_3letter, inject_aa_tooltip_css
 
 st.set_page_config(page_title="2D Structure", page_icon="🎨", layout="wide")
 
@@ -25,6 +25,7 @@ def load_data():
 
 
 def main():
+    inject_aa_tooltip_css(st)  # 3-letter 호버 툴팁 CSS
     st.title("🎨 2D Structure Visualization")
     st.markdown("Visualize peptide sequences and properties")
     st.markdown("---")

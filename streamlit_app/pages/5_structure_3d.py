@@ -13,7 +13,7 @@ import streamlit.components.v1 as components
 from data_loader import CompositionLoader
 from sequence_predictor import SequenceGenerator
 from structure_builder import StructureBuilder
-from utils import seq_with_tooltip, seq_to_3letter
+from utils import seq_with_tooltip, seq_to_3letter, inject_aa_tooltip_css
 
 st.set_page_config(page_title="3D Structure", page_icon="🔬", layout="wide")
 
@@ -26,6 +26,7 @@ def load_data():
 
 
 def main():
+    inject_aa_tooltip_css(st)  # 3-letter 호버 툴팁 CSS
     st.title("🔬 3D Structure Prediction & Visualization")
     st.markdown("Predict and visualize 3D protein structures using ESMFold")
     st.markdown("---")

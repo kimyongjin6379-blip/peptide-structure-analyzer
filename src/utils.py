@@ -84,36 +84,31 @@ def seq_to_3letter(sequence: str, separator: str = '-') -> str:
 
 def seq_with_tooltip(sequence: str, show_dotted: bool = True) -> str:
     """
-    호버 시 3-letter를 보여주는 HTML span 반환
+    호버 시 3-letter를 즉시 보여주는 HTML span 반환 (CSS 기반)
+
+    - title 속성 (브라우저 native, fallback)
+    - data-3letter + .aa-tip 클래스 (CSS pseudo-element, 즉시 반응)
 
     Args:
         sequence: 1-letter 서열
-        show_dotted: 점선 밑줄로 호버 가능함을 시각적으로 표시
+        show_dotted: 점선 밑줄 표시 여부
 
-    Returns:
-        HTML span 문자열 (st.markdown(..., unsafe_allow_html=True)와 함께 사용)
+    Note:
+        Streamlit 페이지에서 사용 전에 inject_aa_tooltip_css()를 호출해야
+        CSS 기반 즉시 툴팁이 작동합니다.
     """
     if not sequence:
         return ""
     three_letter = seq_to_3letter(sequence)
-    style = (
-        'border-bottom: 1px dotted #888; cursor: help;'
-        if show_dotted else 'cursor: help;'
-    )
-    # HTML escape: 서열엔 특수문자 없지만 안전을 위해
-    return (f'<span title="{three_letter}" style="{style}">'
-            f'{sequence}</span>')
+    cls = "aa-tip aa-tip-dotted" if show_dotted else "aa-tip"
+    # title도 함께 두면 CSS가 작동 안 하는 환경에서도 fallback
+    return (f'<span class="{cls}" data-3letter="{three_letter}" '
+            f'title="{three_letter}">{sequence}</span>')
 
 
 def mutation_with_tooltip(mutation: str) -> str:
     """
     변이 표기 호버 툴팁 (예: "A5G" → 호버 시 "Ala5Gly")
-
-    Args:
-        mutation: 변이 표기 (예: "A5G", "L10V")
-
-    Returns:
-        HTML span 문자열
     """
     import re
     m = re.match(r'^([A-Z])(\d+)([A-Z])$', mutation.strip().upper())
@@ -121,9 +116,63 @@ def mutation_with_tooltip(mutation: str) -> str:
         return mutation
     wt, pos, mt = m.groups()
     three = f"{AA_1_TO_3.get(wt, wt)}{pos}{AA_1_TO_3.get(mt, mt)}"
-    return (f'<span title="{three}" '
-            f'style="border-bottom: 1px dotted #888; cursor: help;">'
-            f'{mutation}</span>')
+    return (f'<span class="aa-tip aa-tip-dotted" data-3letter="{three}" '
+            f'title="{three}">{mutation}</span>')
+
+
+# ─── CSS 1회 주입 (각 페이지 상단에서 호출) ────────────────
+AA_TOOLTIP_CSS = """
+<style>
+.aa-tip {
+    position: relative;
+    cursor: help;
+    text-decoration: none;
+    font-weight: inherit;
+}
+.aa-tip-dotted {
+    border-bottom: 1.5px dotted #5b8def;
+}
+.aa-tip:hover::after {
+    content: attr(data-3letter);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 99999;
+    font-size: 0.85em;
+    font-family: 'Consolas', 'Monaco', monospace;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    pointer-events: none;
+    opacity: 1;
+}
+.aa-tip:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 118%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1f2937;
+    z-index: 99999;
+    pointer-events: none;
+}
+</style>
+"""
+
+
+def inject_aa_tooltip_css(st_module):
+    """
+    페이지에 AA 툴팁 CSS 주입 (각 페이지에서 1회 호출)
+
+    Args:
+        st_module: streamlit 모듈 (호출 측에서 import한 것)
+    """
+    st_module.markdown(AA_TOOLTIP_CSS, unsafe_allow_html=True)
 
 
 def calculate_sequence_mw(sequence: str) -> float:

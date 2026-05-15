@@ -14,7 +14,7 @@ import pandas as pd
 import numpy as np
 from data_loader import CompositionLoader
 from bioactive_predictor import BioactivePredictor, ActivityScorer
-from utils import seq_with_tooltip
+from utils import seq_with_tooltip, inject_aa_tooltip_css
 from visualizer_2d import BioactivityVisualizer
 from plm_embedder import PLMEmbedder
 from fitness_predictor import FitnessPredictor
@@ -48,6 +48,7 @@ def load_bioactive_predictor(_loader):
 
 
 def main():
+    inject_aa_tooltip_css(st)  # 3-letter 호버 툴팁 CSS
     st.title("💊 Bioactive Peptide Prediction")
     st.markdown("펩톤 조성 기반 생리활성 펩타이드 예측 및 DB 매칭")
     st.markdown("---")
