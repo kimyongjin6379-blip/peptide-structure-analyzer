@@ -374,19 +374,64 @@ def main():
                             for pep in sorted(peptides, key=len, reverse=True)[:10]:
                                 st.code(pep, language=None)
 
-                # ---- Hit sequences table ----
+                # ---- Hit sequences table (HTML 호버 지원) ----
                 if result.get('hit_sequences'):
                     st.markdown("### 🧬 DB 매칭된 상위 서열 (ESM-2 스코어 포함)")
-                    hit_rows = []
+                    st.caption("💡 서열에 마우스를 올리면 3-letter 표기가 즉시 표시됩니다")
+
+                    rows_html = []
                     for hs in result['hit_sequences']:
-                        hit_rows.append({
-                            'Sequence': hs['sequence'],
-                            'ESM-2 Fitness': f"{hs['esm2_fitness']:.4f}",
-                            'Combined Score': f"{hs['combined_score']:.4f}",
-                            'Motifs Found': hs['motifs_found'],
-                            'Activities': ', '.join(hs['activities'][:5]),
-                        })
-                    st.dataframe(pd.DataFrame(hit_rows), use_container_width=True, hide_index=True)
+                        acts = ', '.join(hs['activities'][:5])
+                        rows_html.append(
+                            f"<tr>"
+                            f"<td style='font-family:Consolas,monospace; font-weight:600;'>"
+                            f"{seq_with_tooltip(hs['sequence'])}</td>"
+                            f"<td style='text-align:right; font-family:monospace;'>"
+                            f"{hs['esm2_fitness']:.4f}</td>"
+                            f"<td style='text-align:right; font-family:monospace;'>"
+                            f"{hs['combined_score']:.4f}</td>"
+                            f"<td style='text-align:center;'>{hs['motifs_found']}</td>"
+                            f"<td style='color:#444;'>{acts}</td>"
+                            f"</tr>"
+                        )
+
+                    table_html = f"""
+                    <style>
+                    .hit-table {{
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 0.92em;
+                        margin: 8px 0;
+                    }}
+                    .hit-table th {{
+                        background: #f0f2f6;
+                        padding: 10px 12px;
+                        text-align: left;
+                        border-bottom: 2px solid #d0d4dc;
+                        font-weight: 600;
+                    }}
+                    .hit-table td {{
+                        padding: 8px 12px;
+                        border-bottom: 1px solid #e6e9ef;
+                    }}
+                    .hit-table tr:hover {{
+                        background: #f8f9fc;
+                    }}
+                    </style>
+                    <table class="hit-table">
+                        <thead>
+                            <tr>
+                                <th>Sequence</th>
+                                <th style="text-align:right;">ESM-2 Fitness</th>
+                                <th style="text-align:right;">Combined Score</th>
+                                <th style="text-align:center;">Motifs</th>
+                                <th>Activities</th>
+                            </tr>
+                        </thead>
+                        <tbody>{''.join(rows_html)}</tbody>
+                    </table>
+                    """
+                    st.markdown(table_html, unsafe_allow_html=True)
 
                     # ---- Motif detail per sequence ----
                     st.markdown("### 서열별 모티프 상세")

@@ -337,20 +337,70 @@ def main():
 
         with tab1:
             st.markdown("### Top 20 Sequences")
+            st.caption("💡 서열에 마우스를 올리면 3-letter 표기가 즉시 표시됩니다")
 
             sequences_with_mw = result.get('sequences_with_mw', [])
 
             if sequences_with_mw:
-                df = pd.DataFrame(sequences_with_mw)
-                df['rank'] = range(1, len(df) + 1)
-                df = df[['rank', 'sequence', 'length', 'likelihood_score', 'molecular_weight']]
+                top_20 = sequences_with_mw[:20]
 
-                df['likelihood_score'] = df['likelihood_score'].apply(
-                    lambda x: f"{x:.6f}" if x > 0.0001 else f"{x:.2e}"
-                )
-                df['molecular_weight'] = df['molecular_weight'].apply(lambda x: f"{x:.1f}")
+                # HTML 테이블로 렌더링 (st.dataframe은 호버 미지원)
+                rows_html = []
+                for i, info in enumerate(top_20, 1):
+                    seq = info['sequence']
+                    score = info['likelihood_score']
+                    score_str = f"{score:.6f}" if score > 0.0001 else f"{score:.2e}"
+                    rows_html.append(
+                        f"<tr>"
+                        f"<td style='text-align:center; color:#888;'>{i}</td>"
+                        f"<td style='font-family:Consolas,monospace; font-weight:600;'>"
+                        f"{seq_with_tooltip(seq)}</td>"
+                        f"<td style='text-align:center;'>{info['length']}</td>"
+                        f"<td style='text-align:right; font-family:monospace;'>{score_str}</td>"
+                        f"<td style='text-align:right; font-family:monospace;'>"
+                        f"{info['molecular_weight']:.1f}</td>"
+                        f"</tr>"
+                    )
 
-                st.dataframe(df, use_container_width=True, hide_index=True)
+                table_html = f"""
+                <style>
+                .seq-table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 0.95em;
+                    margin: 8px 0;
+                }}
+                .seq-table th {{
+                    background: #f0f2f6;
+                    padding: 10px 12px;
+                    text-align: left;
+                    border-bottom: 2px solid #d0d4dc;
+                    font-weight: 600;
+                }}
+                .seq-table td {{
+                    padding: 8px 12px;
+                    border-bottom: 1px solid #e6e9ef;
+                }}
+                .seq-table tr:hover {{
+                    background: #f8f9fc;
+                }}
+                </style>
+                <table class="seq-table">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; text-align:center;">Rank</th>
+                            <th style="width:45%;">Sequence</th>
+                            <th style="width:10%; text-align:center;">Length</th>
+                            <th style="width:20%; text-align:right;">Likelihood</th>
+                            <th style="width:20%; text-align:right;">MW (Da)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {''.join(rows_html)}
+                    </tbody>
+                </table>
+                """
+                st.markdown(table_html, unsafe_allow_html=True)
 
                 # Visualize top sequence
                 st.markdown("#### Top Sequence Visualization")
@@ -529,30 +579,84 @@ def main():
                         st.markdown("**Markov-only Ranking (기존)**")
                         for i, item in enumerate(markov_ranked[:10], 1):
                             score_str = f"{item['likelihood_score']:.6f}" if item['likelihood_score'] > 0.0001 else f"{item['likelihood_score']:.2e}"
-                            st.write(f"{i}. `{item['sequence']}` (score: {score_str})")
+                            st.markdown(
+                                f"{i}. {seq_with_tooltip(item['sequence'])} "
+                                f"<span style='color:#888;'>(score: {score_str})</span>",
+                                unsafe_allow_html=True
+                            )
 
                     with col_after:
                         st.markdown("**ESM-2 Re-ranked (개선)**")
                         for i, item in enumerate(esm2_ranked[:10], 1):
-                            st.write(f"{i}. `{item['sequence']}` (combined: {item['combined_score']:.4f})")
+                            st.markdown(
+                                f"{i}. {seq_with_tooltip(item['sequence'])} "
+                                f"<span style='color:#888;'>(combined: {item['combined_score']:.4f})</span>",
+                                unsafe_allow_html=True
+                            )
 
-                    # Full re-ranked table
+                    # Full re-ranked table (HTML 호버 지원)
                     st.markdown("#### ESM-2 Re-ranked 전체 결과")
+                    st.caption("💡 서열에 마우스를 올리면 3-letter 표기가 즉시 표시됩니다")
 
-                    df_rerank = pd.DataFrame(esm2_ranked)
-                    df_rerank.insert(0, 'rank', range(1, len(df_rerank) + 1))
+                    rerank_rows_html = []
+                    for i, item in enumerate(esm2_ranked, 1):
+                        like = item['likelihood_score']
+                        like_str = f"{like:.6f}" if like > 0.0001 else f"{like:.2e}"
+                        rerank_rows_html.append(
+                            f"<tr>"
+                            f"<td style='text-align:center; color:#888;'>{i}</td>"
+                            f"<td style='font-family:Consolas,monospace; font-weight:600;'>"
+                            f"{seq_with_tooltip(item['sequence'])}</td>"
+                            f"<td style='text-align:center;'>{item['length']}</td>"
+                            f"<td style='text-align:right; font-family:monospace;'>{like_str}</td>"
+                            f"<td style='text-align:right; font-family:monospace;'>"
+                            f"{item['esm2_fitness']:.4f}</td>"
+                            f"<td style='text-align:right; font-family:monospace; font-weight:600; color:#0066cc;'>"
+                            f"{item['combined_score']:.4f}</td>"
+                            f"<td style='text-align:right; font-family:monospace;'>"
+                            f"{item['molecular_weight']:.1f}</td>"
+                            f"</tr>"
+                        )
 
-                    df_display = df_rerank[['rank', 'sequence', 'length', 'likelihood_score', 'esm2_fitness', 'combined_score', 'molecular_weight']].copy()
-                    df_display.columns = ['Rank', 'Sequence', 'Length', 'Likelihood', 'ESM-2 Fitness', 'Combined Score', 'MW (Da)']
-
-                    df_display['Likelihood'] = df_display['Likelihood'].apply(
-                        lambda x: f"{x:.6f}" if x > 0.0001 else f"{x:.2e}"
-                    )
-                    df_display['ESM-2 Fitness'] = df_display['ESM-2 Fitness'].apply(lambda x: f"{x:.4f}")
-                    df_display['Combined Score'] = df_display['Combined Score'].apply(lambda x: f"{x:.4f}")
-                    df_display['MW (Da)'] = df_display['MW (Da)'].apply(lambda x: f"{x:.1f}")
-
-                    st.dataframe(df_display, use_container_width=True, hide_index=True)
+                    rerank_table_html = f"""
+                    <style>
+                    .rerank-table {{
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 0.92em;
+                        margin: 8px 0;
+                    }}
+                    .rerank-table th {{
+                        background: #f0f2f6;
+                        padding: 10px 12px;
+                        text-align: left;
+                        border-bottom: 2px solid #d0d4dc;
+                        font-weight: 600;
+                    }}
+                    .rerank-table td {{
+                        padding: 8px 12px;
+                        border-bottom: 1px solid #e6e9ef;
+                    }}
+                    .rerank-table tr:hover {{
+                        background: #f8f9fc;
+                    }}
+                    </style>
+                    <table class="rerank-table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%; text-align:center;">Rank</th>
+                                <th style="width:35%;">Sequence</th>
+                                <th style="width:8%; text-align:center;">Length</th>
+                                <th style="width:13%; text-align:right;">Likelihood</th>
+                                <th style="width:13%; text-align:right;">ESM-2 Fitness</th>
+                                <th style="width:13%; text-align:right;">Combined</th>
+                                <th style="width:13%; text-align:right;">MW (Da)</th>
+                            </tr>
+                        </thead>
+                        <tbody>{''.join(rerank_rows_html)}</tbody>
+                    </table>
+                    """
+                    st.markdown(rerank_table_html, unsafe_allow_html=True)
 
                     # Improvement suggestions for top sequences
                     st.markdown("#### 🔧 개선 제안 (Top 서열)")
