@@ -519,8 +519,11 @@ def main():
 
         if len(selected_samples) >= 2:
             if st.button("📊 비교 분석 실행"):
-                with st.spinner("DB 매칭 기반 비교 분석 중... (샘플당 200개 서열 생성)"):
-                    comparison = predictor.compare_samples_bioactivity(selected_samples)
+                with st.spinner("DB 매칭 기반 비교 분석 중... (효소 공정이 있는 제품은 process-aware Markov 사용)"):
+                    comparison = predictor.compare_samples_bioactivity(
+                        selected_samples,
+                        use_process_aware=True,
+                    )
                     st.session_state['compare_result'] = comparison
 
             if 'compare_result' in st.session_state:
@@ -528,6 +531,14 @@ def main():
                 samples_activities = comparison.get('sample_scores', {})
 
                 if samples_activities:
+                    methods = comparison.get('generation_methods', {})
+                    if methods:
+                        st.caption(
+                            "Generation basis: " + ", ".join(
+                                f"{sid}={method}" for sid, method in methods.items()
+                            )
+                        )
+
                     # Top 10 activities for radar
                     all_acts = {}
                     for scores in samples_activities.values():

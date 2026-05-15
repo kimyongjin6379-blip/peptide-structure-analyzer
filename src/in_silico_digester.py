@@ -24,6 +24,8 @@ Markov chain 기반의 통계적 추정과 달리, 실제 효소 절단 규칙�
 import json
 import re
 import random
+import hashlib
+import math
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass, field
@@ -53,6 +55,12 @@ class DigestedPeptide:
 # 평균 AA MW = 110 Da (대략치)
 AVG_AA_MW = 110.0
 WATER_MW = 18.0  # 펩타이드 결합 분해 시 추가
+
+
+def stable_sequence_seed(sequence: str, seed: int = 42) -> int:
+    """Return a reproducible integer seed for a sequence across Python runs."""
+    digest = hashlib.blake2b(sequence.encode("utf-8"), digest_size=8).hexdigest()
+    return seed + (int(digest, 16) % 10000)
 
 
 def calc_peptide_mw(seq: str) -> float:
@@ -106,7 +114,7 @@ def cleave_broad_random(sequence: str, target_avg_length: int = 9,
     if len(sequence) <= target_avg_length:
         return [(0, len(sequence))]
 
-    rng = random.Random(seed + hash(sequence) % 10000)
+    rng = random.Random(stable_sequence_seed(sequence, seed))
     # 절단 확률 = 1 / target_avg_length
     cleavage_prob = 1.0 / target_avg_length
 
@@ -139,7 +147,7 @@ def trim_hydrophobic_termini(sequence: str,
     if targets is None:
         targets = {'L', 'I', 'V', 'F', 'Y'}
 
-    rng = random.Random(seed + hash(sequence) % 10000)
+    rng = random.Random(stable_sequence_seed(sequence, seed))
 
     # N-말단 trimming
     trim_n = 0
@@ -451,10 +459,11 @@ class InSilicoDigester:
         rng = random.Random(seed)
         length_dist = markov_stats['length_dist']
         start_freq = markov_stats['start_aa_freq']
+        end_freq = markov_stats['end_aa_freq']
         trans_prob = markov_stats['transition_prob']
 
         # 분포 → 샘플링 가능한 형태로
-        if not length_dist or not start_freq or not trans_prob:
+        if not length_dist or not start_freq or not end_freq or not trans_prob:
             return []
 
         lengths = list(length_dist.keys())
@@ -464,16 +473,21 @@ class InSilicoDigester:
         start_weights = list(start_freq.values())
 
         # 펩타이드 가능성 점수 계산용 (조성)
-        total_count = sum(start_weights)
+        max_start = max(start_weights)
+        max_end = max(end_freq.values())
 
-        sequences = []
-        for i in range(n_sequences):
+        sequences = {}
+        max_attempts = max(n_sequences * 6, n_sequences + 100)
+        attempts = 0
+        while len(sequences) < n_sequences and attempts < max_attempts:
+            attempts += 1
             # 길이 샘플링
             target_len = rng.choices(lengths, weights=length_weights)[0]
             target_len = max(min_length, min(max_length, target_len))
 
             # 시작 AA 샘플링
             seq = [rng.choices(starts, weights=start_weights)[0]]
+            start_score = start_freq[seq[0]] / max_start
 
             # 전이 행렬로 확장
             log_prob = 0.0
@@ -484,18 +498,29 @@ class InSilicoDigester:
                     weights = list(trans_prob[current].values())
                     next_aa = rng.choices(next_aas, weights=weights)[0]
                     prob = trans_prob[current][next_aa]
-                    log_prob += (prob if prob > 0 else 1e-10)
+                    log_prob += math.log(prob if prob > 0 else 1e-10)
                     seq.append(next_aa)
                 else:
                     break
 
             seq_str = ''.join(seq)
             if min_length <= len(seq_str) <= max_length:
-                # 평균 전이 확률을 점수로 사용 (0~1)
-                avg_prob = log_prob / max(len(seq_str) - 1, 1)
-                sequences.append((seq_str, float(avg_prob)))
+                end_count = end_freq.get(seq_str[-1], 0)
+                if end_count <= 0:
+                    continue
 
-        return sequences
+                terminal_acceptance = end_count / max_end
+                if rng.random() > terminal_acceptance:
+                    continue
+
+                transition_score = math.exp(log_prob / max(len(seq_str) - 1, 1))
+                end_score = end_count / max_end
+                score = 0.6 * transition_score + 0.2 * start_score + 0.2 * end_score
+                score = max(0.0, min(1.0, score))
+                if seq_str not in sequences or score > sequences[seq_str]:
+                    sequences[seq_str] = float(score)
+
+        return sorted(sequences.items(), key=lambda x: x[1], reverse=True)
 
     def hybrid_digest_and_markov(self, product_id: str,
                                   min_length: int = 3,

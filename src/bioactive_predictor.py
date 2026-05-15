@@ -458,9 +458,84 @@ class BioactivePredictor:
 
         return recommendations
 
+    def _sample_id_to_process_product(self, sample_id: str, digester) -> Optional[str]:
+        """Map a composition sample id to an enzyme-process product id when possible."""
+        products = set(digester.enzyme_processor.list_products())
+        if sample_id in products:
+            return sample_id
+
+        sample = self.loader.get_sample_by_id(sample_id)
+        if sample is None:
+            return None
+
+        for key in ("Sample_name", "sample_id"):
+            value = sample.get(key, None)
+            if value is not None and str(value) in products:
+                return str(value)
+
+        return None
+
+    def _generate_compare_sequences(self, sample_id: str,
+                                    n_sequences: int,
+                                    length_range: Tuple[int, int],
+                                    use_process_aware: bool = True
+                                    ) -> Tuple[List[Tuple[str, float]], str]:
+        """Generate sequences for sample comparison, preferring process-aware products."""
+        if use_process_aware:
+            try:
+                try:
+                    from .in_silico_digester import InSilicoDigester
+                except ImportError:
+                    from in_silico_digester import InSilicoDigester
+
+                digester = InSilicoDigester()
+                product_id = self._sample_id_to_process_product(sample_id, digester)
+                if product_id:
+                    hybrid = digester.hybrid_digest_and_markov(
+                        product_id,
+                        min_length=length_range[0],
+                        max_length=length_range[1],
+                        n_top_proteins=20,
+                        n_markov_sequences=n_sequences,
+                    )
+                    combined = hybrid.get("combined_sequences", [])
+                    both = [c for c in combined if c["source"] == "both"]
+                    in_silico = [c for c in combined if c["source"] == "in_silico"]
+                    markov = [c for c in combined if c["source"] == "markov"]
+
+                    selected = list(both)
+                    remaining = max(0, n_sequences - len(selected))
+                    n_in_silico = int(remaining * 0.6)
+                    n_markov = remaining - n_in_silico
+                    selected.extend(in_silico[:n_in_silico])
+                    selected.extend(markov[:n_markov])
+                    selected.sort(key=lambda x: x["score"], reverse=True)
+
+                    return (
+                        [(c["sequence"], c["score"]) for c in selected[:n_sequences]],
+                        f"process_aware:{product_id}",
+                    )
+            except Exception:
+                pass
+
+        taa_comp = self.loader.get_peptide_composition(sample_id, normalize=True)
+        if not taa_comp:
+            return [], "unavailable"
+
+        generator = SequenceGenerator(taa_comp)
+        return (
+            generator.generate_sequences(
+                length_range=length_range,
+                n_sequences=n_sequences,
+                method='markov'
+            ),
+            "composition_markov",
+        )
+
     def compare_samples_bioactivity(self, sample_ids: List[str],
                                      n_sequences: int = 200,
-                                     length_range: Tuple[int, int] = (3, 12)) -> Dict:
+                                     length_range: Tuple[int, int] = (3, 12),
+                                     use_process_aware: bool = True) -> Dict:
         """
         여러 샘플의 생리활성 비교 (DB 매칭 기반)
 
@@ -473,18 +548,18 @@ class BioactivePredictor:
             비교 결과
         """
         results = {}
+        generation_methods = {}
 
         for sample_id in sample_ids:
-            taa_comp = self.loader.get_peptide_composition(sample_id, normalize=True)
-            if not taa_comp:
-                continue
-
-            generator = SequenceGenerator(taa_comp)
-            sequences = generator.generate_sequences(
-                length_range=length_range,
+            sequences, method = self._generate_compare_sequences(
+                sample_id,
                 n_sequences=n_sequences,
-                method='markov'
+                length_range=length_range,
+                use_process_aware=use_process_aware,
             )
+            generation_methods[sample_id] = method
+            if not sequences:
+                continue
 
             # DB matching
             activity_hit_counts = defaultdict(int)
@@ -523,7 +598,8 @@ class BioactivePredictor:
         return {
             'sample_scores': results,
             'best_samples_by_activity': best_samples,
-            'n_samples': len(sample_ids)
+            'n_samples': len(sample_ids),
+            'generation_methods': generation_methods,
         }
 
 
